@@ -1,0 +1,50 @@
+{% extends "landing.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+  <h1 class="text-3xl font-bold text-sber-dark mb-8">Объекты недвижимости</h1>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for property in properties %}
+      <div class="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition">
+        <img src="{{ property.main_image_url or '/static/default.jpg' }}" class="w-full h-48 object-cover rounded mb-4">
+        <h2 class="text-xl font-semibold text-gray-900">{{ property.title }}</h2>
+        <p class="text-gray-600">{{ property.description[:100] }}...</p>
+        <p class="text-lg font-bold text-sber mt-2">{{ property.price }} ฿</p>
+        <a href="/{{ lang }}/properties/{{ property.id }}" class="text-sber-dark underline mt-2 inline-block">Подробнее</a>
+      </div>
+    {% else %}
+      <p class="text-gray-600">Ничего не найдено по заданным параметрам.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- 📍 Карта и контакты -->
+{% include 'landing_sections/map.html' %}
+
+<!-- 📬 Блок подписки -->
+<section class="bg-sber text-white py-12 mt-12">
+  <div class="max-w-4xl mx-auto text-center px-4">
+    <h2 class="text-2xl font-bold mb-2">Будьте в курсе новых предложений</h2>
+    <p class="mb-4">Подпишитесь на обновления каталога и получайте самые выгодные варианты первыми</p>
+    <form class="flex flex-col sm:flex-row gap-4 justify-center">
+      <input type="email" placeholder="Ваш Email" class="px-4 py-2 rounded-lg text-gray-800 w-full sm:w-1/2" required />
+      <button type="submit" class="bg-white text-sber font-semibold px-6 py-2 rounded-lg hover:bg-sber-accent hover:text-white transition">Подписаться</button>
+    </form>
+  </div>
+</section>
+
+<!-- 🌍 Leaflet карта -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-uNgg0tM5F3Tq+jFJxv9aJWbLkFfN1F0i0jTYf0L2B3w=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-pM0IFlPz+g/3cFZnUp9MpA6Iz0Xqf0TYpx8o4v0mDyk=" crossorigin=""></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const map = L.map('map').setView([12.935, 100.887], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    L.marker([12.935, 100.887]).addTo(map).bindPopup('Sianoro').openPopup();
+  });
+</script>
+{% endblock %}

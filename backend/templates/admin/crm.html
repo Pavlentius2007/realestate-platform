@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 CRM Система - Sianoro Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --danger-gradient: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem 1rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .crm-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .crm-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .nav-link {
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+
+        .nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, #f8f9fa, #ffffff);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.02);
+        }
+
+        .stat-card.leads { border-left-color: #3b82f6; }
+        .stat-card.hot { border-left-color: #ef4444; }
+        .stat-card.qualified { border-left-color: #10b981; }
+        .stat-card.conversion { border-left-color: #f59e0b; }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .funnel-stage {
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .funnel-stage:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .funnel-bar {
+            height: 10px;
+            border-radius: 5px;
+            margin: 1rem 0;
+            transition: width 0.5s ease;
+        }
+
+        .lead-item {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+
+        .lead-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .lead-item.new { border-left-color: #3b82f6; }
+        .lead-item.contacted { border-left-color: #10b981; }
+        .lead-item.qualified { border-left-color: #f59e0b; }
+        .lead-item.closed { border-left-color: #8b5cf6; }
+
+        .conversion-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-ring {
+            width: 60px;
+            height: 60px;
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: #e9ecef;
+            stroke-width: 4;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 4;
+            stroke-linecap: round;
+            transition: stroke-dasharray 0.3s ease;
+        }
+
+        .quick-action-btn {
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .quick-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .quick-action-btn.danger {
+            background: var(--danger-gradient);
+        }
+
+        .quick-action-btn.warning {
+            background: var(--warning-gradient);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Боковая навигация -->
+        <div class="sidebar">
+            <h3 class="text-center mb-4">
+                <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    🏢 Sianoro Admin
+                </span>
+            </h3>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">
+                        📊 Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/properties">
+                        🏠 Недвижимость
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/projects">
+                        🏗️ Новостройки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/rental">
+                        📋 Аренда
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">
+                        👥 Пользователи
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/articles">
+                        📰 Статьи
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/analytics">
+                        📈 Аналитика
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/reports">
+                        📋 Отчеты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/crm">
+                        🎯 CRM
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/logs">
+                        📋 Логи системы
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>🎯 CRM Система</h2>
+                <div>
+                    <a href="/admin/crm/leads" class="quick-action-btn">
+                        👥 Управление лидами
+                    </a>
+                    <a href="/admin/crm/pipeline" class="quick-action-btn warning">
+                        📊 Воронка продаж
+                    </a>
+                    <a href="/admin/crm/interactions" class="quick-action-btn danger">
+                        💬 Взаимодействия
+                    </a>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger">
+                    ❌ Ошибка загрузки CRM данных: {{ error }}
+                </div>
+            {% elif crm %}
+                <!-- Основная статистика -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stat-card leads">
+                            <div class="mb-2">📝</div>
+                            <div class="stat-number">{{ crm.stats.total_leads }}</div>
+                            <div class="text-muted">Всего лидов</div>
+                            <small class="text-success">+{{ crm.stats.new_leads_week }} за неделю</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card hot">
+                            <div class="mb-2">🔥</div>
+                            <div class="stat-number">{{ crm.stats.hot_leads }}</div>
+                            <div class="text-muted">Горячие лиды</div>
+                            <small class="text-info">Множественные контакты</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card qualified">
+                            <div class="mb-2">✅</div>
+                            <div class="stat-number">{{ crm.funnel_data.qualified }}</div>
+                            <div class="text-muted">Квалифицированные</div>
+                            <small class="text-success">{{ "%.1f"|format((crm.funnel_data.qualified / crm.stats.total_leads * 100) if crm.stats.total_leads > 0 else 0) }}% конверсия</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card conversion">
+                            <div class="mb-2">💰</div>
+                            <div class="stat-number">{{ "%.1f"|format(crm.stats.conversion_rate) }}%</div>
+                            <div class="text-muted">Общая конверсия</div>
+                            <small class="text-info">От лида до сделки</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Основной контент -->
+                <div class="row">
+                    <!-- Воронка продаж -->
+                    <div class="col-md-8">
+                        <div class="crm-card">
+                            <h4 class="mb-4">📊 Воронка продаж</h4>
+                            
+                            {% if crm.funnel_data %}
+                            <div class="funnel-stage">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>📝 Лиды</h5>
+                                    <span class="badge bg-primary">{{ crm.funnel_data.leads }}</span>
+                                </div>
+                                <div class="funnel-bar" style="background: #3b82f6; width: 100%;"></div>
+                                <small class="text-muted">Все входящие заявки</small>
+                            </div>
+                            
+                            <div class="funnel-stage">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>🔍 Квалификация</h5>
+                                    <span class="badge bg-success">{{ crm.funnel_data.qualified }}</span>
+                                </div>
+                                <div class="funnel-bar" style="background: #10b981; width: {{ (crm.funnel_data.qualified / crm.funnel_data.leads * 100) if crm.funnel_data.leads > 0 else 0 }}%;"></div>
+                                <small class="text-muted">Подтвержденный интерес</small>
+                            </div>
+                            
+                            <div class="funnel-stage">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>📋 Предложения</h5>
+                                    <span class="badge bg-warning">{{ crm.funnel_data.proposals }}</span>
+                                </div>
+                                <div class="funnel-bar" style="background: #f59e0b; width: {{ (crm.funnel_data.proposals / crm.funnel_data.leads * 100) if crm.funnel_data.leads > 0 else 0 }}%;"></div>
+                                <small class="text-muted">Отправленные предложения</small>
+                            </div>
+                            
+                            <div class="funnel-stage">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>🤝 Переговоры</h5>
+                                    <span class="badge bg-danger">{{ crm.funnel_data.deals }}</span>
+                                </div>
+                                <div class="funnel-bar" style="background: #ef4444; width: {{ (crm.funnel_data.deals / crm.funnel_data.leads * 100) if crm.funnel_data.leads > 0 else 0 }}%;"></div>
+                                <small class="text-muted">Активные переговоры</small>
+                            </div>
+                            
+                            <div class="funnel-stage">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5>✅ Закрытые сделки</h5>
+                                    <span class="badge bg-purple">{{ crm.funnel_data.closed }}</span>
+                                </div>
+                                <div class="funnel-bar" style="background: #8b5cf6; width: {{ (crm.funnel_data.closed / crm.funnel_data.leads * 100) if crm.funnel_data.leads > 0 else 0 }}%;"></div>
+                                <small class="text-muted">Успешные продажи</small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Конверсия по источникам -->
+                    <div class="col-md-4">
+                        <div class="crm-card">
+                            <h4 class="mb-4">🌍 Конверсия по источникам</h4>
+                            
+                            {% if crm.conversion_data %}
+                                {% for source in crm.conversion_data %}
+                                <div class="conversion-item">
+                                    <div>
+                                        <h6 class="mb-1">{{ source.source }}</h6>
+                                        <small class="text-muted">{{ source.total_leads }} лидов</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <svg class="progress-ring" viewBox="0 0 36 36">
+                                            <circle class="progress-circle" cx="18" cy="18" r="15"></circle>
+                                            <circle class="progress-circle-fill" cx="18" cy="18" r="15" 
+                                                    stroke-dasharray="{{ source.conversion_rate }}, 100"></circle>
+                                        </svg>
+                                        <div class="mt-1">
+                                            <strong>{{ source.conversion_rate }}%</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center py-3">
+                                    <div class="text-muted">Нет данных по источникам</div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Последние лиды -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="crm-card">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h4>📋 Последние лиды</h4>
+                                <a href="/admin/crm/leads" class="quick-action-btn">
+                                    👀 Все лиды
+                                </a>
+                            </div>
+                            
+                            {% if crm.recent_leads %}
+                                {% for lead in crm.recent_leads %}
+                                <div class="lead-item new">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">{{ lead.full_name or 'Без имени' }}</h6>
+                                            <small class="text-muted">
+                                                📞 {{ lead.phone or 'Не указан' }} | 
+                                                📱 {{ lead.whatsapp_number or 'Нет WhatsApp' }} | 
+                                                💬 {{ lead.telegram_id or 'Нет Telegram' }}
+                                            </small>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="mb-1">
+                                                <span class="badge bg-info">{{ lead.source or 'Неизвестно' }}</span>
+                                            </div>
+                                            <small class="text-muted">{{ lead.created_at.strftime('%d.%m.%Y %H:%M') if lead.created_at else '' }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <div class="text-muted">
+                                        <h5>📝 Нет лидов</h5>
+                                        <p>Лиды будут отображаться здесь по мере поступления</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="crm-card">
+                        <div class="mb-3">🎯</div>
+                        <h5 class="text-muted">Загрузка CRM данных...</h5>
+                        <p class="text-muted">Анализируем лиды и воронку продаж</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Анимация загрузки воронки
+        document.addEventListener('DOMContentLoaded', function() {
+            const funnelBars = document.querySelectorAll('.funnel-bar');
+            
+            funnelBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    bar.style.transition = 'width 1s ease';
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,102 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+venv312/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Uploads and media (keep structure but ignore content)
+static/uploads/*
+!static/uploads/.gitkeep
+static/img.zip
+
+# Backups
+backups/
+*.backup
+
+# Google credentials
+google-credentials/
+*.json
+
+# Test files
+test_*.py
+*_test.py
+
+# Documentation files (keep only main ones)
+*.md
+!README.md
+!CHANGELOG.md
+!DEV_CONFIG.md
+!INSTALL_DEPENDENCIES.md
+
+# Translation test files
+auto_translate_admin.html
+auto_translate.py
+add_*.py
+extract_*.py
+find_*.py
+reload_*.py
+check_*.py
+test_*.py
+quick_start_*.bat
+install_*.bat
+setup_*.sql
+fix_*.sql
+check_*.sql
+migrate_*.py
+
+# Cursor config
+.cursor/ 

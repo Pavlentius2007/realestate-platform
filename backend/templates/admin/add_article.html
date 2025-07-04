@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить статью - Админ панель Sianoro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="/admin/articles" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-arrow-left mr-2"></i>Назад к статьям
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-900">✍️ Добавить статью</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button type="button" 
+                            id="preview-btn"
+                            class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-eye mr-2"></i>Превью
+                    </button>
+                    <button form="article-form" 
+                            type="submit" 
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-save mr-2"></i>Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 px-6">
+        
+        {% if error %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                {{ error }}
+            </div>
+        </div>
+        {% endif %}
+
+        <form id="article-form" method="POST" action="/admin/articles/add" enctype="multipart/form-data" class="space-y-6">
+            
+            <!-- Basic Info -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">📝 Основная информация</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                            Заголовок статьи *
+                        </label>
+                        <input type="text" 
+                               id="title" 
+                               name="title" 
+                               value="{{ title or '' }}"
+                               required 
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Введите заголовок статьи">
+                    </div>
+                    
+                    <div>
+                        <label for="slug" class="block text-sm font-medium text-gray-700 mb-2">
+                            URL (slug) *
+                        </label>
+                        <input type="text" 
+                               id="slug" 
+                               name="slug" 
+                               value="{{ slug or '' }}"
+                               required 
+                               pattern="[a-z0-9\-]+"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="url-stati-bez-probelov">
+                        <p class="text-xs text-gray-500 mt-1">
+                            Только английские буквы, цифры и дефисы
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Featured Image Upload -->
+                <div class="mt-6">
+                    <label for="featured_image" class="block text-sm font-medium text-gray-700 mb-2">
+                        🖼️ Заглавное изображение
+                    </label>
+                    <div class="relative">
+                        <input type="file" 
+                               id="featured_image" 
+                               name="featured_image" 
+                               accept="image/*"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               onchange="previewImage(this)">
+                        <p class="text-xs text-gray-500 mt-1">
+                            Рекомендуемый размер: 1200x600px. Форматы: JPG, PNG, WebP (макс. 5MB)
+                        </p>
+                    </div>
+                    <!-- Image Preview -->
+                    <div id="image-preview" class="mt-4 hidden">
+                        <img id="preview-img" src="" alt="Предварительный просмотр" class="max-w-full h-48 object-cover rounded-lg border">
+                        <button type="button" onclick="removeImagePreview()" class="mt-2 text-sm text-red-600 hover:text-red-800">
+                            <i class="fas fa-times mr-1"></i>Удалить изображение
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="excerpt" class="block text-sm font-medium text-gray-700 mb-2">
+                        Краткое описание
+                    </label>
+                    <textarea id="excerpt" 
+                              name="excerpt" 
+                              rows="3"
+                              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="Краткое описание статьи (появится в списке статей)">{{ excerpt or '' }}</textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                            Категория
+                        </label>
+                        <select id="category" 
+                                name="category" 
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <option value="tips" {% if category == 'tips' %}selected{% endif %}>💡 Полезные советы</option>
+                            <option value="buying" {% if category == 'buying' %}selected{% endif %}>🏠 Покупка недвижимости</option>
+                            <option value="renting" {% if category == 'renting' %}selected{% endif %}>🔑 Аренда жилья</option>
+                            <option value="investment" {% if category == 'investment' %}selected{% endif %}>📈 Инвестиции</option>
+                            <option value="legal" {% if category == 'legal' %}selected{% endif %}>⚖️ Юридические вопросы</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                               id="published" 
+                               name="published" 
+                               value="true"
+                               {% if published %}checked{% endif %}
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="published" class="ml-3 text-sm font-medium text-gray-700">
+                            ✅ Опубликовать статью сразу
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Editor -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-gray-900">📄 Содержание статьи</h2>
+                    <div class="flex items-center space-x-2">
+                        <button type="button" 
+                                id="toggle-editor"
+                                class="text-sm bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-lg transition-colors">
+                            <i class="fas fa-code mr-1"></i>Markdown
+                        </button>
+                        <a href="https://www.markdownguide.org/basic-syntax/" 
+                           target="_blank"
+                           class="text-sm text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-question-circle mr-1"></i>Справка
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="editor-container">
+                    <!-- Markdown Editor -->
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-medium text-gray-700">Markdown редактор</label>
+                            <div class="flex items-center space-x-2 text-xs text-gray-500">
+                                <kbd class="px-2 py-1 bg-gray-100 rounded">Ctrl+S</kbd>
+                                <span>для сохранения</span>
+                            </div>
+                        </div>
+                        <textarea id="content" 
+                                  name="content" 
+                                  rows="20"
+                                  required
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                                  placeholder="Введите содержание статьи в формате Markdown...">{{ content or '' }}</textarea>
+                        
+                        <!-- Markdown Toolbar -->
+                        <div class="flex items-center space-x-2 text-sm">
+                            <button type="button" onclick="insertMarkdown('**', '**')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded" title="Жирный текст">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button type="button" onclick="insertMarkdown('*', '*')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded" title="Курсив">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button type="button" onclick="insertMarkdown('## ', '')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded" title="Заголовок">
+                                <i class="fas fa-heading"></i>
+                            </button>
+                            <button type="button" onclick="insertMarkdown('- ', '')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded" title="Список">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button type="button" onclick="insertMarkdown('[', '](url)')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded" title="Ссылка">
+                                <i class="fas fa-link"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="space-y-4">
+                        <label class="text-sm font-medium text-gray-700">Предварительный просмотр</label>
+                        <div id="preview" 
+                             class="border border-gray-300 rounded-lg p-4 bg-gray-50 min-h-96 prose max-w-none">
+                            <p class="text-gray-500 italic">Предварительный просмотр появится здесь...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEO Settings -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">🔍 SEO настройки</h2>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="meta-title" class="block text-sm font-medium text-gray-700 mb-2">
+                            Meta Title
+                        </label>
+                        <input type="text" 
+                               id="meta-title" 
+                               name="meta_title"
+                               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                               placeholder="Заголовок для поисковых систем (оставьте пустым для автозаполнения)">
+                        <p class="text-xs text-gray-500 mt-1">Рекомендуется до 60 символов</p>
+                    </div>
+                    
+                    <div>
+                        <label for="meta-description" class="block text-sm font-medium text-gray-700 mb-2">
+                            Meta Description
+                        </label>
+                        <textarea id="meta-description" 
+                                  name="meta_description"
+                                  rows="3"
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                  placeholder="Описание для поисковых систем (оставьте пустым для автозаполнения)"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Рекомендуется до 160 символов</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-between bg-white rounded-lg shadow p-6">
+                <div class="flex items-center space-x-4">
+                    <a href="/admin/articles" 
+                       class="text-gray-600 hover:text-gray-900 font-medium">
+                        <i class="fas fa-times mr-2"></i>Отменить
+                    </a>
+                </div>
+                
+                <div class="flex items-center space-x-3">
+                    <button type="button" 
+                            onclick="saveDraft()"
+                            class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-save mr-2"></i>Сохранить как черновик
+                    </button>
+                    <button type="submit" 
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-check mr-2"></i>Опубликовать
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="flex items-center justify-between p-4 border-b">
+                <h3 class="text-lg font-semibold">Предварительный просмотр</h3>
+                <button onclick="closePreview()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modal-preview-content" class="p-6 prose max-w-none">
+                <!-- Preview content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Auto-generate slug from title
+    document.getElementById('title').addEventListener('input', function() {
+        const title = this.value;
+        const slug = title
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '');
+        
+        if (!document.getElementById('slug').value) {
+            document.getElementById('slug').value = slug;
+        }
+    });
+
+    // Live preview
+    const contentTextarea = document.getElementById('content');
+    const previewDiv = document.getElementById('preview');
+
+    contentTextarea.addEventListener('input', function() {
+        const markdown = this.value;
+        if (markdown.trim()) {
+            previewDiv.innerHTML = marked.parse(markdown);
+        } else {
+            previewDiv.innerHTML = '<p class="text-gray-500 italic">Предварительный просмотр появится здесь...</p>';
+        }
+    });
+
+    // Markdown toolbar functions
+    function insertMarkdown(before, after) {
+        const textarea = document.getElementById('content');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        const selectedText = text.substring(start, end);
+        
+        const newText = text.substring(0, start) + before + selectedText + after + text.substring(end);
+        textarea.value = newText;
+        
+        // Update cursor position
+        const newPosition = start + before.length + selectedText.length + after.length;
+        textarea.setSelectionRange(newPosition, newPosition);
+        textarea.focus();
+        
+        // Update preview
+        textarea.dispatchEvent(new Event('input'));
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            document.getElementById('article-form').dispatchEvent(new Event('submit'));
+        }
+    });
+
+    // Preview modal
+    document.getElementById('preview-btn').addEventListener('click', function() {
+        const content = document.getElementById('content').value;
+        const title = document.getElementById('title').value;
+        
+        if (!content.trim()) {
+            alert('Сначала введите содержание статьи');
+            return;
+        }
+        
+        const modalContent = document.getElementById('modal-preview-content');
+        modalContent.innerHTML = `
+            <h1 class="text-3xl font-bold mb-4">${title || 'Заголовок статьи'}</h1>
+            ${marked.parse(content)}
+        `;
+        
+        document.getElementById('preview-modal').classList.remove('hidden');
+        document.getElementById('preview-modal').classList.add('flex');
+    });
+
+    function closePreview() {
+        document.getElementById('preview-modal').classList.add('hidden');
+        document.getElementById('preview-modal').classList.remove('flex');
+    }
+
+    // Save as draft
+    function saveDraft() {
+        document.getElementById('published').checked = false;
+        document.getElementById('article-form').submit();
+    }
+
+    // Form validation
+    document.getElementById('article-form').addEventListener('submit', function(e) {
+        const title = document.getElementById('title').value.trim();
+        const slug = document.getElementById('slug').value.trim();
+        const content = document.getElementById('content').value.trim();
+        
+        if (!title || !slug || !content) {
+            e.preventDefault();
+            alert('Заполните все обязательные поля');
+            return;
+        }
+        
+        // Validate slug format
+        const slugPattern = /^[a-z0-9\-]+$/;
+        if (!slugPattern.test(slug)) {
+            e.preventDefault();
+            alert('URL (slug) должен содержать только английские буквы, цифры и дефисы');
+            return;
+        }
+    });
+
+    // Image preview functions
+    function previewImage(input) {
+        const file = input.files[0];
+        const preview = document.getElementById('image-preview');
+        const previewImg = document.getElementById('preview-img');
+        
+        if (file) {
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Размер файла не должен превышать 5MB');
+                input.value = '';
+                return;
+            }
+            
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Пожалуйста, выберите файл изображения');
+                input.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function removeImagePreview() {
+        document.getElementById('featured_image').value = '';
+        document.getElementById('image-preview').classList.add('hidden');
+        document.getElementById('preview-img').src = '';
+    }
+
+    // Auto-save to localStorage
+    setInterval(function() {
+        const formData = {
+            title: document.getElementById('title').value,
+            slug: document.getElementById('slug').value,
+            excerpt: document.getElementById('excerpt').value,
+            content: document.getElementById('content').value,
+            category: document.getElementById('category').value
+        };
+        localStorage.setItem('article_draft', JSON.stringify(formData));
+    }, 30000); // Save every 30 seconds
+
+    // Restore from localStorage
+    window.addEventListener('load', function() {
+        const saved = localStorage.getItem('article_draft');
+        if (saved && confirm('Найден сохраненный черновик. Восстановить?')) {
+            const data = JSON.parse(saved);
+            document.getElementById('title').value = data.title || '';
+            document.getElementById('slug').value = data.slug || '';
+            document.getElementById('excerpt').value = data.excerpt || '';
+            document.getElementById('content').value = data.content || '';
+            document.getElementById('category').value = data.category || 'tips';
+            
+            // Trigger preview update
+            document.getElementById('content').dispatchEvent(new Event('input'));
+        }
+    });
+    </script>
+</body>
+</html> 

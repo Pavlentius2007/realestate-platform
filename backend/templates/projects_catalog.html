@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Проекты недвижимости - Sianoro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">Проекты недвижимости в Паттайе</h1>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+                    Инвестируйте в лучшие проекты от проверенных застройщиков
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col lg:flex-row gap-6 items-center justify-between">
+                <!-- Status Filter -->
+                <div class="flex flex-wrap gap-3">
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if not selected_status %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProjects('', '{{ selected_district }}')"
+                    >
+                        Все проекты
+                    </button>
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if selected_status == 'active' %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProjects('active', '{{ selected_district }}')"
+                    >
+                        Активные
+                    </button>
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if selected_status == 'upcoming' %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProjects('upcoming', '{{ selected_district }}')"
+                    >
+                        Строящиеся
+                    </button>
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if selected_status == 'completed' %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProjects('completed', '{{ selected_district }}')"
+                    >
+                        Завершенные
+                    </button>
+                </div>
+
+                <!-- District Filter & AI Search -->
+                <div class="flex flex-wrap gap-3">
+                    <select 
+                        id="districtFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onchange="filterProjects('{{ selected_status }}', this.value)"
+                    >
+                        <option value="">{{ _("forms.all_districts") }}</option>
+                        {% for district in districts %}
+                        <option value="{{ district }}" {% if selected_district == district %}selected{% endif %}>
+                            {{ district }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <!-- Additional Filters -->
+                    <input 
+                        type="text" 
+                        id="developerFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Застройщик"
+                        onchange="filterProjectsAdvanced()"
+                    />
+                    
+                    <input 
+                        type="number" 
+                        id="budgetFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-40"
+                        placeholder="Бюджет до (฿)"
+                        onchange="filterProjectsAdvanced()"
+                    />
+                    
+                    <a href="/{{ lang }}#ai-search-section" 
+                       class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 flex items-center gap-2">
+                        🤖 Подбор по ИИ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Grid -->
+    <div class="container mx-auto px-4 py-8">
+        <div id="projectsContainer">
+            {% include "components/project_cards.html" %}
+        </div>
+    </div>
+</div>
+
+<script>
+// Filter projects function
+function filterProjects(status, district) {
+    const url = new URL('/{{ lang }}/api/projects', window.location.origin);
+    if (status) url.searchParams.set('status', status);
+    if (district) url.searchParams.set('district', district);
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            renderProjectCards(data.projects);
+        })
+        .catch(error => {
+            console.error('Error filtering projects:', error);
+        });
+}
+
+// Advanced filter function with all parameters
+function filterProjectsAdvanced() {
+    const url = new URL('/{{ lang }}/api/projects', window.location.origin);
+    
+    // Get current status and district from buttons/selects
+    const selectedStatus = document.querySelector('[data-status].bg-blue-600')?.dataset?.status || '';
+    const selectedDistrict = document.querySelector('[data-district].bg-blue-600')?.dataset?.district || '';
+    const developer = document.getElementById('developerFilter').value;
+    const budget = document.getElementById('budgetFilter').value;
+    
+    if (selectedStatus) url.searchParams.set('status', selectedStatus);
+    if (selectedDistrict) url.searchParams.set('district', selectedDistrict);
+    if (developer) url.searchParams.set('developer', developer);
+    if (budget) url.searchParams.set('budget', budget);
+    
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            renderProjectCards(data.projects);
+        })
+        .catch(error => {
+            console.error('Error filtering projects:', error);
+        });
+}
+
+// Render project cards
+function renderProjectCards(projects) {
+    const container = document.getElementById('projectsContainer');
+    
+    if (projects.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">{{ _("Проекты не найдены") }}</h3>
+                <p class="text-gray-600">{{ _("Попробуйте изменить фильтры") }}</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const cardsHtml = projects.map(project => `
+        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <div class="relative h-64 bg-gray-200">
+                ${project.hero_image ? 
+                    `<img src="${project.hero_image}" alt="${project.title}" class="w-full h-full object-cover">` :
+                    `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>`
+                }
+                <div class="absolute top-3 right-3">
+                    <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                        ${project.completion_year || '{{ _("Активный") }}'}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <h3 class="text-xl font-bold text-gray-900 mb-2">${project.title}</h3>
+                ${project.subtitle ? `<p class="text-gray-600 mb-3">${project.subtitle}</p>` : ''}
+                
+                <div class="flex items-center text-sm text-gray-600 mb-3">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                    </svg>
+                    ${project.district}
+                </div>
+                
+                ${project.developer ? `<p class="text-sm text-blue-600 mb-3">{{ _("Застройщик") }}: ${project.developer}</p>` : ''}
+                
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        ${project.price_from ? 
+                            `<span class="text-lg font-bold text-gray-900">
+                                ${new Intl.NumberFormat().format(project.price_from)}
+                                ${project.price_to ? ` - ${new Intl.NumberFormat().format(project.price_to)}` : '+'}
+                            </span>
+                            <span class="text-sm text-gray-600 ml-1">THB</span>` :
+                            '<span class="text-gray-600">{{ _("Цена по запросу") }}</span>'
+                        }
+                    </div>
+                </div>
+                
+                ${project.highlights && project.highlights.length > 0 ? 
+                    `<div class="flex flex-wrap gap-1 mb-4">
+                        ${project.highlights.slice(0, 2).map(highlight => 
+                            `<span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">${highlight}</span>`
+                        ).join('')}
+                        ${project.highlights.length > 2 ? `<span class="text-xs text-gray-500">+${project.highlights.length - 2}</span>` : ''}
+                    </div>` : ''
+                }
+                
+                <a href="/{{ lang }}/projects/${project.slug}" 
+                   class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                    {{ _("Подробнее о проекте") }}
+                </a>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cardsHtml}</div>`;
+}
+
+
+</script>
+
+{% endblock %} 

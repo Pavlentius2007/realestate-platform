@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование пользователя - Sianoro{% endblock %}
+
+{% block head %}
+<style>
+  .form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen">
+  <!-- Хлебные крошки -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <nav class="flex items-center gap-2 text-sm text-gray-500">
+        <a href="/admin" class="hover:text-blue-600 transition-colors">Админ панель</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <a href="/admin/users" class="hover:text-blue-600 transition-colors">Пользователи</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="text-gray-900 font-medium">Редактирование</span>
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- Заголовок -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">✏️ Редактирование пользователя</h1>
+      <p class="text-gray-600">Изменение данных пользователя {{ user.full_name }}</p>
+    </div>
+
+    <!-- Форма редактирования -->
+    <div class="form-container">
+      <div class="p-6 border-b">
+        <h2 class="text-xl font-semibold text-gray-900">Данные пользователя</h2>
+      </div>
+      
+      <form action="/admin/users/edit/{{ user.id }}" method="post" class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Основная информация -->
+          <div class="md:col-span-2">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">Основная информация</h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Имя *</label>
+            <input type="text" name="name" value="{{ user.full_name or '' }}" required 
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" value="{{ user.email or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Телефон</label>
+            <input type="text" name="phone" value="{{ user.phone or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Источник</label>
+            <select name="source" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+              <option value="">Выберите источник</option>
+              <option value="website" {% if user.source == 'website' %}selected{% endif %}>Сайт</option>
+              <option value="social" {% if user.source == 'social' %}selected{% endif %}>Социальные сети</option>
+              <option value="referral" {% if user.source == 'referral' %}selected{% endif %}>Рекомендация</option>
+              <option value="advertising" {% if user.source == 'advertising' %}selected{% endif %}>Реклама</option>
+              <option value="phone" {% if user.source == 'phone' %}selected{% endif %}>Телефонный звонок</option>
+              <option value="rental_request" {% if user.source == 'rental_request' %}selected{% endif %}>Заявка на аренду</option>
+              <option value="other" {% if user.source == 'other' %}selected{% endif %}>Другое</option>
+            </select>
+          </div>
+
+          <!-- Социальные сети -->
+          <div class="md:col-span-2 mt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">Социальные сети и мессенджеры</h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
+            <input type="text" name="whatsapp" value="{{ user.whatsapp_number or '' }}" placeholder="+66123456789"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Telegram</label>
+            <input type="text" name="telegram" value="{{ user.telegram_id or '' }}" placeholder="@username"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
+            <input type="text" name="instagram" value="{{ user.instagram_id or '' }}" placeholder="@username"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+
+          <!-- Локация и бюджет -->
+          <div class="md:col-span-2 mt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">Локация и бюджет</h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Город</label>
+            <input type="text" name="city" value="{{ user.city or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Страна</label>
+            <input type="text" name="country" value="{{ user.country or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Бюджет от (baht)</label>
+            <input type="number" name="budget_min" value="{{ user.budget_min or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Бюджет до (baht)</label>
+            <input type="number" name="budget_max" value="{{ user.budget_max or '' }}"
+                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+          </div>
+          
+          <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("forms.property_type") }}</label>
+            <select name="property_type" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+              <option value="">Выберите тип</option>
+              <option value="condo" {% if user.property_type == 'condo' %}selected{% endif %}>Кондоминиум</option>
+              <option value="villa" {% if user.property_type == 'villa' %}selected{% endif %}>Вилла</option>
+              <option value="house" {% if user.property_type == 'house' %}selected{% endif %}>Дом</option>
+              <option value="townhouse" {% if user.property_type == 'townhouse' %}selected{% endif %}>Таунхаус</option>
+              <option value="apartment" {% if user.property_type == 'apartment' %}selected{% endif %}>Апартаменты</option>
+              <option value="land" {% if user.property_type == 'land' %}selected{% endif %}>Земельный участок</option>
+            </select>
+          </div>
+
+          <!-- CRM поля -->
+          <div class="md:col-span-2 mt-4">
+            <h3 class="text-lg font-medium text-gray-900 mb-3">CRM данные</h3>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Статус</label>
+            <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+              <option value="new" {% if user.status == 'new' %}selected{% endif %}>Новый</option>
+              <option value="contacted" {% if user.status == 'contacted' %}selected{% endif %}>Связались</option>
+              <option value="interested" {% if user.status == 'interested' %}selected{% endif %}>Заинтересован</option>
+              <option value="closed" {% if user.status == 'closed' %}selected{% endif %}>Закрыт</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Приоритет</label>
+            <select name="priority" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+              <option value="low" {% if user.priority == 'low' %}selected{% endif %}>Низкий</option>
+              <option value="medium" {% if user.priority == 'medium' %}selected{% endif %}>Средний</option>
+              <option value="high" {% if user.priority == 'high' %}selected{% endif %}>Высокий</option>
+            </select>
+          </div>
+          
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Заметки</label>
+            <textarea name="notes" rows="4" 
+                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                      placeholder="Дополнительная информация о клиенте...">{{ user.notes or '' }}</textarea>
+          </div>
+          
+          <!-- Активность -->
+          <div class="md:col-span-2">
+            <label class="flex items-center gap-2">
+              <input type="checkbox" name="is_active" value="true" {% if user.is_active %}checked{% endif %}
+                     class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium text-gray-700">Активный пользователь</span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Кнопки действий -->
+        <div class="flex items-center justify-between gap-3 mt-6 pt-6 border-t">
+          <a href="/admin/users" 
+             class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Назад к списку
+          </a>
+          
+          <div class="flex items-center gap-3">
+            <button type="submit" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              Сохранить изменения
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %} 

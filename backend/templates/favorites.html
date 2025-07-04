@@ -1,0 +1,339 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Избранное") }} - Sianoro{% endblock %}
+
+{% block head %}
+<meta name="description" content="Ваши избранные объекты недвижимости в Паттайе">
+{% endblock %}
+
+{% block content %}
+<main class="max-w-7xl mx-auto px-4 py-8">
+  <!-- Заголовок страницы -->
+  <div class="text-center mb-10">
+    <h1 class="text-3xl md:text-4xl font-bold font-heading text-gray-900 mb-4">
+      ❤️ {{ _("Избранное") }}
+    </h1>
+    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+      {{ _("Сохранённые объекты недвижимости") }}
+    </p>
+  </div>
+
+  <!-- Статистика и управление -->
+  {% if total_count > 0 %}
+  <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4">
+        <div class="bg-red-100 p-3 rounded-xl">
+          <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div>
+          <h2 class="text-xl font-semibold text-gray-900">
+            {{ _("Сохранено объектов") }}: {{ total_count }}
+          </h2>
+          <p class="text-sm text-gray-500">
+            {{ _("Ваши избранные предложения недвижимости") }}
+          </p>
+        </div>
+      </div>
+      
+      <div class="flex gap-3">
+        <button onclick="shareFavorites()" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl transition-colors">
+          📤 {{ _("Поделиться") }}
+        </button>
+        <button onclick="clearAllFavorites()" 
+                class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-xl transition-colors">
+          🗑️ {{ _("Очистить всё") }}
+        </button>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Список избранных объектов -->
+  <div id="favorites-container">
+    {% if favorites %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for favorite in favorites %}
+          {% set property = favorite.property %}
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group" 
+               data-property-id="{{ property.id }}">
+            <!-- Изображение -->
+            <div class="relative h-64 overflow-hidden">
+              {% if property.images %}
+                <img src="{{ property.images[0].image_url }}" 
+                     alt="{{ property.title }}"
+                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              {% else %}
+                <div class="w-full h-full bg-gray-200 flex items-center justify-center">
+                  <span class="text-gray-400">📷 {{ _("Нет фото") }}</span>
+                </div>
+              {% endif %}
+              
+              <!-- Кнопка удаления из избранного -->
+              <button onclick="removeFromFavorites({{ property.id }})" 
+                      class="absolute top-3 right-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-colors">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              
+              <!-- Статус и тип -->
+              <div class="absolute top-3 left-3 flex gap-2">
+                {% if property.is_new_building %}
+                  <span class="bg-purple-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    🏗️ {{ _("Новостройка") }}
+                  </span>
+                {% endif %}
+                {% if property.property_type == 'rent' %}
+                  <span class="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    🏖️ {{ _("Аренда") }}
+                  </span>
+                {% else %}
+                  <span class="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-medium">
+                    🏠 {{ _("Продажа") }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+            
+            <!-- Информация -->
+            <div class="p-6">
+              <!-- Заголовок и цена -->
+              <div class="mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                  {{ property.title }}
+                </h3>
+                <div class="flex items-center justify-between">
+                  <div class="text-2xl font-bold text-blue-600">
+                    ฿{{ "{:,.0f}".format(property.price) }}
+                    {% if property.price_period %}
+                      <span class="text-sm text-gray-500">/{{ property.price_period }}</span>
+                    {% endif %}
+                  </div>
+                  {% if property.old_price and property.old_price > property.price %}
+                    <div class="text-sm text-gray-500 line-through">
+                      ฿{{ "{:,.0f}".format(property.old_price) }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <!-- Местоположение -->
+              {% if property.location or property.district %}
+              <div class="flex items-center text-gray-600 mb-4">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-sm">
+                  {% if property.district %}{{ property.district }}{% endif %}
+                  {% if property.location and property.district %}, {% endif %}
+                  {% if property.location %}{{ property.location }}{% endif %}
+                </span>
+              </div>
+              {% endif %}
+              
+              <!-- Характеристики -->
+              <div class="grid grid-cols-3 gap-4 mb-4 text-center">
+                {% if property.bedrooms is not none %}
+                <div class="text-sm">
+                  <div class="text-gray-900 font-semibold">{{ property.bedrooms }}</div>
+                  <div class="text-gray-500">{{ _("спален") }}</div>
+                </div>
+                {% endif %}
+                {% if property.bathrooms is not none %}
+                <div class="text-sm">
+                  <div class="text-gray-900 font-semibold">{{ property.bathrooms }}</div>
+                  <div class="text-gray-500">{{ _("ванных") }}</div>
+                </div>
+                {% endif %}
+                {% if property.area %}
+                <div class="text-sm">
+                  <div class="text-gray-900 font-semibold">{{ property.area }}</div>
+                  <div class="text-gray-500">м²</div>
+                </div>
+                {% endif %}
+              </div>
+              
+              <!-- Дата добавления в избранное -->
+              <div class="text-xs text-gray-400 mb-4">
+                {{ _("Добавлено") }}: {{ favorite.created_at.strftime('%d.%m.%Y') }}
+              </div>
+              
+              <!-- Кнопки действий -->
+              <div class="flex gap-3">
+                <a href="/ru/properties/{{ property.id }}" 
+                   class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-xl transition-colors">
+                  👁️ {{ _("Смотреть") }}
+                </a>
+                <button onclick="contactAboutProperty({{ property.id }})" 
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-xl transition-colors">
+                  📞 {{ _("Связаться") }}
+                </button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <!-- Пустое состояние -->
+      <div class="text-center py-16">
+        <div class="mb-8">
+          <svg class="w-24 h-24 mx-auto text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">
+          {{ _("Пока ничего нет в избранном") }}
+        </h2>
+        <p class="text-gray-600 mb-8 max-w-md mx-auto">
+          {{ _("Добавляйте понравившиеся объекты в избранное, чтобы легко находить их позже") }}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/ru/properties/?deal_type=buy" 
+             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors">
+            🏠 {{ _("Купить недвижимость") }}
+          </a>
+          <a href="/ru/properties/rent" 
+             class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl transition-colors">
+            🏖️ {{ _("Снять недвижимость") }}
+          </a>
+          <a href="/ru/projects" 
+             class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl transition-colors">
+            🏗️ {{ _("Новостройки") }}
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</main>
+
+<!-- JavaScript для управления избранным -->
+<script>
+// Удаление из избранного
+async function removeFromFavorites(propertyId) {
+  try {
+    const response = await fetch(`/ru/favorites/remove/${propertyId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      // Удаляем элемент со страницы
+      const propertyCard = document.querySelector(`[data-property-id="${propertyId}"]`);
+      if (propertyCard) {
+        propertyCard.style.transform = 'scale(0.95)';
+        propertyCard.style.opacity = '0';
+        setTimeout(() => {
+          propertyCard.remove();
+          // Если больше нет объектов, перезагружаем страницу
+          if (document.querySelectorAll('[data-property-id]').length === 0) {
+            location.reload();
+          }
+        }, 300);
+      }
+      
+      showNotification(data.message, 'success');
+    } else {
+      showNotification(data.message, 'error');
+    }
+  } catch (error) {
+    showNotification('Ошибка при удалении из избранного', 'error');
+  }
+}
+
+// Очистка всего избранного
+async function clearAllFavorites() {
+  if (!confirm('{{ _("Вы уверены, что хотите удалить все объекты из избранного?") }}')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch('/ru/favorites/clear', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      location.reload();
+    } else {
+      showNotification('Ошибка при очистке избранного', 'error');
+    }
+  } catch (error) {
+    showNotification('Ошибка при очистке избранного', 'error');
+  }
+}
+
+// Поделиться избранным
+function shareFavorites() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Мои избранные объекты недвижимости',
+      text: 'Посмотрите на эти замечательные объекты недвижимости в Паттайе!',
+      url: window.location.href
+    });
+  } else {
+    // Копируем ссылку в буфер обмена
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      showNotification('{{ _("Ссылка скопирована в буфер обмена") }}', 'success');
+    });
+  }
+}
+
+// Связаться по поводу объекта
+function contactAboutProperty(propertyId) {
+  const message = `Здравствуйте! Меня интересует объект #${propertyId} с вашего сайта. Можете предоставить подробную информацию?`;
+  const whatsappUrl = `https://wa.me/66982649201?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+// Показ уведомлений
+function showNotification(message, type = 'info') {
+  const notification = document.createElement('div');
+  notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg text-white font-medium transition-all duration-300 transform translate-x-full`;
+  
+  const colors = {
+    success: 'bg-green-600',
+    error: 'bg-red-600',
+    info: 'bg-blue-600'
+  };
+  
+  notification.classList.add(colors[type] || colors.info);
+  notification.textContent = message;
+  
+  document.body.appendChild(notification);
+  
+  // Показываем
+  setTimeout(() => {
+    notification.style.transform = 'translateX(0)';
+  }, 100);
+  
+  // Скрываем через 5 секунд
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 300);
+  }, 5000);
+}
+</script>
+
+<style>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
+{% endblock %} 

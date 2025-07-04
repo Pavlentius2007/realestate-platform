@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Добавить объект аренды - Админка{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-4xl mx-auto px-4">
+    
+    <!-- Заголовок -->
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">🏠 Добавить объект для аренды</h1>
+        <p class="text-gray-600 mt-2">Создание нового объекта для сдачи в аренду</p>
+      </div>
+      <a href="/admin/rental" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+        ← Назад к списку
+      </a>
+    </div>
+
+    <!-- Форма -->
+    <form action="/add-rental" method="post" enctype="multipart/form-data" class="space-y-8">
+      
+      <!-- Основная информация -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          🏠 Основная информация
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Название объекта <span class="text-red-500">*</span>
+            </label>
+            <input type="text" name="title" required 
+                   placeholder="Например: Уютная студия в центре Паттайи"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ _("forms.property_type") }} <span class="text-red-500">*</span>
+            </label>
+            <select name="property_type" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">{{ _("property.select_type") }}</option>
+              <option value="apartment">{{ _("common.apartments") }}</option>
+              <option value="villa">{{ _("common.villa") }}</option>
+              <option value="townhouse">{{ _("property.types.townhouse") }}</option>
+              <option value="condo">{{ _("common.condo") }}</option>
+              <option value="studio">{{ _("common.studio") }}</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Район <span class="text-red-500">*</span>
+            </label>
+            <select name="district" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">Выберите район</option>
+              <option value="central_pattaya">Центральная Паттайя</option>
+              <option value="north_pattaya">Северная Паттайя</option>
+              <option value="south_pattaya">Южная Паттайя</option>
+              <option value="jomtien">Джомтьен</option>
+              <option value="naklua">Наклуа</option>
+              <option value="wong_amat">Вонг Амат</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              {{ _("property.bedrooms") }}
+            </label>
+            <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="0">{{ _("common.studio") }}</option>
+              <option value="1">1 спальня</option>
+              <option value="2">2 спальни</option>
+              <option value="3">3 спальни</option>
+              <option value="4">4+ спален</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Площадь (м²)
+            </label>
+            <input type="number" name="area" min="0" 
+                   placeholder="35"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Стоимость аренды -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          💰 Стоимость аренды
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Цена <span class="text-red-500">*</span>
+            </label>
+            <input type="number" name="price" required min="0" 
+                   placeholder="25000"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Период оплаты
+            </label>
+            <select name="price_period" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="month">в месяц</option>
+              <option value="day">в день</option>
+              <option value="week">в неделю</option>
+              <option value="year">в год</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Валюта
+            </label>
+            <select name="currency" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="THB">THB (฿)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="RUB">RUB (₽)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Удобства -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          ✨ Удобства и особенности
+        </h2>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="pool" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">🏊‍♂️ Бассейн</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="fitness" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">💪 Фитнес</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="sea_view" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">🌊 Вид на море</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="parking" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">🚗 Парковка</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="wifi" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">📶 Wi-Fi</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="ac" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">❄️ Кондиционер</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="balcony" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">🏞️ Балкон</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="amenities" value="kitchen" class="rounded border-gray-300 text-blue-600">
+            <span class="ml-2">🍳 Кухня</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Описание -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          📝 Описание
+        </h2>
+        
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Краткое описание <span class="text-red-500">*</span>
+            </label>
+            <input type="text" name="short_description" required 
+                   placeholder="Уютная студия в 5 минутах от пляжа"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Полное описание
+            </label>
+            <textarea name="description" rows="5" 
+                      placeholder="Подробное описание объекта, особенности, расположение..."
+                      class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Фотографии -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          📸 Фотографии
+        </h2>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Загрузить фотографии
+          </label>
+          <input type="file" name="images" multiple accept="image/*" 
+                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          <p class="text-sm text-gray-500 mt-2">
+            Можно выбрать несколько файлов. Рекомендуемый размер: 1200x800px
+          </p>
+        </div>
+      </div>
+
+      <!-- Контакты -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+          📞 Контактная информация
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              Контактный телефон
+            </label>
+            <input type="tel" name="contact_phone" 
+                   placeholder="+66 XX XXX XXXX"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              WhatsApp
+            </label>
+            <input type="tel" name="whatsapp" 
+                   placeholder="+66 XX XXX XXXX"
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Кнопки -->
+      <div class="flex items-center justify-end gap-4 bg-white rounded-lg shadow p-6">
+        <a href="/admin/rental" 
+           class="px-6 py-3 text-gray-600 hover:text-gray-800 font-medium">
+          Отмена
+        </a>
+        <button type="submit" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+          💾 Сохранить объект
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %} 

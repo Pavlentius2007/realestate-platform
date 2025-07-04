@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Регистрация</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2a79c5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #205b94;
+    }
+    .message {
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Регистрация</h2>
+    <form id="register-form">
+      <input type="text" name="full_name" placeholder="Имя" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="phone" placeholder="Телефон" />
+      <input type="hidden" name="source" id="source" value="website" />
+      <button type="submit">Зарегистрироваться</button>
+    </form>
+    <div class="message" id="message"></div>
+  </div>
+
+  <script>
+    document.getElementById("register-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const formData = {
+        full_name: form.full_name.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        source: form.source.value
+      };
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/users/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (res.ok) {
+          document.getElementById("message").innerText = "✅ Вы успешно зарегистрированы!";
+          form.reset();
+        } else {
+          const err = await res.json();
+          document.getElementById("message").innerText = "❌ " + (err.detail || "Ошибка регистрации");
+        }
+      } catch (e) {
+        document.getElementById("message").innerText = "❌ Ошибка подключения к серверу";
+      }
+    });
+  </script>
+</body>
+</html>

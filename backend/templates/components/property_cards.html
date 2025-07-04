@@ -1,0 +1,68 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="results">
+  {% for property in properties %}
+    <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 transition hover:shadow-lg">
+      <img src="/static/images/{{ property.preview_image or 'default.jpg' }}" alt="{{ property.title }}"
+           class="w-full h-48 object-cover">
+
+      <div class="p-4 space-y-2">
+        <!-- 💸 Цена -->
+        <div class="text-xl font-bold text-sber">
+          ฿ {{ "{:,.0f}".format(property.price) }}
+          {% if property.old_price and property.old_price > property.price %}
+            <span class="text-sm text-gray-400 line-through ml-2">
+              ฿ {{ "{:,.0f}".format(property.old_price) }}
+            </span>
+          {% endif %}
+        </div>
+
+        <!-- 🏢 Название и район -->
+        <h3 class="text-lg font-bold text-gray-800 truncate">{{ property.title }}</h3>
+        <div class="text-gray-800 font-semibold text-sm truncate">🏢 {{ property.condo_name or "–" }}</div>
+        <div class="text-gray-500 text-sm truncate">📍 {{ property.district or "–" }}, {{ property.location or "–" }}</div>
+
+        <!-- 🍿 Характеристики -->
+        <div class="flex justify-between text-xs text-gray-600 mt-2">
+          <span>🏧 {{ property.bedrooms or "–" }} спальн.</span>
+          <span>🚻 {{ property.bathrooms or "–" }} ванн.</span>
+        </div>
+
+        <div class="flex justify-between text-xs text-gray-600">
+          <span>📀 {{ property.area or "–" }} м²</span>
+          <span>🏢 {{ property.floor or "—" }} этаж</span>
+        </div>
+
+        <!-- 🔗 Подробнее -->
+        <div class="pt-2 text-right">
+          <a href="/{{ lang }}/properties/{{ property.id }}" class="text-sm text-sber-dark font-medium underline">Подробнее</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-gray-500 col-span-full text-center">Нет предложений по фильтрам.</p>
+  {% endfor %}
+</div>
+
+<div id="loading-indicator" class="text-center py-6 hidden">
+  <span class="text-gray-500 text-sm">Загрузка...</span>
+</div>
+
+{% if next_page %}
+  <div class="text-center pt-6">
+    <button
+      hx-get="/{{ lang }}/properties/filter?page={{ next_page }}"
+      hx-target="#results"
+      hx-swap="afterend"
+      class="bg-sber hover:bg-sber-dark text-white py-2 px-4 rounded-xl shadow">
+      Показать ещё
+    </button>
+  </div>
+{% endif %}
+
+<script>
+  document.body.addEventListener("htmx:beforeRequest", () => {
+    document.getElementById("loading-indicator").classList.remove("hidden");
+  });
+  document.body.addEventListener("htmx:afterSwap", () => {
+    document.getElementById("loading-indicator").classList.add("hidden");
+  });
+</script>

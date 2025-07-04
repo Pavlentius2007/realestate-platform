@@ -1,0 +1,538 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _("rent.title") }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+<style>
+  .filter-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+  }
+  
+  .property-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+  }
+  
+  .amenity-badge {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin: 2px;
+    display: inline-block;
+  }
+  
+  .price-badge {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  
+  .date-input {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+  }
+  
+  .date-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+  
+  .request-modal {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-br from-blue-50 to-cyan-50 min-h-screen">
+  
+  <!-- Hero секция -->
+  <div class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ _("rent.title") }}</h1>
+      <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+        {{ _("rent.subtitle") }}
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    
+    <!-- Фильтры -->
+    <div class="filter-card p-6 mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+        <span class="text-3xl mr-3">🔍</span>
+        {{ _("rent.search_title") }}
+      </h2>
+      
+      <form id="rentalFilters" class="space-y-6" onsubmit="searchRentals(); return false;">
+        
+        <!-- Основные параметры -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-slate-300 mb-2">🏠 {{ _("forms.property_type") }}</label>
+            <select name="property_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">{{ _("common.any_type") }}</option>
+              <option value="apartment">{{ _("common.apartments") }}</option>
+              <option value="villa">{{ _("common.villa") }}</option>
+              <option value="townhouse">{{ _("property.types.townhouse") }}</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.bedrooms_count") }}</label>
+            <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">{{ _("common.any_amount") }}</option>
+              <option value="0">{{ _("common.studio") }}</option>
+              <option value="1">{{ _("common.1_bedroom") }}</option>
+              <option value="2">{{ _("common.2_bedrooms") }}</option>
+              <option value="3">{{ _("common.3_bedrooms") }}</option>
+              <option value="4">4+ {{ _("common.bedrooms") }}</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.district") }}</label>
+            <select name="district" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">{{ _("forms.any_district") }}</option>
+              <option value="central_pattaya">{{ _("districts.central") }}</option>
+              <option value="north_pattaya">{{ _("districts.north") }}</option>
+              <option value="south_pattaya">{{ _("districts.south") }}</option>
+              <option value="jomtien">{{ _("districts.jomtien") }}</option>
+              <option value="naklua">{{ _("districts.naklua") }}</option>
+              <option value="wong_amat">{{ _("districts.wongamat") }}</option>
+            </select>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.rental_type") }}</label>
+            <select name="rental_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+              <option value="">{{ _("rent.any_period") }}</option>
+              <option value="daily">{{ _("rent.daily") }}</option>
+              <option value="weekly">{{ _("rent.weekly") }}</option>
+              <option value="monthly">{{ _("rent.monthly") }}</option>
+              <option value="long_term">{{ _("rent.long_term") }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Бюджет -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.budget_monthly") }}</label>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="number" name="price_from" placeholder="{{ _('rent.from_placeholder') }}" 
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+            <input type="number" name="price_to" placeholder="{{ _('rent.to_placeholder') }}" 
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <!-- Даты аренды -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.rental_period") }}</label>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <input type="text" id="check_in" name="check_in" placeholder="{{ _('rent.check_in') }}" 
+                     class="date-input w-full focus:outline-none" readonly>
+            </div>
+            <div>
+              <input type="text" id="check_out" name="check_out" placeholder="{{ _('rent.check_out') }}" 
+                     class="date-input w-full focus:outline-none" readonly>
+            </div>
+          </div>
+        </div>
+
+        <!-- Удобства -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">{{ _("rent.amenities") }}</label>
+          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="pool" class="rounded">
+              <span class="text-sm">🏊 {{ _("amenities.pool") }}</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="gym" class="rounded">
+              <span class="text-sm">💪 {{ _("amenities.gym") }}</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="sea_view" class="rounded">
+              <span class="text-sm">🌊 {{ _("common.sea_view") }}</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="parking" class="rounded">
+              <span class="text-sm">🚗 {{ _("amenities.parking") }}</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="wifi" class="rounded">
+              <span class="text-sm">📶 {{ _("amenities.wifi") }}</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="amenities" value="air_con" class="rounded">
+              <span class="text-sm">❄️ {{ _("amenities.air_con") }}</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <button type="button" onclick="clearFilters()" 
+                  class="text-gray-600 hover:text-gray-800 underline">
+            {{ _("rent.clear_filters") }}
+          </button>
+          <button type="submit" 
+                  class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2">
+            <span>🔍</span>
+            {{ _("rent.find_objects") }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Результаты поиска -->
+    <div id="searchResults">
+      <!-- Заглушка пока нет результатов -->
+      <div class="text-center py-16">
+        <div class="text-6xl mb-4">🏖️</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ _("forms.select_search_parameters") }}</h3>
+        <p class="text-gray-600 mb-6">{{ _("forms.search_instruction") }}</p>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+          <p class="text-blue-800 text-sm">
+            {{ _("rent.tip_title") }} <strong>{{ _("rent.tip_text") }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Популярные объекты -->
+    <div class="mt-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">{{ _("rent.popular_objects") }}</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Пример карточки объекта -->
+        <div class="property-card">
+          <div class="relative">
+            <img src="/static/images/default.jpg" alt="Кондо" class="w-full h-48 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="price-badge">25,000 ฿/мес</span>
+            </div>
+            <div class="absolute top-4 right-4">
+              <button onclick="openRequestModal('Luxury Condo Jomtien')" 
+                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                {{ _("rent.contact") }}
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Luxury Condo Jomtien</h3>
+            <p class="text-gray-600 mb-3">📍 Джомтьен, в 50 метрах от пляжа</p>
+            <p class="text-gray-700 mb-4">Современные апартаменты с потрясающим видом на море. 1 спальня, полностью меблированы.</p>
+            
+            <div class="flex flex-wrap gap-1 mb-4">
+              <span class="amenity-badge">🏊 Бассейн</span>
+              <span class="amenity-badge">💪 Фитнес</span>
+              <span class="amenity-badge">🌊 Вид на море</span>
+              <span class="amenity-badge">🚗 Парковка</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">1 спальня • 45 м²</span>
+              <button onclick="openRequestModal('Luxury Condo Jomtien')" 
+                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                {{ _("rent.book") }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Еще примеры -->
+        <div class="property-card">
+          <div class="relative">
+            <img src="/static/images/default.jpg" alt="Вилла" class="w-full h-48 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="price-badge">85,000 ฿/мес</span>
+            </div>
+            <div class="absolute top-4 right-4">
+              <button onclick="openRequestModal('Villa Central Pattaya')" 
+                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                📞 Связаться
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Villa Central Pattaya</h3>
+            <p class="text-gray-600 mb-3">📍 Центральная Паттайя</p>
+            <p class="text-gray-700 mb-4">Роскошная вилла с частным бассейном. Идеально для семейного отдыха или компании друзей.</p>
+            
+            <div class="flex flex-wrap gap-1 mb-4">
+              <span class="amenity-badge">🏊 Частный бассейн</span>
+              <span class="amenity-badge">🏠 3 спальни</span>
+              <span class="amenity-badge">🌴 Сад</span>
+              <span class="amenity-badge">🚗 Парковка</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">3 спальни • 180 м²</span>
+              <button onclick="openRequestModal('Villa Central Pattaya')" 
+                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                Забронировать
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="property-card">
+          <div class="relative">
+            <img src="/static/images/default.jpg" alt="Студия" class="w-full h-48 object-cover">
+            <div class="absolute top-4 left-4">
+              <span class="price-badge">18,000 ฿/мес</span>
+            </div>
+            <div class="absolute top-4 right-4">
+              <button onclick="openRequestModal('Modern Studio Naklua')" 
+                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
+                📞 Связаться
+              </button>
+            </div>
+          </div>
+          
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">Modern Studio Naklua</h3>
+            <p class="text-gray-600 mb-3">📍 Наклуа, тихий район</p>
+            <p class="text-gray-700 mb-4">Уютная студия для одного или пары. Отличное соотношение цены и качества.</p>
+            
+            <div class="flex flex-wrap gap-1 mb-4">
+              <span class="amenity-badge">📶 Wi-Fi</span>
+              <span class="amenity-badge">❄️ Кондиционер</span>
+              <span class="amenity-badge">🍴 Кухня</span>
+              <span class="amenity-badge">🏊 Общий бассейн</span>
+            </div>
+            
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">Студия • 32 м²</span>
+              <button onclick="openRequestModal('Modern Studio Naklua')" 
+                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
+                Забронировать
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Преимущества аренды с нами -->
+    <div class="bg-white rounded-2xl p-8 mt-16">
+      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">{{ _("rent.why_choose_us") }}</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">🏆</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.verified_properties") }}</h3>
+          <p class="text-gray-600 text-sm">{{ _("rent.verified_desc") }}</p>
+        </div>
+        
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">💬</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.support_24_7") }}</h3>
+          <p class="text-gray-600 text-sm">{{ _("rent.support_desc") }}</p>
+        </div>
+        
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">💳</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.transparent_prices") }}</h3>
+          <p class="text-gray-600 text-sm">{{ _("rent.transparent_desc") }}</p>
+        </div>
+        
+        <div class="text-center p-6">
+          <div class="text-4xl mb-4">🚗</div>
+          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.free_transfer") }}</h3>
+          <p class="text-gray-600 text-sm">{{ _("rent.transfer_desc") }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно заявки -->
+<div id="requestModal" class="request-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl max-w-md w-full p-6 transform transition-all">
+    <div class="flex items-center justify-between mb-6">
+      <h3 class="text-xl font-bold text-gray-900">{{ _("rent.request_modal") }}</h3>
+      <button onclick="closeRequestModal()" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <form onsubmit="submitRentalRequest(); return false;" class="space-y-4">
+      <input type="hidden" id="propertyName" name="property_name">
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.your_name") }}</label>
+        <input type="text" name="name" required 
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.phone") }}</label>
+        <input type="tel" name="phone" required placeholder="+66 или +7" 
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.whatsapp") }}</label>
+        <input type="tel" name="whatsapp" placeholder="+66123456789" 
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.telegram") }}</label>
+        <input type="text" name="telegram" placeholder="@username" 
+               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+      </div>
+      
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.check_in") }}</label>
+          <input type="text" name="check_in_date" id="modalCheckIn" 
+                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500" readonly>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.check_out") }}</label>
+          <input type="text" name="check_out_date" id="modalCheckOut" 
+                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500" readonly>
+        </div>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.guests") }}</label>
+        <select name="guests" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          <option value="1">1 человек</option>
+          <option value="2">2 человека</option>
+          <option value="3">3 человека</option>
+          <option value="4">4 человека</option>
+          <option value="5+">5+ человек</option>
+        </select>
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.comment") }}</label>
+        <textarea name="message" rows="3" placeholder="Дополнительные пожелания..." 
+                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"></textarea>
+      </div>
+      
+      <div class="flex items-center justify-end gap-3 pt-4">
+        <button type="button" onclick="closeRequestModal()" 
+                class="px-4 py-2 text-gray-600 hover:text-gray-800">
+          {{ _("rent.cancel") }}
+        </button>
+        <button type="submit" 
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+          {{ _("rent.submit_request") }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Инициализация календарей
+document.addEventListener('DOMContentLoaded', function() {
+  // Основные поля дат
+  flatpickr("#check_in", {
+    locale: "ru",
+    dateFormat: "d.m.Y",
+    minDate: "today",
+    onChange: function(selectedDates, dateStr, instance) {
+      if (selectedDates[0]) {
+        document.getElementById('check_out')._flatpickr.set('minDate', selectedDates[0]);
+      }
+    }
+  });
+  
+  flatpickr("#check_out", {
+    locale: "ru",
+    dateFormat: "d.m.Y",
+    minDate: "today"
+  });
+  
+  // Поля в модальном окне
+  flatpickr("#modalCheckIn", {
+    locale: "ru",
+    dateFormat: "d.m.Y",
+    minDate: "today",
+    onChange: function(selectedDates, dateStr, instance) {
+      if (selectedDates[0]) {
+        document.getElementById('modalCheckOut')._flatpickr.set('minDate', selectedDates[0]);
+      }
+    }
+  });
+  
+  flatpickr("#modalCheckOut", {
+    locale: "ru",
+    dateFormat: "d.m.Y",
+    minDate: "today"
+  });
+});
+
+// Функции для работы с модальным окном
+function openRequestModal(propertyName) {
+  document.getElementById('propertyName').value = propertyName;
+  document.getElementById('requestModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeRequestModal() {
+  document.getElementById('requestModal').classList.add('hidden');
+  document.body.style.overflow = 'auto';
+}
+
+// Закрытие модального окна при клике вне его области
+document.getElementById('requestModal').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closeRequestModal();
+  }
+});
+
+function submitRentalRequest() {
+  // Здесь будет логика отправки формы
+  alert('Ваша заявка отправлена! Мы свяжемся с вами в ближайшее время.');
+  closeRequestModal();
+}
+
+function clearFilters() {
+  document.getElementById('rentalFilters').reset();
+  // Дополнительная логика очистки, если нужна
+}
+
+function searchRentals() {
+  // Здесь будет логика поиска
+  alert('Функция поиска в разработке');
+}
+</script>
+{% endblock %} 

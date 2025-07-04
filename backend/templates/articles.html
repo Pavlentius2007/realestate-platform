@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if article %}
+{{ article.title }} - {{ _("articles.useful") }} - Sianoro
+{% else %}
+{{ _("articles.useful") }} - {{ _("articles.subtitle") }} - Sianoro
+{% endif %}
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<style>
+  .article-content h2 { @apply text-2xl font-bold text-gray-900 mt-8 mb-4; }
+  .article-content h3 { @apply text-xl font-semibold text-gray-800 mt-6 mb-3; }
+  .article-content p { @apply text-gray-700 leading-relaxed mb-4; }
+  .article-content ul { @apply list-disc list-inside text-gray-700 mb-4 pl-4; }
+  .article-content ol { @apply list-decimal list-inside text-gray-700 mb-4 pl-4; }
+  .article-content li { @apply mb-2; }
+  .article-content a { @apply text-blue-600 hover:text-blue-800 underline; }
+  .article-content blockquote { @apply border-l-4 border-blue-500 pl-4 italic text-gray-600 my-4; }
+  .article-content pre { @apply bg-gray-100 rounded-lg p-4 overflow-x-auto text-sm; }
+  .article-content code { @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono; }
+  .sidebar-sticky { top: 90px; }
+  .article-card { transition: all 0.3s ease; }
+  .article-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+  .search-highlight { background: linear-gradient(120deg, #a7f3d0 0%, #a7f3d0 100%); }
+  .toc-link { transition: all 0.2s ease; }
+  .toc-link:hover { background-color: #f3f4f6; border-radius: 6px; }
+  .gradient-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  
+  <!-- Header Section -->
+  <div class="bg-gradient-to-r from-blue-600 to-purple-700 py-12">
+    <div class="container mx-auto px-4">
+      <div class="text-center text-white">
+        {% if article %}
+        <nav class="text-sm text-gray-200 mb-4">
+          <a href="/{{ lang }}" class="hover:underline">{{ _("articles.home") }}</a> › 
+          <a href="/{{ lang }}/articles" class="hover:underline">{{ _("articles.useful") }}</a> › 
+          <span>{{ article.title }}</span>
+        </nav>
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ article.title }}</h1>
+        {% if article.excerpt %}
+        <p class="text-xl text-gray-200 max-w-3xl mx-auto">{{ article.excerpt }}</p>
+        {% endif %}
+        {% else %}
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ _("articles.title") }}</h1>
+        <p class="text-xl text-gray-200">{{ _("articles.subtitle") }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Image Section (for single article) -->
+  {% if article and article.featured_image %}
+  <div class="container mx-auto px-4 -mt-6 relative z-10">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <img src="{{ article.featured_image }}" 
+           alt="{{ article.title }}" 
+           class="w-full h-64 md:h-96 object-cover">
+    </div>
+  </div>
+  {% endif %}
+  
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="sticky top-20 space-y-6">
+          
+          <!-- Search -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              🔍 {{ _("articles.search_articles") }}
+            </h3>
+            <input type="text" 
+                   id="article-search" 
+                   placeholder="{{ _('articles.find_article') }}" 
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+          </div>
+          
+          <!-- All Articles -->
+          {% if articles %}
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              📋 {{ _("articles.all_articles") }}
+            </h3>
+            <nav class="space-y-2">
+              {% for art in articles %}
+              <a href="/{{ lang }}/articles/{{ art.slug }}" 
+                 class="block p-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded transition-colors {% if article and article.slug == art.slug %}bg-blue-50 text-blue-600 font-semibold{% endif %}">
+                <div class="font-medium">{{ art.title }}</div>
+                {% if art.excerpt %}
+                <div class="text-xs text-gray-500 mt-1">{{ art.excerpt[:60] }}...</div>
+                {% endif %}
+              </a>
+              {% endfor %}
+            </nav>
+          </div>
+          {% endif %}
+          
+          <!-- Categories -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">
+              🏷️ {{ _("articles.categories") }}
+            </h3>
+            <div class="space-y-2">
+              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+                🏠 {{ _("articles.property_purchase") }}
+              </a>
+              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+                🔑 {{ _("articles.rental_housing") }}
+              </a>
+              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+                📈 {{ _("articles.investments") }}
+              </a>
+              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+                ⚖️ {{ _("articles.legal_issues") }}
+              </a>
+            </div>
+          </div>
+          
+          <!-- Contact -->
+          <div class="bg-gradient-to-br from-blue-600 to-purple-700 rounded-lg p-6 text-white">
+            <h3 class="text-lg font-semibold mb-3">❓ {{ _("articles.have_questions") }}</h3>
+            <p class="text-blue-100 text-sm mb-4">{{ _("articles.experts_ready") }}</p>
+            <button onclick="contactExpert()" 
+                    class="w-full bg-white text-blue-600 font-semibold py-2 px-4 rounded-lg hover:bg-blue-50">
+              💬 {{ _("articles.ask_question") }}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Main Content -->
+      <div class="lg:col-span-3">
+        {% if article %}
+        <!-- Single Article View -->
+        <article class="bg-white rounded-lg shadow-md p-8">
+          <div class="prose max-w-none">
+            {{ article.content|safe }}
+          </div>
+          
+          <div class="mt-8 pt-6 border-t">
+            <div class="flex justify-between items-center">
+              <button onclick="shareArticle()" class="text-gray-600 hover:text-blue-600">
+                📤 {{ _("articles.share") }}
+              </button>
+              <a href="/{{ lang }}/articles" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                {{ _("articles.back_to_articles") }}
+              </a>
+            </div>
+          </div>
+        </article>
+        
+        {% else %}
+        <!-- Articles List View -->
+        {% if articles %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for art in articles %}
+          <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            {% if art.featured_image %}
+            <div class="relative">
+              <img src="{{ art.featured_image }}" 
+                   alt="{{ art.title }}" 
+                   class="w-full h-48 object-cover">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+            </div>
+            {% endif %}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-3">
+                <a href="/{{ lang }}/articles/{{ art.slug }}" class="hover:text-blue-600">
+                  {{ art.title }}
+                </a>
+              </h2>
+              {% if art.excerpt %}
+              <p class="text-gray-600 mb-4">{{ art.excerpt }}</p>
+              {% endif %}
+              <div class="flex items-center justify-between">
+                <a href="/{{ lang }}/articles/{{ art.slug }}" 
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
+                  {{ _("articles.read") }}
+                </a>
+                {% if art.category %}
+                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  {% if art.category == 'buying' %}🏠 {{ _("articles.buying") }}
+                  {% elif art.category == 'renting' %}🔑 {{ _("articles.renting") }}
+                  {% elif art.category == 'investment' %}📈 {{ _("articles.investment") }}
+                  {% elif art.category == 'legal' %}⚖️ {{ _("articles.legal") }}
+                  {% else %}💡 {{ _("articles.tips") }}
+                  {% endif %}
+                </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-12">
+          <div class="text-6xl mb-4">📚</div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ _("articles.title") }}</h2>
+          <p class="text-gray-600">{{ _("articles.subtitle") }}</p>
+        </div>
+        {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Article Search Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('article-search');
+  const articles = document.querySelectorAll('.article-card, .bg-white.rounded-lg.shadow-md.overflow-hidden');
+  
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase();
+      
+      articles.forEach(article => {
+        const title = article.querySelector('h2, .font-medium');
+        const content = article.querySelector('p, .text-xs');
+        
+        if (title || content) {
+          const titleText = title ? title.textContent.toLowerCase() : '';
+          const contentText = content ? content.textContent.toLowerCase() : '';
+          
+          if (titleText.includes(searchTerm) || contentText.includes(searchTerm)) {
+            article.style.display = 'block';
+            // Highlight search terms
+            if (searchTerm) {
+              highlightText(article, searchTerm);
+            } else {
+              removeHighlight(article);
+            }
+          } else {
+            article.style.display = 'none';
+          }
+        }
+      });
+    });
+  }
+});
+
+function highlightText(element, searchTerm) {
+  // Simple highlight implementation
+  const walker = document.createTreeWalker(
+    element,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  
+  const textNodes = [];
+  let node;
+  
+  while (node = walker.nextNode()) {
+    textNodes.push(node);
+  }
+  
+  textNodes.forEach(textNode => {
+    const text = textNode.textContent;
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    
+    if (regex.test(text)) {
+      const highlightedHTML = text.replace(regex, '<span class="search-highlight">$1</span>');
+      const wrapper = document.createElement('span');
+      wrapper.innerHTML = highlightedHTML;
+      textNode.parentNode.replaceChild(wrapper, textNode);
+    }
+  });
+}
+
+function removeHighlight(element) {
+  const highlights = element.querySelectorAll('.search-highlight');
+  highlights.forEach(highlight => {
+    highlight.outerHTML = highlight.innerHTML;
+  });
+}
+
+function shareArticle() {
+  if (navigator.share) {
+    navigator.share({
+      title: document.title,
+      url: window.location.href
+    });
+  } else {
+    // Fallback - copy to clipboard
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      alert('{{ _("articles.share") }} - ссылка скопирована!');
+    });
+  }
+}
+
+function contactExpert() {
+  // Redirect to contact form or open modal
+  window.location.href = '/{{ lang }}/contact';
+}
+</script>
+{% endblock %} 

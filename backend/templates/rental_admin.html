@@ -1,0 +1,508 @@
+{% extends "base.html" %}
+
+{% block title %}Управление арендой - Админ панель{% endblock %}
+
+{% block head %}
+<style>
+  .admin-sidebar {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: calc(100vh - 120px);
+  }
+  
+  .admin-nav-item {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 4px 0;
+  }
+  
+  .admin-nav-item:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateX(5px);
+  }
+  
+  .admin-nav-item.active {
+    background: rgba(255,255,255,0.2);
+    border-left: 4px solid #fbbf24;
+  }
+  
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .status-available { background: #dcfce7; color: #166534; }
+  .status-rented { background: #fee2e2; color: #dc2626; }
+  .status-maintenance { background: #fef3c7; color: #d97706; }
+  
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 12px;
+    width: 600px;
+    max-width: 90%;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+  }
+  
+  .close:hover {
+    color: #ef4444;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen">
+  <!-- Заголовок страницы -->
+  <div class="bg-white shadow-sm border-b">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 font-heading flex items-center gap-3">
+            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+            </svg>
+            Управление арендой
+          </h1>
+          <p class="text-gray-600 mt-1">Каталог объектов недвижимости для сдачи в аренду</p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+          <a href="/add-rental" 
+             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors flex items-center gap-2 font-medium">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            Добавить объект аренды
+          </a>
+          
+          <a href="/admin" 
+             class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            Назад в админку
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      
+      <!-- Боковая навигация -->
+      <div class="lg:col-span-1">
+        <div class="admin-sidebar rounded-xl p-6 text-white sticky top-24">
+          <h3 class="text-lg font-semibold mb-4 flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+            </svg>
+            Навигация
+          </h3>
+          
+          <nav class="space-y-2">
+            <a href="/admin" class="admin-nav-item flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              Дашборд
+            </a>
+            
+            <a href="/admin/properties" class="admin-nav-item flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m0 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+              Недвижимость
+            </a>
+            
+            <a href="/admin/rental" class="admin-nav-item active flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+              </svg>
+              Аренда
+            </a>
+            
+            <a href="/admin/projects" class="admin-nav-item flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+              </svg>
+              Новостройки
+            </a>
+            
+            <a href="/admin/users" class="admin-nav-item flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"/>
+              </svg>
+              Пользователи
+            </a>
+            
+            <a href="/admin/articles" class="admin-nav-item flex items-center gap-3 px-4 py-3 text-white hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Статьи
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Основной контент -->
+      <div class="lg:col-span-3">
+        
+        <!-- Статистика аренды -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="bg-white rounded-xl p-6 shadow-sm border">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-600 text-sm">Всего объектов</p>
+                <p class="text-3xl font-bold text-gray-900">{{ stats.total }}</p>
+              </div>
+              <div class="bg-blue-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-xl p-6 shadow-sm border">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-600 text-sm">Свободно</p>
+                <p class="text-3xl font-bold text-green-600">{{ stats.available }}</p>
+              </div>
+              <div class="bg-green-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-xl p-6 shadow-sm border">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-600 text-sm">Арендовано</p>
+                <p class="text-3xl font-bold text-red-600">{{ stats.rented }}</p>
+              </div>
+              <div class="bg-red-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white rounded-xl p-6 shadow-sm border">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-gray-600 text-sm">Обслуживание</p>
+                <p class="text-3xl font-bold text-yellow-600">{{ stats.maintenance }}</p>
+              </div>
+              <div class="bg-yellow-100 p-3 rounded-full">
+                <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.99-.833-2.766 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Таблица объектов аренды -->
+        <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+          <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Объекты аренды</h3>
+            <p class="text-gray-600 text-sm mt-1">Управление недвижимостью для сдачи в аренду</p>
+          </div>
+          
+          {% if properties %}
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Объект</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Район</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Арендатор</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Период</th>
+                  <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
+                </tr>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                {% for property in properties %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                      <div class="flex-shrink-0">
+                        {% if property.images %}
+                          <img src="{{ property.images[0].image_url }}" 
+                               class="h-12 w-16 object-cover rounded-lg shadow-sm" 
+                               alt="{{ property.title }}">
+                        {% else %}
+                          <div class="h-12 w-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m0 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                            </svg>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="ml-4">
+                        <div class="text-sm font-medium text-gray-900">{{ property.title }}</div>
+                        <div class="text-sm text-gray-500">{{ property.condo_name or 'Без названия' }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {{ property.district or 'Не указан' }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <span class="font-medium">{{ '{:,.0f}'.format(property.price) }} ฿</span>
+                    <div class="text-xs text-gray-500">/{{ property.price_period or 'мес' }}</div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {% set status = property.rental_status or 'available' %}
+                    {% if status == 'available' %}
+                      <span class="status-badge status-available">Свободен</span>
+                    {% elif status == 'rented' %}
+                      <span class="status-badge status-rented">Арендован</span>
+                    {% elif status == 'maintenance' %}
+                      <span class="status-badge status-maintenance">Обслуживание</span>
+                    {% else %}
+                      <span class="status-badge status-available">Свободен</span>
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {% if property.renter_name %}
+                      <div>{{ property.renter_name }}</div>
+                      <div class="text-xs text-gray-500">{{ property.renter_contact }}</div>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {% if property.rental_start_date and property.rental_end_date %}
+                      <div>{{ property.rental_start_date.strftime('%d.%m.%Y') }}</div>
+                      <div class="text-xs text-gray-500">до {{ property.rental_end_date.strftime('%d.%m.%Y') }}</div>
+                    {% else %}
+                      <span class="text-gray-400">—</span>
+                    {% endif %}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button onclick="openRentalModal({{ property.id }}, '{{ property.title|replace("'", "\\'") }}', '{{ property.rental_status or 'available' }}', '{{ (property.renter_name or '')|replace("'", "\\'") }}', '{{ (property.renter_contact or '')|replace("'", "\\'") }}')" 
+                            class="text-blue-600 hover:text-blue-900 transition-colors">
+                      Управлять
+                    </button>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <!-- Пустое состояние -->
+          <div class="text-center py-16">
+            <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+              <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Объекты аренды не найдены</h3>
+            <p class="text-gray-500 mb-6">Начните с добавления первого объекта для сдачи в аренду</p>
+            <a href="/add-rental" 
+               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors font-medium">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+              </svg>
+              Добавить объект аренды
+            </a>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модальное окно управления арендой -->
+<div id="rentalModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeRentalModal()">&times;</span>
+    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+      <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"/>
+      </svg>
+      Управление арендой
+    </h2>
+    <p class="text-gray-600 mb-6" id="property-title">Объект: </p>
+    
+    <form id="rentalForm" onsubmit="updateRentalStatus(); return false;">
+      <input type="hidden" id="property-id" name="property_id">
+      
+      <!-- Статус аренды -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Статус аренды</label>
+        <select id="rental-status" name="rental_status" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" onchange="toggleRenterFields()">
+          <option value="available">�� Свободен</option>
+          <option value="rented">🔴 Арендован</option>
+          <option value="maintenance">🟡 На обслуживании</option>
+        </select>
+      </div>
+      
+      <!-- Поля для арендатора (показываются только если статус "арендован") -->
+      <div id="renter-fields" style="display: none;">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Имя арендатора *</label>
+            <input type="text" id="renter-name" name="renter_name" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Контакт арендатора *</label>
+            <input type="text" id="renter-contact" name="renter_contact" placeholder="+66123456789 или email" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Дата начала аренды *</label>
+            <input type="date" id="rental-start-date" name="rental_start_date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Дата окончания аренды *</label>
+            <input type="date" id="rental-end-date" name="rental_end_date" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Заметки -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Заметки и комментарии</label>
+        <textarea id="rental-notes" name="rental_notes" rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500" placeholder="Особенности аренды, условия, контакты..."></textarea>
+      </div>
+      
+      <!-- Кнопки -->
+      <div class="flex justify-end gap-3">
+        <button type="button" onclick="closeRentalModal()" class="px-6 py-2 text-gray-600 hover:text-gray-800 font-medium">
+          Отмена
+        </button>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 font-medium">
+          💾 Сохранить
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Загружаем статистику при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+  loadRentalStats();
+});
+
+// Загрузка статистики по аренде
+async function loadRentalStats() {
+  try {
+    const response = await fetch('/admin/rental/stats');
+    const stats = await response.json();
+    
+    document.getElementById('available-count').textContent = stats.available || 0;
+    document.getElementById('rented-count').textContent = stats.rented || 0;
+    document.getElementById('maintenance-count').textContent = stats.maintenance || 0;
+    document.getElementById('expiring-count').textContent = stats.expiring_soon || 0;
+  } catch (error) {
+    console.error('Ошибка загрузки статистики:', error);
+  }
+}
+
+// Открытие модального окна аренды
+function openRentalModal(propertyId, title, status, renterName, renterContact, startDate, endDate, notes) {
+  document.getElementById('property-id').value = propertyId;
+  document.getElementById('property-title').textContent = 'Объект: ' + title;
+  document.getElementById('rental-status').value = status;
+  document.getElementById('renter-name').value = renterName;
+  document.getElementById('renter-contact').value = renterContact;
+  document.getElementById('rental-start-date').value = startDate;
+  document.getElementById('rental-end-date').value = endDate;
+  document.getElementById('rental-notes').value = notes;
+  
+  toggleRenterFields();
+  document.getElementById('rentalModal').style.display = 'block';
+}
+
+// Закрытие модального окна
+function closeRentalModal() {
+  document.getElementById('rentalModal').style.display = 'none';
+}
+
+// Показ/скрытие полей арендатора
+function toggleRenterFields() {
+  const status = document.getElementById('rental-status').value;
+  const renterFields = document.getElementById('renter-fields');
+  
+  if (status === 'rented') {
+    renterFields.style.display = 'block';
+  } else {
+    renterFields.style.display = 'none';
+  }
+}
+
+// Обновление статуса аренды
+async function updateRentalStatus() {
+  const form = document.getElementById('rentalForm');
+  const formData = new FormData(form);
+  const propertyId = document.getElementById('property-id').value;
+  
+  try {
+    const response = await fetch(`/admin/rental/update/${propertyId}`, {
+      method: 'POST',
+      body: formData
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert('✅ Статус аренды обновлен!');
+      closeRentalModal();
+      location.reload(); // Перезагружаем страницу для обновления данных
+    } else {
+      alert('❌ Ошибка: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Ошибка обновления:', error);
+    alert('❌ Ошибка при обновлении статуса аренды');
+  }
+}
+
+// Закрытие модального окна при клике вне его
+window.onclick = function(event) {
+  const modal = document.getElementById('rentalModal');
+  if (event.target == modal) {
+    closeRentalModal();
+  }
+}
+</script>
+{% endblock %} 

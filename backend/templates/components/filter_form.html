@@ -1,0 +1,37 @@
+<form hx-get="/{{ lang }}/properties/filter" hx-target="#results" hx-push-url="true" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <input
+    type="text"
+    name="district"
+    placeholder="{{ _('forms.district') }}"
+    class="border border-gray-300 rounded-xl p-2 w-full"
+  />
+
+  <select name="bedrooms" class="border border-gray-300 rounded-xl p-2 w-full">
+    <option value="">{{ _("property.bedrooms") }}</option>
+    <option value="1">{{ _("common.1_bedroom") }}</option>
+    <option value="2">{{ _("common.2_bedrooms") }}</option>
+    <option value="3">3 {{ _("property.bedrooms") }}</option>
+    <option value="4">4+ {{ _("property.bedrooms") }}</option>
+  </select>
+
+  <div class="flex gap-2">
+    <input
+      type="number"
+      name="price_from"
+      placeholder="{{ _('common.from') }}"
+      class="border border-gray-300 rounded-xl p-2 w-full"
+    />
+    <input
+      type="number"
+      name="price_to"
+      placeholder="{{ _('common.to') }}"
+      class="border border-gray-300 rounded-xl p-2 w-full"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="md:col-span-3 bg-sber hover:bg-sber-dark text-white py-2 px-6 rounded-xl shadow mt-2">
+    {{ _("rent.find_objects") }}
+  </button>
+</form>

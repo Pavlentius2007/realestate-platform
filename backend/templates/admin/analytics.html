@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Аналитика - Sianoro Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem 1rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .stats-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-link {
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+
+        .nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+        }
+
+        .metric-card {
+            background: linear-gradient(45deg, #f0f0f0, #ffffff);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: scale(1.02);
+        }
+
+        .metric-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-fill {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .table-analytics {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .table-analytics th {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+
+        .export-btn {
+            background: var(--success-gradient);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Боковая навигация -->
+        <div class="sidebar">
+            <h3 class="text-center mb-4">
+                <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    🏢 Sianoro Admin
+                </span>
+            </h3>
+            
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin">
+                        📊 Главная
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/properties">
+                        🏠 Недвижимость
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/projects">
+                        🏗️ Новостройки
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/rental">
+                        📋 Аренда
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">
+                        👥 Пользователи
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/articles">
+                        📰 Статьи
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/analytics">
+                        📈 Аналитика
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/reports">
+                        📋 Отчеты
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/logs">
+                        📋 Логи системы
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Заголовок с кнопками экспорта -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>📈 Аналитическая панель</h2>
+                <div>
+                    <button class="export-btn me-2" onclick="exportToPDF()">
+                        📄 Экспорт PDF
+                    </button>
+                    <button class="export-btn" onclick="exportToExcel()">
+                        📊 Экспорт Excel
+                    </button>
+                </div>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-danger">
+                    ❌ Ошибка загрузки аналитики: {{ error }}
+                </div>
+            {% elif analytics %}
+                <!-- Основные метрики -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="metric-icon">👥</div>
+                            <div class="stats-number">{{ analytics.total_stats.users }}</div>
+                            <div class="text-muted">Всего пользователей</div>
+                            <small class="text-success">+{{ analytics.total_stats.new_users_month }} за месяц</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="metric-icon">🏠</div>
+                            <div class="stats-number">{{ analytics.total_stats.properties }}</div>
+                            <div class="text-muted">Объектов недвижимости</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="metric-icon">🏗️</div>
+                            <div class="stats-number">{{ analytics.total_stats.projects }}</div>
+                            <div class="text-muted">Проектов новостроек</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stats-card">
+                            <div class="metric-icon">💰</div>
+                            <div class="stats-number">${{ "{:,.0f}".format(analytics.price_analysis.avg_price) }}</div>
+                            <div class="text-muted">Средняя цена</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Графики и диаграммы -->
+                <div class="row">
+                    <!-- Тренд пользователей -->
+                    <div class="col-md-8">
+                        <div class="chart-card">
+                            <h5>📈 Тренд регистраций (6 месяцев)</h5>
+                            <canvas id="userTrendChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Источники пользователей -->
+                    <div class="col-md-4">
+                        <div class="chart-card">
+                            <h5>🌍 Источники трафика</h5>
+                            <canvas id="sourceChart" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Типы недвижимости -->
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5>🏠 Распределение по типам сделок</h5>
+                            <canvas id="propertyChart" width="300" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Топ локаций -->
+                    <div class="col-md-6">
+                        <div class="chart-card">
+                            <h5>📍 Топ-10 популярных локаций</h5>
+                            <div class="table-responsive">
+                                <table class="table table-analytics">
+                                    <thead>
+                                        <tr>
+                                            <th>Город</th>
+                                            <th>Количество</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% set total_locations = analytics.location_stats|sum(attribute='count') %}
+                                        {% for location in analytics.location_stats[:10] %}
+                                        <tr>
+                                            <td>{{ location.city }}</td>
+                                            <td>{{ location.count }}</td>
+                                            <td>{{ "%.1f"|format((location.count / total_locations * 100) if total_locations > 0 else 0) }}%</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Контактная информация -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-card">
+                            <h5>📱 Статистика контактов пользователей</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="metric-card">
+                                        <div class="metric-icon">📞</div>
+                                        <div class="stats-number">{{ analytics.contact_stats.with_phone }}</div>
+                                        <div class="text-muted">С телефонами</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="metric-card">
+                                        <div class="metric-icon">💬</div>
+                                        <div class="stats-number">{{ analytics.contact_stats.with_telegram }}</div>
+                                        <div class="text-muted">С Telegram</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="metric-card">
+                                        <div class="metric-icon">📲</div>
+                                        <div class="stats-number">{{ analytics.contact_stats.with_whatsapp }}</div>
+                                        <div class="text-muted">С WhatsApp</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="text-center py-5">
+                    <div class="chart-card">
+                        <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Загрузка аналитики...</h5>
+                        <p class="text-muted">Данные обрабатываются</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Функции экспорта
+        function exportToPDF() {
+            alert('Функция экспорта в PDF будет добавлена в следующем обновлении');
+        }
+
+        function exportToExcel() {
+            alert('Функция экспорта в Excel будет добавлена в следующем обновлении');
+        }
+
+        // Инициализация графиков после загрузки страницы
+        // Инициализация графиков (упрощенная версия без Jinja2 циклов)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Создание демонстрационных графиков
+            initializeCharts();
+        });
+
+        function initializeCharts() {
+            // Тренд пользователей (демо данные)
+            const userTrendCtx = document.getElementById('userTrendChart');
+            if (userTrendCtx) {
+                new Chart(userTrendCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Янв 2024', 'Фев 2024', 'Мар 2024', 'Апр 2024', 'Май 2024', 'Июн 2024'],
+                        datasets: [{
+                            label: 'Новые пользователи',
+                            data: [12, 19, 15, 25, 22, 30],
+                            borderColor: 'rgb(102, 126, 234)',
+                            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Источники трафика (демо данные)
+            const sourceCtx = document.getElementById('sourceChart');
+            if (sourceCtx) {
+                new Chart(sourceCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Сайт', 'Telegram', 'WhatsApp', 'Реклама'],
+                        datasets: [{
+                            data: [45, 25, 20, 10],
+                            backgroundColor: [
+                                'rgba(102, 126, 234, 0.8)',
+                                'rgba(240, 147, 251, 0.8)',
+                                'rgba(79, 172, 254, 0.8)',
+                                'rgba(245, 87, 108, 0.8)'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Типы недвижимости (демо данные)
+            const propertyCtx = document.getElementById('propertyChart');
+            if (propertyCtx) {
+                new Chart(propertyCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Покупка', 'Аренда'],
+                        datasets: [{
+                            label: 'Количество',
+                            data: [65, 35],
+                            backgroundColor: 'rgba(102, 126, 234, 0.8)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html> 

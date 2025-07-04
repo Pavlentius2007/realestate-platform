@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if edit_mode %}Редактировать новостройку{% else %}Добавить новостройку{% endif %} - Админка</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .form-section {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .form-section h3 {
+            color: #2d3748;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .required::after {
+            content: " *";
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    
+    <!-- Шапка -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-800">{% if edit_mode %}✏️ Редактировать новостройку{% else %}🏗️ Добавить новостройку{% endif %}</h1>
+                <a href="/admin" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                    ← Назад в админку
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" action="{% if edit_mode %}/admin/projects/edit/{{ project.id }}{% else %}/admin/add-project{% endif %}" enctype="multipart/form-data" class="max-w-6xl mx-auto px-6 py-8">
+        
+        <!-- Основная информация -->
+        <div class="form-section">
+            <h3>📝 Основная информация</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 required">Название новостройки</label>
+                    <input type="text" name="title" id="title" 
+                           placeholder="Например: PTY Residence Sai 1" 
+                           value="{{ project.title if project else '' }}"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           required>
+                    <p class="text-sm text-gray-500 mt-1">Полное название проекта как оно будет отображаться на сайте</p>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2 required">URL слаг</label>
+                    <input type="text" name="slug" id="slug" 
+                           placeholder="pty-residence-sai-1" 
+                           value="{{ project.slug if project else '' }}"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" 
+                           required>
+                    <p class="text-sm text-gray-500 mt-1">
+                        Адрес страницы: <span class="font-mono bg-gray-100 px-2 py-1 rounded">localhost:8001/ru/projects/<span id="slug-preview">ваш-слаг</span></span>
+                        <button type="button" onclick="generateSlug()" class="ml-2 text-blue-600 hover:text-blue-800 underline text-sm">
+                            🔄 Сгенерировать автоматически
+                        </button>
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Подзаголовок</label>
+                    <input type="text" name="subtitle" 
+                           placeholder="Краткое описание проекта" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Застройщик</label>
+                    <input type="text" name="developer" 
+                           placeholder="Например: PTY Development" 
+                           value="{{ project.developer if project else '' }}"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Местоположение -->
+        <div class="form-section">
+            <h3>📍 Местоположение</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Район</label>
+                    <select name="district" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Выберите район</option>
+                        <option value="Вонгамат">Вонгамат</option>
+                        <option value="Центральная Паттайя">Центральная Паттайя</option>
+                        <option value="Восточная Паттайя">Восточная Паттайя</option>
+                        <option value="Наклуа">Наклуа</option>
+                        <option value="Пратамнак">Пратамнак</option>
+                        <option value="Джомтьен">Джомтьен</option>
+                        <option value="На Джомтьен">На Джомтьен</option>
+                        <option value="Юг">Юг</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Полный адрес</label>
+                    <input type="text" name="location" 
+                           placeholder="Улица, дом, район, город" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Широта (lat)</label>
+                    <input type="text" name="lat" 
+                           placeholder="12.92345" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Долгота (lng)</label>
+                    <input type="text" name="lng" 
+                           placeholder="100.87654" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Характеристики -->
+        <div class="form-section">
+            <h3>🏢 Характеристики новостройки</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Год завершения</label>
+                    <input type="number" name="completion_year" 
+                           placeholder="2025" min="2024" max="2030"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Количество единиц</label>
+                    <input type="number" name="total_units" 
+                           placeholder="200" min="1"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Этажей</label>
+                    <input type="number" name="floors" 
+                           placeholder="25" min="1"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Статус</label>
+                    <select name="status" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="active">В продаже</option>
+                        <option value="upcoming">Скоро в продаже</option>
+                        <option value="completed">Завершен</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Цена от (THB)</label>
+                    <input type="number" name="price_from" 
+                           placeholder="2500000" step="50000"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Цена до (THB)</label>
+                    <input type="number" name="price_to" 
+                           placeholder="8500000" step="50000"
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Изображения -->
+        <div class="form-section">
+            <h3>📸 Изображения</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Главное изображение</label>
+                    <input type="file" name="hero_image" accept="image/*" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">Основное фото новостройки (рекомендуется 1200x800px)</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Галерея изображений</label>
+                    <input type="file" name="gallery_images" multiple accept="image/*" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <p class="text-sm text-gray-500 mt-1">Дополнительные фото (можно выбрать несколько)</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Ссылка на видео</label>
+                <input type="url" name="video_url" 
+                       placeholder="https://www.youtube.com/watch?v=..." 
+                       class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <p class="text-sm text-gray-500 mt-1">YouTube, Vimeo или другая ссылка на видео-обзор</p>
+            </div>
+        </div>
+
+        <!-- Описание и особенности -->
+        <div class="form-section">
+            <h3>📋 Описание и особенности</h3>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Описание новостройки</label>
+                <textarea name="description" rows="4" 
+                          placeholder="Подробное описание проекта, его преимуществ и особенностей..." 
+                          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ project.description if project else '' }}</textarea>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Основные преимущества</label>
+                <input type="text" name="highlights" 
+                       placeholder="Вид на море, Рядом с пляжем, Бассейн на крыше, Фитнес-центр" 
+                       class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <p class="text-sm text-gray-500 mt-1">Перечислите через запятую ключевые преимущества</p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-3">Удобства и инфраструктура</label>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Бассейн" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🏊 Бассейн</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Спортзал" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">💪 Спортзал</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Сауна" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🧖 Сауна</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Парковка" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🚗 Парковка</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Охрана 24/7" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🛡️ Охрана 24/7</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Детская площадка" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🎠 Детская площадка</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Ресепшн" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🏨 Ресепшн</span>
+                    </label>
+                    <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="checkbox" name="amenities" value="Лифт" class="mr-3 h-4 w-4 text-blue-600 rounded">
+                        <span class="text-sm">🛗 Лифт</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Коммерческая информация -->
+        <div class="form-section">
+            <h3>💰 Коммерческая информация</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Первоначальный взнос</label>
+                    <input type="text" name="down_payment" 
+                           placeholder="30% или от 750,000 THB" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Ежемесячный платеж</label>
+                    <input type="text" name="monthly_payment" 
+                           placeholder="от 50,000 THB в месяц" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">План платежей</label>
+                <textarea name="payment_plan" rows="3" 
+                          placeholder="Детальная информация о схеме оплаты..." 
+                          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">ROI и доходность</label>
+                <textarea name="roi_info" rows="3" 
+                          placeholder="Информация о рентабельности инвестиций, аренде..." 
+                          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+        </div>
+
+        <!-- Контакты -->
+        <div class="form-section">
+            <h3>📞 Контактная информация</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Телефон офиса продаж</label>
+                    <input type="text" name="sales_office_phone" 
+                           placeholder="+66 XX XXX XXXX" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email офиса продаж</label>
+                    <input type="email" name="sales_office_email" 
+                           placeholder="sales@project.com" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Адрес офиса продаж</label>
+                    <input type="text" name="sales_office_address" 
+                           placeholder="Полный адрес офиса продаж" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительно -->
+        <div class="form-section">
+            <h3>⚙️ Дополнительные настройки</h3>
+            
+            <div class="mb-4">
+                <label class="flex items-center p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <input type="checkbox" name="is_featured" value="true" class="mr-3 h-5 w-5 text-blue-600 rounded">
+                    <div>
+                        <span class="text-lg font-medium text-blue-800">⭐ Рекомендуемая новостройка</span>
+                        <p class="text-sm text-blue-600 mt-1">Новостройка будет отображаться в разделе рекомендуемых на главной странице</p>
+                    </div>
+                </label>
+            </div>
+
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Типы квартир и планировки</label>
+                <textarea name="unit_types" rows="3" 
+                          placeholder="Студии от 25 м², 1-комнатные от 35 м², 2-комнатные от 55 м²..." 
+                          class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">SEO заголовок</label>
+                    <input type="text" name="meta_title" 
+                           placeholder="SEO заголовок для поисковых систем" 
+                           class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">SEO описание</label>
+                    <textarea name="meta_description" rows="3" 
+                              placeholder="Краткое описание для поисковых систем" 
+                              class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Сообщения -->
+        {% if error %}
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center">
+                    <span class="text-red-500 text-xl mr-3">⚠️</span>
+                    <div class="text-red-800">{{ error }}</div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if success %}
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <div class="flex items-center">
+                    <span class="text-green-500 text-xl mr-3">✅</span>
+                    <div class="text-green-800">Новостройка успешно добавлена!</div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Кнопки -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 text-center">
+            <button type="submit" class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg mr-4">
+                💾 Сохранить новостройку
+            </button>
+            <a href="/admin" class="bg-gray-500 text-white px-8 py-4 rounded-lg hover:bg-gray-600 transition-colors font-semibold text-lg">
+                ❌ Отмена
+            </a>
+        </div>
+    </form>
+
+    <script>
+        // Автогенерация slug из названия
+        function generateSlug() {
+            const title = document.getElementById('title').value;
+            const slug = title
+                .toLowerCase()
+                .replace(/[а-яё]/g, function(match) {
+                    const ru = 'а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я'.split(' ');
+                    const en = 'a b v g d e e zh z i y k l m n o p r s t u f h ts ch sh sch  y  e yu ya'.split(' ');
+                    return en[ru.indexOf(match)] || match;
+                })
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .trim('-');
+            
+            document.getElementById('slug').value = slug;
+            updateSlugPreview();
+        }
+
+        // Обновление превью slug
+        function updateSlugPreview() {
+            const slug = document.getElementById('slug').value || 'ваш-слаг';
+            document.getElementById('slug-preview').textContent = slug;
+        }
+
+        // Автообновление превью при вводе
+        document.getElementById('slug').addEventListener('input', updateSlugPreview);
+        document.getElementById('title').addEventListener('input', function() {
+            if (!document.getElementById('slug').value) {
+                generateSlug();
+            }
+        });
+
+        // Инициализация
+        updateSlugPreview();
+    </script>
+
+    {% if edit_mode %}
+    <script>
+      const proj = {{ project_json|safe }};
+      document.addEventListener('DOMContentLoaded', () => {
+        for (const [key, val] of Object.entries(proj)) {
+          const el = document.querySelector(`[name="${key}"]`);
+          if(!el || val===null) continue;
+          if(el.type==='checkbox') {
+            if(Array.isArray(proj.amenities)){
+              proj.amenities.forEach(am=>{const cb=document.querySelector(`input[name='amenities'][value='${am}']`);if(cb) cb.checked=true;});
+            }
+          } else if(el.tagName==='SELECT') {
+            el.value = val;
+          } else {
+            el.value = val;
+          }
+        }
+      });
+    </script>
+    {% endif %}
+</body>
+</html> 
