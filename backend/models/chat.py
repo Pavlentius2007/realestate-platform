@@ -1,7 +1,12 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, JSON, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from database import Base
+
+# Используем относительный импорт для избежания циклических зависимостей
+try:
+    from backend.database import Base
+except ImportError:
+    from database import Base
 
 class ChatSession(Base):
     __tablename__ = "chat_sessions"

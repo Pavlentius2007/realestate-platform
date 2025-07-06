@@ -42,7 +42,15 @@ except ImportError:
     from fix_i18n_modern import ModernI18n, ModernI18nMiddleware, i18n
 
 # 📁 Базовая директория и шаблоны
-BASE_DIR = Path(__file__).resolve().parent.parent  # realestate-platform
+# Определяем корневую директорию проекта независимо от текущей рабочей директории
+CURRENT_FILE = Path(__file__).resolve()
+if CURRENT_FILE.parent.name == "backend":
+    # Запуск из backend директории
+    BASE_DIR = CURRENT_FILE.parent.parent  # realestate-platform
+else:
+    # Запуск из корневой директории
+    BASE_DIR = CURRENT_FILE.parent  # realestate-platform
+
 TEMPLATES_DIR = BASE_DIR / "backend" / "templates"
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 templates.env.globals["supported_languages"] = SUPPORTED_LANGUAGES
@@ -97,29 +105,18 @@ app.add_middleware(
 app.add_middleware(ModernI18nMiddleware, templates=templates)
 
 # 🔼 Статические файлы
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+app.mount("/css", StaticFiles(directory=str(BASE_DIR / "static" / "css")), name="css")
+app.mount("/js", StaticFiles(directory=str(BASE_DIR / "static" / "js")), name="js")
+app.mount("/images", StaticFiles(directory=str(BASE_DIR / "static" / "images")), name="images")
+app.mount("/locales", StaticFiles(directory=str(BASE_DIR / "locales")), name="locales")
 
 # 🌍 Загрузка переводов
 i18n.load_translations()  # Принудительная перезагрузка переводов при старте
 
-# 🔌 Подключение роутеров
-app.include_router(admin.router)
-app.include_router(analytics.router)
-app.include_router(crm.router)
-app.include_router(auto_translation_router, prefix="/api/translate", tags=["Auto Translation"])
-app.include_router(rental_request.router)
-app.include_router(submit_property.router)
-app.include_router(submit_rent.router)
-app.include_router(user_tools.router)
-app.include_router(stats.router, prefix="/stats", tags=["Stats"])
-app.include_router(properties_router, prefix="/{lang}/properties", tags=["Properties"])
-app.include_router(projects.router, prefix="/{lang}")
-app.include_router(favorites.router, prefix="/{lang}", tags=["Favorites"])
-app.include_router(articles_router, prefix="/{lang}", tags=["Articles"])
-
-# 🌍 Смена языка
+# 🌍 Смена языка - ДОЛЖЕН БЫТЬ ПЕРЕД ВСЕМИ РОУТЕРАМИ!
 @app.get("/lang/{lang_code}")
-async def switch_language(request: Request, lang_code: str, response: Response):
+async def switch_language(request: Request, lang_code: str):
     """Переключает язык интерфейса с сохранением в сессии и cookie"""
     
     # Проверяем, что язык поддерживается
@@ -130,20 +127,13 @@ async def switch_language(request: Request, lang_code: str, response: Response):
         )
     
     # 1. Сохраняем в сессии
-    request.session[LANGUAGE_SESSION_KEY] = lang_code
-    print(f"🌍 set_language_in_session: установлен язык {lang_code}")
+    try:
+        request.session[LANGUAGE_SESSION_KEY] = lang_code
+        print(f"🌍 set_language_in_session: установлен язык {lang_code}")
+    except Exception as e:
+        print(f"⚠️ Ошибка сохранения в сессии: {e}")
     
-    # 2. Сохраняем в cookie
-    response.set_cookie(
-        key=LANGUAGE_COOKIE_NAME,
-        value=lang_code,
-        max_age=LANGUAGE_COOKIE_MAX_AGE,
-        httponly=True,
-        samesite="lax",
-        secure=request.url.scheme == "https"
-    )
-    
-    # 3. Определяем URL для редиректа
+    # 2. Определяем URL для редиректа
     referer = request.headers.get("referer")
     if not referer:
         return RedirectResponse(f"/{lang_code}", status_code=302)
@@ -168,7 +158,33 @@ async def switch_language(request: Request, lang_code: str, response: Response):
     if is_ajax:
         return {"success": True, "redirect_url": new_url}
     
-    return RedirectResponse(url=new_url, status_code=302)
+    # Создаем редирект с установкой cookie
+    response = RedirectResponse(url=new_url, status_code=302)
+    response.set_cookie(
+        key=LANGUAGE_COOKIE_NAME,
+        value=lang_code,
+        max_age=LANGUAGE_COOKIE_MAX_AGE,
+        httponly=True,
+        samesite="lax",
+        secure=request.url.scheme == "https"
+    )
+    
+    return response
+
+# 🔌 Подключение роутеров
+app.include_router(admin.router)
+app.include_router(analytics.router)
+app.include_router(crm.router)
+app.include_router(auto_translation_router, prefix="/api/translate", tags=["Auto Translation"])
+app.include_router(rental_request.router)
+app.include_router(submit_property.router)
+app.include_router(submit_rent.router)
+app.include_router(user_tools.router)
+app.include_router(stats.router, prefix="/stats", tags=["Stats"])
+app.include_router(properties_router, prefix="/{lang}/properties", tags=["Properties"])
+app.include_router(projects.router, prefix="/{lang}")
+app.include_router(favorites.router, prefix="/{lang}", tags=["Favorites"])
+app.include_router(articles_router, prefix="/{lang}", tags=["Articles"])
 
 # 📄 Маршруты страниц
 @app.get("/{lang}")
@@ -485,25 +501,6 @@ def get_preferred_language(request: Request) -> str:
     return DEFAULT_LANGUAGE
 
 @app.middleware("http")
-async def language_middleware(request: Request, call_next):
-    # Не трогаем статику
-    if request.url.path.startswith("/static/"):
-        return await call_next(request)
-    lang = get_preferred_language(request)
-    request.state.lang = lang
-    path = request.url.path
-
-    # ⏭️  Пропускаем админские маршруты, чтобы избежать циклов редиректов
-    if path.startswith("/admin"):
-        return await call_next(request)
-
-    path_parts = path.strip('/').split('/')
-    if not path_parts or path_parts[0] not in SUPPORTED_LANGUAGES:
-        return RedirectResponse(f"/{lang}{path}", status_code=302)
-    response = await call_next(request)
-    return response
-
-@app.middleware("http")
 async def add_ajax_header(request: Request, call_next):
     response = await call_next(request)
     # Проверяем, является ли запрос AJAX
@@ -549,15 +546,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Ошибка при запуске сервера: {e}")
 
-# Загрузка переводов
-translations = {}
-locales_dir = Path(os.getcwd()) / "locales"
-for file in os.listdir(locales_dir):
-    if file.endswith('.json'):
-        lang = file.split('.')[0]
-        with open(os.path.join(locales_dir, file), 'r', encoding='utf-8') as f:
-            translations[lang] = json.load(f)
-
 # 👉 Поддержка /{lang}/admin: показываем ту же админку без редиректов, чтобы избежать циклов
 
 from fastapi import Depends  # импорт для использования в функции ниже
@@ -583,3 +571,9 @@ async def admin_subpath_redirect(lang: str, rest_path: str):
     """Перенаправляет /{lang}/admin/... на /admin/... чтобы избежать 404."""
     target = f"/admin/{rest_path}"
     return RedirectResponse(url=target, status_code=302)
+
+@app.get("/{lang}/static/{path:path}")
+async def static_with_lang(lang: str, path: str):
+    # Редиректим на правильный путь статики без обработки сессии
+    from starlette.responses import RedirectResponse
+    return RedirectResponse(url=f"/static/{path}", status_code=307)

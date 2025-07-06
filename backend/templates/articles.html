@@ -115,16 +115,16 @@
               🏷️ {{ _("articles.categories") }}
             </h3>
             <div class="space-y-2">
-              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+              <a href="/{{ lang }}/articles?category=property_purchase" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
                 🏠 {{ _("articles.property_purchase") }}
               </a>
-              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+              <a href="/{{ lang }}/articles?category=rental_housing" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
                 🔑 {{ _("articles.rental_housing") }}
               </a>
-              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+              <a href="/{{ lang }}/articles?category=investments" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
                 📈 {{ _("articles.investments") }}
               </a>
-              <a href="#" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
+              <a href="/{{ lang }}/articles?category=legal_issues" class="block p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded">
                 ⚖️ {{ _("articles.legal_issues") }}
               </a>
             </div>
@@ -170,16 +170,11 @@
           {% for art in articles %}
           <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
             {% if art.featured_image %}
-            <div class="relative">
-              <img src="{{ art.featured_image }}" 
-                   alt="{{ art.title }}" 
-                   class="w-full h-48 object-cover">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
+            <img src="{{ art.featured_image }}" alt="{{ art.title }}" class="w-full h-48 object-cover">
             {% endif %}
             <div class="p-6">
               <h2 class="text-xl font-semibold text-gray-900 mb-3">
-                <a href="/{{ lang }}/articles/{{ art.slug }}" class="hover:text-blue-600">
+                <a href="/{{ lang }}/articles/{{ art.slug }}" class="hover:text-[#0074E4]">
                   {{ art.title }}
                 </a>
               </h2>
@@ -188,18 +183,14 @@
               {% endif %}
               <div class="flex items-center justify-between">
                 <a href="/{{ lang }}/articles/{{ art.slug }}" 
-                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm">
-                  {{ _("articles.read") }}
+                   class="bg-[#0074E4] text-white px-4 py-2 rounded-lg hover:bg-[#005bb5] text-sm transition font-semibold">
+                  {{ _('articles.read') or 'Читать' }}
                 </a>
                 {% if art.category %}
-                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                  {% if art.category == 'buying' %}🏠 {{ _("articles.buying") }}
-                  {% elif art.category == 'renting' %}🔑 {{ _("articles.renting") }}
-                  {% elif art.category == 'investment' %}📈 {{ _("articles.investment") }}
-                  {% elif art.category == 'legal' %}⚖️ {{ _("articles.legal") }}
-                  {% else %}💡 {{ _("articles.tips") }}
-                  {% endif %}
-                </span>
+                  <span class="text-xs px-2 py-1 rounded font-medium"
+                        style="background-color: #e0f2fe; color: #0369a1;">
+                    {{ _('articles.' ~ art.category) or art.category }}
+                  </span>
                 {% endif %}
               </div>
             </div>

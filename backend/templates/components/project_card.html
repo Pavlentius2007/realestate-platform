@@ -7,6 +7,6 @@
     <div class="text-bluebrand-dark font-semibold mb-2">{{ project.price }}</div>
     <div class="text-sm text-gray-500 mb-2">Год постройки: {{ project.year }} | Этажей: {{ project.floors }} | Объектов: {{ project.units }}</div>
     <div class="text-gray-700 mb-4">{{ project.desc }}</div>
-    <a href="#" class="mt-auto inline-block bg-bluebrand hover:bg-bluebrand-dark text-white font-semibold py-2 px-4 rounded-xl transition">Узнать подробнее</a>
+    <a href="/{{ lang }}/projects/{{ project.slug }}" class="mt-auto inline-block bg-bluebrand hover:bg-bluebrand-dark text-white font-semibold py-2 px-4 rounded-xl transition">{{ _('property.view_details') }}</a>
   </div>
 </div> 

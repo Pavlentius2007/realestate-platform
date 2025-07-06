@@ -1,108 +1,66 @@
 {% if projects %}
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for project in projects %}
-    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-        
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-300 border border-gray-100">
         <!-- Project Image -->
-        <div class="relative h-64 bg-gray-200">
+        <div class="relative h-56 bg-gray-100">
             {% if project.hero_image %}
-            <img src="{{ project.hero_image }}" 
-                 alt="{{ project.title }}" 
-                 class="w-full h-full object-cover">
+            <img src="{{ project.hero_image }}" alt="{{ project.title }}" class="w-full h-full object-cover">
             {% else %}
-            <div class="w-full h-full flex items-center justify-center text-gray-400">
-                <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
-                </svg>
+            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                <i class="fa-regular fa-building text-5xl"></i>
             </div>
             {% endif %}
-            
             <!-- Status Badge -->
             <div class="absolute top-3 right-3">
-                <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                    {% if project.completion_year %}
-                        {{ project.completion_year }}
-                    {% elif project.status == 'active' %}
-                        {{ _("Активный") }}
-                    {% elif project.status == 'upcoming' %}
-                        {{ _("Строится") }}
-                    {% else %}
-                        {{ _("Завершен") }}
-                    {% endif %}
-                </span>
+                {% if project.status == 'active' %}
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Активный</span>
+                {% elif project.status == 'upcoming' %}
+                <span class="bg-yellow-400 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Строится</span>
+                {% elif project.status == 'completed' %}
+                <span class="bg-gray-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Завершен</span>
+                {% else %}
+                <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold shadow">Проект</span>
+                {% endif %}
             </div>
-            
             <!-- Featured Badge -->
             {% if project.is_featured %}
             <div class="absolute top-3 left-3">
-                <span class="bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                    {{ _("Рекомендуем") }}
-                </span>
+                <span class="bg-[#FFD600] text-gray-900 px-2 py-1 rounded-full text-xs font-bold shadow">Рекомендуем</span>
             </div>
             {% endif %}
         </div>
-        
         <!-- Project Info -->
-        <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">
-                {{ project.title }}
-            </h3>
-            
+        <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ project.title }}</h3>
             {% if project.subtitle %}
-            <p class="text-gray-600 mb-3">{{ project.subtitle }}</p>
+            <p class="text-gray-600 mb-2">{{ project.subtitle }}</p>
             {% endif %}
-            
-            <!-- Location -->
-            <div class="flex items-center text-sm text-gray-600 mb-3">
-                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                </svg>
-                {{ project.district }}
+            <div class="flex items-center text-sm text-gray-500 mb-2">
+                <i class="fa-solid fa-location-dot mr-1 text-[#0074E4]"></i> {{ project.district }}
             </div>
-            
-            <!-- Developer -->
             {% if project.developer %}
-            <p class="text-sm text-blue-600 mb-3">{{ _("Застройщик") }}: {{ project.developer }}</p>
+            <div class="text-xs text-blue-700 mb-2 font-medium"><i class="fa-solid fa-user-tie mr-1"></i>Застройщик: {{ project.developer }}</div>
             {% endif %}
-            
-            <!-- Price Range -->
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    {% if project.price_from %}
-                    <span class="text-lg font-bold text-gray-900">
-                        {{ "{:,.0f}".format(project.price_from) }}
-                        {% if project.price_to %}
-                        - {{ "{:,.0f}".format(project.price_to) }}
-                        {% else %}
-                        +
-                        {% endif %}
-                    </span>
-                    <span class="text-sm text-gray-600 ml-1">{{ project.currency or 'THB' }}</span>
-                    {% else %}
-                    <span class="text-gray-600">{{ _("Цена по запросу") }}</span>
-                    {% endif %}
-                </div>
+            <div class="flex items-center gap-2 mb-2">
+                {% if project.price_from %}
+                <span class="text-lg font-bold text-[#0074E4]">{{ "{:,.0f}".format(project.price_from) }}{% if project.price_to %} - {{ "{:,.0f}".format(project.price_to) }}{% else %}+{% endif %}</span>
+                <span class="text-xs text-gray-500">{{ project.currency or 'THB' }}</span>
+                {% else %}
+                <span class="text-gray-500 text-sm">Цена по запросу</span>
+                {% endif %}
             </div>
-            
-            <!-- Highlights -->
             {% if project.highlights %}
-            <div class="flex flex-wrap gap-1 mb-4">
+            <div class="flex flex-wrap gap-1 mb-3">
                 {% for highlight in project.highlights[:2] %}
-                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                    {{ highlight }}
-                </span>
+                <span class="bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs font-medium">{{ highlight }}</span>
                 {% endfor %}
                 {% if project.highlights|length > 2 %}
-                <span class="text-xs text-gray-500">+{{ project.highlights|length - 2 }}</span>
+                <span class="text-xs text-gray-400">+{{ project.highlights|length - 2 }}</span>
                 {% endif %}
             </div>
             {% endif %}
-            
-            <!-- Action Button -->
-            <a href="/{{ lang }}/projects/{{ project.slug }}" 
-               class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                {{ _("Подробнее о проекте") }}
-            </a>
+            <a href="/{{ lang }}/projects/{{ project.slug }}" class="mt-auto block w-full bg-[#0074E4] hover:bg-[#005bb5] text-white text-center py-2 px-4 rounded-lg font-semibold transition-all duration-200 shadow">Подробнее о проекте</a>
         </div>
     </div>
     {% endfor %}

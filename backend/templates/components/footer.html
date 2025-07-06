@@ -1,0 +1,104 @@
+<!-- Компактный футер в стиле Zillow -->
+<footer class="bg-white border-t border-gray-200">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Основной контент -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+      
+      <!-- Логотип и описание -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span class="text-white font-bold text-sm">S</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900">Sianoro</h3>
+        </div>
+        <p class="text-gray-600 text-sm leading-relaxed mb-4 max-w-md">
+          {{ _("footer.about") }}
+        </p>
+        
+        <!-- Социальные сети -->
+        <div class="flex gap-3">
+          <a href="https://wa.me/66809515940" target="_blank" class="text-gray-400 hover:text-green-600 transition-colors">
+            <i class="fab fa-whatsapp text-lg"></i>
+          </a>
+          <a href="https://t.me/sianoro" target="_blank" class="text-gray-400 hover:text-blue-600 transition-colors">
+            <i class="fab fa-telegram text-lg"></i>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Контакты -->
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+          {{ _("footer.contacts") }}
+        </h4>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <i class="fas fa-phone text-gray-400 text-sm"></i>
+            <a href="tel:+66809515940" class="text-gray-600 hover:text-blue-600 transition-colors text-sm">
+              +66 80 951 59 40
+            </a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-phone text-gray-400 text-sm"></i>
+            <a href="tel:+79538628581" class="text-gray-600 hover:text-blue-600 transition-colors text-sm">
+              +7 953 862 85 81
+            </a>
+          </div>
+          <div class="flex items-center gap-3">
+            <i class="fas fa-envelope text-gray-400 text-sm"></i>
+            <a href="mailto:info@sianoro.com" class="text-gray-600 hover:text-blue-600 transition-colors text-sm">
+              info@sianoro.com
+            </a>
+          </div>
+          <div class="flex items-start gap-3">
+            <i class="fas fa-map-marker-alt text-gray-400 text-sm mt-0.5"></i>
+            <span class="text-gray-600 text-sm">{{ _("footer.office_address") }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Навигация -->
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wide">
+          {{ _("navigation.real_estate") }}
+        </h4>
+        <div class="space-y-2">
+          <a href="/{{ lang }}/properties?deal_type=buy" class="block text-gray-600 hover:text-blue-600 transition-colors text-sm">
+            {{ _("services.property_sales") }}
+          </a>
+          <a href="/{{ lang }}/rent" class="block text-gray-600 hover:text-blue-600 transition-colors text-sm">
+            {{ _("services.apartment_rental") }}
+          </a>
+          <a href="/{{ lang }}/projects" class="block text-gray-600 hover:text-blue-600 transition-colors text-sm">
+            {{ _("services.new_build_investments") }}
+          </a>
+          <a href="/{{ lang }}/articles?category=legal_issues" class="block text-gray-600 hover:text-blue-600 transition-colors text-sm">
+            {{ _("services.legal_support") }}
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Разделитель -->
+    <div class="h-px bg-gray-200 mb-6"></div>
+    
+    <!-- Нижняя часть -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-sm text-gray-500">
+        <span>© {{ now().year }} </span>
+        <span class="font-semibold text-gray-900">Sianoro</span>
+        <span>. {{ _("footer.rights") }}</span>
+      </div>
+      
+      <div class="flex gap-6 text-sm">
+        <a href="/{{ lang }}/privacy" class="text-gray-500 hover:text-blue-600 transition-colors">
+          {{ _("legal.privacy_policy") }}
+        </a>
+        <a href="/{{ lang }}/terms" class="text-gray-500 hover:text-blue-600 transition-colors">
+          {{ _("legal.terms_of_use") }}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer> 

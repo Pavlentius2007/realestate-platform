@@ -1,0 +1,117 @@
+/* Mobile Improvements for Sianoro Real Estate */
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  .navbar-nav {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .nav-link {
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .desktop-menu {
+    display: none;
+  }
+}
+
+/* Mobile Property Cards */
+@media (max-width: 768px) {
+  .property-card {
+    margin-bottom: 1rem;
+  }
+  
+  .property-image {
+    height: 200px;
+  }
+  
+  .property-details {
+    padding: 1rem;
+  }
+  
+  .property-price {
+    font-size: 1.5rem;
+  }
+  
+  .property-features {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile Forms */
+@media (max-width: 768px) {
+  .search-form {
+    margin: 1rem;
+    padding: 1rem;
+  }
+  
+  .form-control {
+    padding: 10px 12px;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Mobile Hero */
+@media (max-width: 768px) {
+  .hero {
+    padding: 2rem 0;
+  }
+  
+  .hero h1 {
+    font-size: 1.75rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+}
+
+/* Mobile Footer */
+@media (max-width: 768px) {
+  .footer {
+    padding: 2rem 0 1rem;
+  }
+  
+  .footer .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Touch-friendly buttons */
+@media (max-width: 768px) {
+  .btn {
+    min-height: 44px;
+    padding: 12px 20px;
+  }
+  
+  .nav-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Mobile floating menu */
+@media (max-width: 768px) {
+  .floating-social-menu {
+    right: 16px;
+    bottom: 24px;
+  }
+  
+  .social-btn {
+    width: 48px;
+    height: 48px;
+  }
+} 

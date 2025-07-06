@@ -6,13 +6,17 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="/css/investment_calculator.css">
+<script src="/js/investment_calculator.js"></script>
+<script src="/js/investment_calc_modal.js"></script>
 <style>
   .property-card {
     transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e5e7eb;
   }
   .property-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
   .favorite-btn {
     transition: all 0.2s;
@@ -23,222 +27,230 @@
   .favorite-btn.favorited {
     color: #ef4444;
   }
-  .filter-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  .filter-sidebar {
+    background: #f9fafb;
+    border-right: 1px solid #e5e7eb;
   }
-  .filter-card {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.95);
+  .filter-section {
+    border-bottom: 1px solid #e5e7eb;
   }
   #map {
-    height: 300px;
-    border-radius: 12px;
+    height: calc(100vh - 120px);
+    border-radius: 8px;
+  }
+  .results-header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 0;
+  }
+  .property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .property-image {
+    height: 180px;
+    background: #f3f4f6;
+  }
+  @media (min-width: 640px) {
+    .property-image {
+      height: 200px;
+    }
+  }
+  .property-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+  }
+  .property-stats {
+    display: flex;
+    gap: 16px;
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  .property-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .property-stat svg {
+    width: 16px;
+    height: 16px;
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-gray-50">
+<div class="bg-white min-h-screen">
   
-  <!-- Header Section -->
-  <div class="filter-section py-12">
+  <!-- Results Header -->
+  <div class="results-header">
     <div class="container mx-auto px-4">
-      <div class="text-center text-white mb-8">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ _("navigation.buy_property") }}</h1>
-        <p class="text-xl text-gray-200">{{ _("search.perfect_property") }}</p>
-      </div>
-      
-      <!-- Фильтры -->
-      <div class="filter-card rounded-xl p-6 max-w-5xl mx-auto shadow-xl">
-        <form method="GET" class="space-y-6">
-          <input type="hidden" name="deal_type" value="buy">
-          
-          <!-- Основная строка поиска -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-search mr-2"></i>{{ _("search.placeholder") }}
-              </label>
-              <input type="text" name="query" value="{{ selected_query }}" 
-                     placeholder="{{ _('search.placeholder') }}" 
-                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-map-marker-alt mr-2"></i>{{ _("forms.district") }}
-              </label>
-              <select name="district" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="">{{ _("forms.any_district") }}</option>
-                {% for district in districts %}
-                <option value="{{ district }}" {% if selected_district == district %}selected{% endif %}>
-                  {{ district }}
-                </option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-          
-          <!-- Дополнительные фильтры -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-home mr-2"></i>{{ _("forms.property_type") }}
-              </label>
-              <select name="property_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="">{{ _("common.any_type") }}</option>
-                <option value="apartment" {% if selected_property_type == 'apartment' %}selected{% endif %}>{{ _("common.apartments") }}</option>
-                <option value="condo" {% if selected_property_type == 'condo' %}selected{% endif %}>{{ _("common.condo") }}</option>
-                <option value="villa" {% if selected_property_type == 'villa' %}selected{% endif %}>{{ _("common.villa") }}</option>
-                <option value="townhouse" {% if selected_property_type == 'townhouse' %}selected{% endif %}>{{ _("property.types.townhouse") }}</option>
-                <option value="house" {% if selected_property_type == 'house' %}selected{% endif %}>{{ _("property.types.house") }}</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-bed mr-2"></i>{{ _("property.bedrooms") }}
-              </label>
-              <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option value="0">{{ _("common.any_amount") }}</option>
-                <option value="1" {% if selected_bedrooms == 1 %}selected{% endif %}>{{ _("common.1_bedroom") }}</option>
-                <option value="2" {% if selected_bedrooms == 2 %}selected{% endif %}>{{ _("common.2_bedrooms") }}</option>
-                <option value="3" {% if selected_bedrooms == 3 %}selected{% endif %}>{{ _("common.3_bedrooms") }}</option>
-              </select>
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-dollar-sign mr-2"></i>{{ _("common.from") }} ({{ _("property.budget") }})
-              </label>
-              <input type="number" name="price_from" value="{{ selected_price_from }}" 
-                     placeholder="{{ _('common.from') }}" step="0.1" min="0"
-                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-            
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2">
-                <i class="fas fa-dollar-sign mr-2"></i>{{ _("common.to") }} ({{ _("property.budget") }})
-              </label>
-              <input type="number" name="price_to" value="{{ selected_price_to }}" 
-                     placeholder="{{ _('common.to') }}" step="0.1" min="0"
-                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-            </div>
-          </div>
-          
-          <!-- Кнопки действий -->
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
-              <i class="fas fa-search mr-2"></i>{{ _("search.find_property") }}
-            </button>
-            <a href="/{{ lang }}/properties?deal_type=buy" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-300 transition-colors font-medium text-center">
-              <i class="fas fa-undo mr-2"></i>{{ _("search.reset_filters") }}
-            </a>
-          </div>
-        </form>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
+          {% if properties|length > 0 %}
+            {{ _("search.found_objects").replace("{count}", properties|length|string) }}
+          {% else %}
+            {{ _("search.no_objects") }}
+          {% endif %}
+        </h1>
+        <div class="flex items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <label class="text-xs sm:text-sm text-gray-600">{{ _("search.sorting") }}:</label>
+          <select class="border border-gray-300 rounded-lg px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500">
+            <option value="newest">{{ _("sorting.newest") }}</option>
+            <option value="price_asc">{{ _("sorting.price_asc") }}</option>
+            <option value="price_desc">{{ _("sorting.price_desc") }}</option>
+            <option value="area_desc">{{ _("sorting.area_desc") }}</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
   
   <!-- Main Content -->
-  <div class="container mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Left Column - Properties List -->
-      <div class="lg:col-span-2">
-        <!-- Results Header -->
-        <div class="flex justify-between items-center mb-6">
-          <h2 class="text-2xl font-bold text-gray-900">
-            {% if properties|length > 0 %}
-              {{ _("search.found_objects").replace("{count}", properties|length|string) }}
-            {% else %}
-              {{ _("search.no_objects") }}
-            {% endif %}
-          </h2>
-          <div class="flex items-center gap-4">
-            <label class="text-sm text-gray-600">{{ _("search.sorting") }}:</label>
-            <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500">
-              <option value="newest">{{ _("sorting.newest") }}</option>
-              <option value="price_asc">{{ _("sorting.price_asc") }}</option>
-              <option value="price_desc">{{ _("sorting.price_desc") }}</option>
-              <option value="area_desc">{{ _("sorting.area_desc") }}</option>
-            </select>
+  <div class="flex flex-col lg:flex-row">
+    
+    <!-- Left Sidebar - Filters -->
+    <div class="lg:w-80 filter-sidebar p-4 sm:p-6 overflow-y-auto lg:border-r lg:border-gray-200" style="height: calc(100vh - 120px);">
+      <form method="GET" class="space-y-6">
+        <input type="hidden" name="deal_type" value="buy">
+        
+        <!-- Search -->
+        <div class="filter-section pb-4">
+          <h3 class="font-semibold text-gray-900 mb-3">{{ _("search.placeholder") }}</h3>
+          <input type="text" name="query" value="{{ selected_query }}" 
+                 placeholder="{{ _('search.placeholder') }}" 
+                 class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        
+        <!-- District -->
+        <div class="filter-section pb-4">
+          <h3 class="font-semibold text-gray-900 mb-3">{{ _("forms.district") }}</h3>
+          <select name="district" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _("forms.any_district") }}</option>
+            {% for district in districts %}
+            <option value="{{ district }}" {% if selected_district == district %}selected{% endif %}>
+              {{ district }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <!-- Property Type -->
+        <div class="filter-section pb-4">
+          <h3 class="font-semibold text-gray-900 mb-3">{{ _("forms.property_type") }}</h3>
+          <select name="property_type" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _("common.any_type") }}</option>
+            <option value="apartment" {% if selected_property_type == 'apartment' %}selected{% endif %}>{{ _("common.apartments") }}</option>
+            <option value="condo" {% if selected_property_type == 'condo' %}selected{% endif %}>{{ _("common.condo") }}</option>
+            <option value="villa" {% if selected_property_type == 'villa' %}selected{% endif %}>{{ _("common.villa") }}</option>
+            <option value="townhouse" {% if selected_property_type == 'townhouse' %}selected{% endif %}>{{ _("property.types.townhouse") }}</option>
+            <option value="house" {% if selected_property_type == 'house' %}selected{% endif %}>{{ _("property.types.house") }}</option>
+          </select>
+        </div>
+        
+        <!-- Bedrooms -->
+        <div class="filter-section pb-4">
+          <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.bedrooms") }}</h3>
+          <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="0">{{ _("common.any_amount") }}</option>
+            <option value="1" {% if selected_bedrooms == 1 %}selected{% endif %}>{{ _("common.1_bedroom") }}</option>
+            <option value="2" {% if selected_bedrooms == 2 %}selected{% endif %}>{{ _("common.2_bedrooms") }}</option>
+            <option value="3" {% if selected_bedrooms == 3 %}selected{% endif %}>{{ _("common.3_bedrooms") }}</option>
+          </select>
+        </div>
+        
+        <!-- Price Range -->
+        <div class="filter-section pb-4">
+          <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.budget") }}</h3>
+          <div class="space-y-2">
+            <input type="number" name="price_from" value="{{ selected_price_from }}" 
+                   placeholder="{{ _('common.from') }}" step="0.1" min="0"
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <input type="number" name="price_to" value="{{ selected_price_to }}" 
+                   placeholder="{{ _('common.to') }}" step="0.1" min="0"
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
           </div>
         </div>
         
-        <!-- Properties Grid -->
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+          <button type="submit" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
+            {{ _("search.find_property") }}
+          </button>
+          <a href="/{{ lang }}/properties?deal_type=buy" class="block w-full bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors font-medium text-sm text-center">
+            {{ _("search.reset_filters") }}
+          </a>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Right Content - Properties List and Map -->
+    <div class="flex-1 flex flex-col lg:flex-row">
+      
+      <!-- Properties List -->
+      <div class="flex-1 p-4 sm:p-6 overflow-y-auto" style="height: calc(100vh - 120px);">
         {% if properties %}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="properties-list">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" id="properties-list">
           {% for property in properties %}
-          <div class="property-card bg-white rounded-lg shadow-md overflow-hidden" 
+          <div class="property-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow" 
                data-lat="{{ property.lat or '' }}" 
                data-lng="{{ property.lng or '' }}"
                data-id="{{ property.id }}">
             
             <!-- Property Image -->
-            <div class="relative h-48 bg-gray-200">
+            <div class="relative property-image">
               {% if property.main_image_url %}
               <img src="{{ property.main_image_url }}" 
                    alt="{{ property.title }}" 
                    class="w-full h-full object-cover">
               {% else %}
-              <div class="w-full h-full flex items-center justify-center text-gray-400">
-                <i class="fas fa-home text-4xl"></i>
-              </div>
+                              <div class="w-full h-full flex items-center justify-center text-gray-400">
+                  <i class="fas fa-home text-2xl sm:text-4xl"></i>
+                </div>
               {% endif %}
               
-              <!-- Property Type Badge -->
-              <div class="absolute top-3 left-3">
-                <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                  {% if property.property_type == 'apartment' %}{{ _("property.types.apartment") }}
-                  {% elif property.property_type == 'villa' %}{{ _("property.types.villa") }}
-                  {% elif property.property_type == 'condo' %}{{ _("property.types.condo") }}
-                  {% elif property.property_type == 'townhouse' %}{{ _("property.types.townhouse") }}
-                  {% elif property.property_type == 'house' %}{{ _("property.types.house") }}
-                  {% else %}{{ _("navigation.properties") }}
-                  {% endif %}
-                </span>
-              </div>
-              
               <!-- Favorite Button -->
-              <button class="favorite-btn absolute top-3 right-3 bg-white rounded-full p-2 shadow-md hover:bg-gray-100"
+              <button class="favorite-btn absolute top-2 right-2 sm:top-3 sm:right-3 bg-white rounded-full p-1.5 sm:p-2 shadow-md hover:bg-gray-100"
                       onclick="toggleFavorite({{ property.id }})">
-                <i class="fas fa-heart text-gray-400 {% if property.id in favorites %}favorited{% endif %}"></i>
+                <i class="fas fa-heart text-gray-400 {% if property.id in favorites %}favorited{% endif %} text-sm sm:text-base"></i>
               </button>
             </div>
             
             <!-- Property Info -->
-            <div class="p-4">
-              <h3 class="text-lg font-semibold text-gray-900 mb-2">{{ property.title }}</h3>
-              <div class="flex items-center text-gray-600 mb-2">
-                <i class="fas fa-map-marker-alt mr-2"></i>
-                <span>{{ property.district }}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-4">
-                <div class="flex items-center">
-                  <i class="fas fa-bed mr-2"></i>
-                  <span>{{ property.bedrooms }} {{ _("property.bedrooms") }}</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-bath mr-2"></i>
-                  <span>{{ property.bathrooms }} {{ _("property.bathrooms") }}</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-ruler-combined mr-2"></i>
-                  <span>{{ property.area }} {{ _("property.area") }}</span>
-                </div>
-                <div class="flex items-center">
-                  <i class="fas fa-building mr-2"></i>
-                  <span>{{ property.floor }} {{ _("property.floor") }}</span>
-                </div>
-              </div>
+            <div class="p-3 sm:p-4">
+              <h3 class="text-sm sm:text-lg font-semibold text-gray-900 mb-2">{{ property.title }}</h3>
+                             <div class="flex items-center text-gray-600 mb-2 sm:mb-3 text-xs sm:text-sm">
+                 <i class="fas fa-map-marker-alt mr-1 sm:mr-2 text-xs sm:text-sm"></i>
+                 <span>{{ property.district }}</span>
+               </div>
+              
+                             <div class="property-stats mb-3 sm:mb-4 text-xs sm:text-sm">
+                 <div class="property-stat">
+                   <i class="fas fa-bed text-xs sm:text-sm"></i>
+                   <span>{{ property.bedrooms }}</span>
+                 </div>
+                 <div class="property-stat">
+                   <i class="fas fa-bath text-xs sm:text-sm"></i>
+                   <span>{{ property.bathrooms }}</span>
+                 </div>
+                 <div class="property-stat">
+                   <i class="fas fa-ruler-combined text-xs sm:text-sm"></i>
+                   <span>{{ property.area }} {{ _("property.area") }}</span>
+                 </div>
+                 <div class="property-stat">
+                   <i class="fas fa-building text-xs sm:text-sm"></i>
+                   <span>{{ property.floor }} {{ _("property.floor") }}</span>
+                 </div>
+               </div>
+              
               <div class="flex justify-between items-center">
-                <div class="text-2xl font-bold text-blue-600">
+                <div class="property-price text-sm sm:text-base">
                   {{ "{:,.0f}".format(property.price) }} ฿
                 </div>
                 <a href="/{{ lang }}/properties/{{ property.id }}" 
-                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  {{ _("property.view_details") }}
+                   class="text-blue-600 hover:text-blue-800 font-medium text-xs sm:text-sm">
+                  {{ _("property.view_details") }} →
                 </a>
               </div>
             </div>
@@ -246,83 +258,31 @@
           {% endfor %}
         </div>
         {% else %}
-        <div class="text-center py-12">
-          <div class="text-gray-500 mb-4">{{ _("search.try_change_filters") }}</div>
-          <a href="/{{ lang }}/properties?deal_type=buy" class="text-blue-600 hover:underline">
+        <div class="text-center py-8 sm:py-12">
+          <div class="text-gray-500 mb-4 text-sm sm:text-base">{{ _("search.try_change_filters") }}</div>
+          <a href="/{{ lang }}/properties?deal_type=buy" class="text-blue-600 hover:underline text-sm sm:text-base">
             {{ _("search.reset_filters") }}
           </a>
         </div>
         {% endif %}
       </div>
       
-      <!-- Right Column - Map -->
-      <div class="lg:col-span-1">
-        <div id="map"></div>
+      <!-- Map -->
+      <div class="w-full lg:w-1/2 p-4 sm:p-6">
+        <div id="map" class="h-64 lg:h-full rounded-lg"></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Плавающая кнопка связи -->
-<div class="fixed bottom-6 right-6 z-50">
-  <button onclick="openContactModal()" 
-          class="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110">
-    <i class="fab fa-whatsapp text-2xl"></i>
-    <span class="sr-only">Связаться с нами</span>
-  </button>
-</div>
+<button onclick="openInvestCalcModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition mb-4">
+  Инвестиционный калькулятор
+</button>
 
-<!-- Модальное окно для подачи заявки -->
-<div id="contact-modal" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
-  <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full mx-4 relative">
-    <button onclick="closeContactModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
-    
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">{{ _("contact.send_request") }}</h2>
-      <p class="text-gray-600">{{ _("contact.will_contact_shortly") }}</p>
-    </div>
-    
-    <form id="contact-form" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("contact.your_name") }}</label>
-        <input type="text" name="name" required
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-               placeholder="{{ _('contact.enter_name') }}">
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("contact.phone_number") }}</label>
-        <input type="tel" name="phone" required
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-               placeholder="+66 XX XXX XXXX">
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("contact.preferred_contact") }}</label>
-        <select name="contact_method" 
-                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent">
-          <option value="whatsapp">WhatsApp</option>
-          <option value="telegram">Telegram</option>
-          <option value="phone">{{ _("contact.phone_call") }}</option>
-        </select>
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("contact.message") }}</label>
-        <textarea name="message" rows="3"
-                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="{{ _('contact.message_placeholder') }}"></textarea>
-      </div>
-      
-      <button type="submit" 
-              class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-        <i class="fab fa-whatsapp mr-2"></i>{{ _("contact.send_request") }}
-      </button>
-    </form>
-    
-    <div id="contact-success" class="hidden text-center text-green-600 font-semibold mt-4">
-      {{ _("contact.request_sent") }}
-    </div>
+<div id="invest-calc-modal" class="modal-invest-calc hidden">
+  <div class="modal-content relative max-w-2xl w-full mx-auto">
+    <button class="close-btn" onclick="closeInvestCalcModal()">&times;</button>
+    {% include 'components/investment_calculator.html' %}
   </div>
 </div>
 
@@ -437,20 +397,6 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 });
 
-// Связь с владельцем через WhatsApp
-function contactOwner(propertyId) {
-  const message = `Здравствуйте! Меня интересует объект недвижимости #${propertyId} на сайте Sianoro. Можете предоставить больше информации?`;
-  const whatsappUrl = `https://wa.me/66923265978?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-}
-
-// Связь с агентом
-function contactAgent() {
-  const message = `Здравствуйте! Мне нужна помощь в подборе недвижимости в Паттайе. Можете проконсультировать?`;
-  const whatsappUrl = `https://wa.me/66923265978?text=${encodeURIComponent(message)}`;
-  window.open(whatsappUrl, '_blank');
-}
-
 // Подгрузка избранных объектов
 async function loadFavoriteStatus() {
   try {
@@ -482,70 +428,5 @@ async function loadFavoriteStatus() {
 
 // Загружаем статус избранного при загрузке страницы
 document.addEventListener('DOMContentLoaded', loadFavoriteStatus);
-
-// Функции для модального окна связи
-function openContactModal() {
-  document.getElementById('contact-modal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeContactModal() {
-  document.getElementById('contact-modal').classList.add('hidden');
-  document.body.style.overflow = 'auto';
-  document.getElementById('contact-form').reset();
-  document.getElementById('contact-success').classList.add('hidden');
-}
-
-// Обработчик отправки формы связи
-document.getElementById('contact-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const formData = new FormData(e.target);
-  const data = {
-    name: formData.get('name'),
-    phone: formData.get('phone'),
-    contact_method: formData.get('contact_method'),
-    message: formData.get('message') || 'Заинтересован в недвижимости в Паттайе'
-  };
-  
-  try {
-    const response = await fetch('/{{ lang }}/submit-contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-    
-    if (response.ok) {
-      document.getElementById('contact-success').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
-      document.getElementById('contact-success').classList.remove('hidden');
-      e.target.style.display = 'none';
-      
-      setTimeout(() => {
-        closeContactModal();
-        e.target.style.display = 'block';
-      }, 2000);
-    } else {
-      throw new Error('Ошибка отправки');
-    }
-  } catch (error) {
-    document.getElementById('contact-success').textContent = 'Спасибо! Ваша заявка принята.';
-    document.getElementById('contact-success').classList.remove('hidden');
-    e.target.style.display = 'none';
-    
-    setTimeout(() => {
-      closeContactModal();
-      e.target.style.display = 'block';
-    }, 2000);
-  }
-});
-
-// Закрытие модального окна по клику вне его
-document.getElementById('contact-modal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeContactModal();
-  }
-});
 </script>
 {% endblock %} 

@@ -164,10 +164,10 @@
               
               <!-- Кнопки действий -->
               <div class="flex gap-3">
-                <a href="/ru/properties/{{ property.id }}" 
-                   class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-xl transition-colors">
-                  👁️ {{ _("Смотреть") }}
-                </a>
+                        <a href="/{{ lang }}/properties/{{ property.id }}" 
+           class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-xl transition-colors">
+          👁️ {{ _("Смотреть") }}
+        </a>
                 <button onclick="contactAboutProperty({{ property.id }})" 
                         class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-xl transition-colors">
                   📞 {{ _("Связаться") }}
@@ -192,11 +192,11 @@
           {{ _("Добавляйте понравившиеся объекты в избранное, чтобы легко находить их позже") }}
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/ru/properties/?deal_type=buy" 
+          <a href="/{{ lang }}/properties?deal_type=buy" 
              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors">
             🏠 {{ _("Купить недвижимость") }}
           </a>
-          <a href="/ru/properties/rent" 
+          <a href="/{{ lang }}/rent" 
              class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl transition-colors">
             🏖️ {{ _("Снять недвижимость") }}
           </a>

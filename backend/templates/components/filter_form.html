@@ -29,9 +29,14 @@
     />
   </div>
 
-  <button
-    type="submit"
-    class="md:col-span-3 bg-sber hover:bg-sber-dark text-white py-2 px-6 rounded-xl shadow mt-2">
-    {{ _("rent.find_objects") }}
-  </button>
+  <div class="flex gap-2 mt-2 md:col-span-3">
+    <button
+      type="submit"
+      class="bg-sber hover:bg-sber-dark text-white py-2 px-6 rounded-xl shadow w-full md:w-auto">
+      {{ _("rent.find_objects") }}
+    </button>
+          <a href="/{{ lang }}/ai-search" onclick="openAiSearchModal()" class="flex items-center justify-center bg-[#0074E4] hover:bg-[#005bb5] text-white py-2 px-6 rounded-xl shadow w-full md:w-auto ml-2 transition font-semibold">
+        <i class="fa-solid fa-robot mr-2"></i> {{ _('navigation.ai_assistant') }}
+      </a>
+  </div>
 </form>

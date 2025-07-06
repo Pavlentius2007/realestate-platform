@@ -21,6 +21,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
   <!-- Tailwind -->
   <link rel="stylesheet" href="https://cdn.tailwindcss.com">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -29,61 +32,22 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
+  <!-- Zillow-style CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/zillow-style.css') }}">
+  
+  <!-- Mobile improvements CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/mobile-improvements.css') }}">
+  
+  <!-- Final touches CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/final-touches.css') }}">
+  
+  <!-- Footer improvements CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/footer-improvements.css') }}">
+  
   <!-- Кастомные стили -->
   <style>
-    /* Современные шрифты */
-    .font-modern { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
-    .font-heading { font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif; }
-    
-    /* Улучшенная типографика */
-    body { 
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-      line-height: 1.6;
-      color: #1f2937; /* Более контрастный серый */
-    }
-    
-    h1, h2, h3, h4, h5, h6 { 
-      font-family: 'Poppins', sans-serif; 
-      font-weight: 600;
-      color: #111827; /* Еще более темный для заголовков */
-    }
-    
     /* Карта */
     #map, #map-inline { height: 100%; min-height: 100%; }
-    
-    /* Улучшенная цветовая схема */
-    .bg-primary { background-color: #2563eb; } /* Более яркий синий */
-    .text-primary { color: #2563eb; }
-    .bg-primary-light { background-color: #dbeafe; }
-    .text-secondary { color: #6b7280; }
-    .border-primary { border-color: #2563eb; }
-    
-    /* Социальные иконки */
-    .social-sidebar {
-      position: fixed;
-      right: 20px;
-      bottom: 120px;
-      z-index: 40;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    
-    .social-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    .social-icon:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-    }
     
     /* Выпадающее меню */
     .dropdown-menu {
@@ -98,31 +62,63 @@
       opacity: 1;
       visibility: visible;
     }
-    
-    /* Анимации */
-    .fade-in {
-      animation: fadeIn 0.3s ease-in-out;
+
+    /* Floating Social Menu */
+    .floating-social-menu {
+      position: fixed;
+      right: 32px;
+      bottom: 120px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Мобильная адаптация социальных иконок */
     @media (max-width: 768px) {
-      .social-sidebar {
-        position: relative;
-        right: auto;
-        bottom: auto;
-        flex-direction: row;
-        justify-content: center;
-        margin: 20px 0;
+      .floating-social-menu {
+        right: 16px;
+        bottom: 24px;
       }
+    }
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .social-btn {
+      width: 56px;
+      height: 56px;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .telegram-btn {
+      background: linear-gradient(135deg, #0088cc 0%, #229ED9 100%);
+      color: white;
+    }
+    .telegram-btn:hover {
+      background: linear-gradient(135deg, #229ED9 0%, #0088cc 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,136,204,0.3);
+    }
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: white;
+    }
+    .whatsapp-btn:hover {
+      background: linear-gradient(135deg, #128C7E 0%, #25D366 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37,211,102,0.3);
     }
   </style>
 
   <!-- Стили -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/navbar.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', path='css/font-awesome.min.css') }}">
@@ -191,9 +187,18 @@
         
         const html = await pageResponse.text();
         
-        // Обновляем только основной контент
+        // Обновляем основной контент и navbar
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
+        
+        // Обновляем navbar
+        const newNavbar = doc.querySelector('nav');
+        const currentNavbar = document.querySelector('nav');
+        if (newNavbar && currentNavbar) {
+          currentNavbar.innerHTML = newNavbar.innerHTML;
+        }
+        
+        // Обновляем основной контент
         const newContent = doc.querySelector('main').innerHTML;
         document.querySelector('main').innerHTML = newContent;
         
@@ -202,6 +207,9 @@
         
         // Обновляем язык в HTML
         document.documentElement.lang = newLang;
+        
+        // Переинициализируем обработчики событий для обновленного navbar
+        initializeNavbarHandlers();
         
         // Загружаем переводы для нового языка
         await loadTranslations(newLang);
@@ -213,16 +221,51 @@
       }
     }
     
-    // Обработчик смены языка
-    document.addEventListener('DOMContentLoaded', function() {
-      // Обработка переключателя языка
+    // Инициализация обработчиков navbar
+    function initializeNavbarHandlers() {
+      // Обработка переключателя языка (десктоп)
       const langSwitcher = document.getElementById('language-switcher');
       if (langSwitcher) {
         langSwitcher.addEventListener('change', function(e) {
           const newLang = e.target.value;
           updatePageContent(newLang);
+          window.location.reload();
         });
       }
+      
+      // Обработка переключателя языка (мобильный)
+      const langMobile = document.getElementById('mobile-language-switcher');
+      if (langMobile) {
+        langMobile.addEventListener('change', function(e) {
+          const newLang = e.target.value;
+          if (langSwitcher) {
+            langSwitcher.value = newLang;
+          }
+          updatePageContent(newLang);
+        });
+      }
+      
+      // Мобильное меню
+      const burger = document.getElementById('navbar-burger');
+      const menu = document.getElementById('mobile-menu');
+      if (burger && menu) {
+        burger.addEventListener('click', function() {
+          menu.classList.toggle('hidden');
+        });
+      }
+      
+      // Синхронизация языкового select
+      if (langSwitcher && langMobile) {
+        langSwitcher.addEventListener('change', e => {
+          langMobile.value = e.target.value;
+        });
+      }
+    }
+    
+    // Обработчик смены языка
+    document.addEventListener('DOMContentLoaded', function() {
+      // Инициализируем обработчики navbar
+      initializeNavbarHandlers();
       
       // Обработка языковых ссылок
       document.querySelectorAll('[data-lang]').forEach(link => {
@@ -247,208 +290,13 @@
   </script>
 </head>
 
-<body class="bg-gray-50 text-gray-900 font-modern">
-  <!-- 🔝 Современная шапка в стиле футера -->
-  <header class="sticky top-0 z-50 shadow-xl">
-    <!-- Декоративная верхняя полоса -->
-    <div class="h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-500"></div>
-    
-    <!-- Основной хедер -->
-    <div class="bg-gradient-to-br from-slate-100 via-blue-50 to-slate-200 backdrop-blur-lg border-b border-blue-200/30">
-          <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
-        
-        <!-- Левая часть: Современное меню -->
-        <div class="flex items-center gap-6">
-          <!-- Главное меню -->
-          <nav class="hidden lg:flex items-center gap-6">
-            <div class="relative group">
-              <button class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-200/50 transition-colors text-slate-700 font-medium">
-                <span class="font-medium">🏠 {{ _("navigation.real_estate") }}</span>
-              <svg class="h-4 w-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </button>
-            
-            <div class="dropdown-menu absolute left-0 mt-2 w-72 bg-white text-gray-800 rounded-xl shadow-xl py-2 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-              <a href="/{{ lang }}/properties?deal_type=buy" class="block px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                  <span class="text-2xl">🏠</span>
-                  <div>
-                    <div class="font-medium text-gray-900">{{ _("navigation.buy_property") }}</div>
-                    <div class="text-sm text-gray-500">{{ _("header.buy_property_desc") }}</div>
-                  </div>
-                </div>
-              </a>
-              
-              <a href="/{{ lang }}/properties/rent" class="block px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                  <span class="text-2xl">🏖️</span>
-                  <div>
-                    <div class="font-medium text-gray-900">{{ _("navigation.rent_property") }}</div>
-                    <div class="text-sm text-gray-500">{{ _("header.rent_property_desc") }}</div>
-                  </div>
-                </div>
-              </a>
-              
-              <a href="/{{ lang }}/projects" class="block px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                  <span class="text-2xl">🏗️</span>
-                  <div>
-                    <div class="font-medium text-gray-900">{{ _("navigation.new_builds") }}</div>
-                    <div class="text-sm text-gray-500">{{ _("header.new_builds_desc") }}</div>
-                  </div>
-                </div>
-              </a>
-              
-              <a href="/{{ lang }}/ai-chat" class="block px-4 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-colors">
-                <div class="flex items-center gap-3">
-                  <span class="text-2xl">🤖</span>
-                  <div>
-                    <div class="font-medium text-purple-700">{{ _("navigation.ai_assistant") }}</div>
-                    <div class="text-sm text-gray-500">Умный чат-консультант по недвижимости</div>
-                  </div>
-                </div>
-              </a>
-            </div>
-          </div>
-          
-          <a href="/{{ lang }}/articles" class="px-3 py-2 rounded-lg hover:bg-blue-200/50 transition-colors font-medium text-slate-700">
-            📚 {{ _("navigation.useful") }}
-          </a>
-        </nav>
-        
-        <!-- Мобильное меню -->
-        <div class="lg:hidden">
-          <button id="mobileMenuButton" class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-blue-200/50 transition-colors text-slate-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-            </svg>
-            <span class="font-medium">{{ _("navigation.menu") }}</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Центр: логотип -->
-      <div class="flex items-center justify-center">
-        <a href="/{{ lang }}" class="flex items-center gap-3 group">
-          <!-- Современный логотип в виде SVG -->
-          <div class="w-10 h-10 relative">
-            <svg width="40" height="40" viewBox="0 0 100 100" class="drop-shadow-lg">
-              <!-- Круглый фон -->
-              <circle cx="50" cy="50" r="50" fill="#1e3a8a" stroke="#fbbf24" stroke-width="2"/>
-              
-              <!-- Солнечные лучи -->
-              <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
-                <line x1="50" y1="15" x2="50" y2="25"/>
-                <line x1="65" y1="20" x2="60" y2="25"/>
-                <line x1="35" y1="20" x2="40" y2="25"/>
-                <line x1="75" y1="35" x2="70" y2="40"/>
-                <line x1="25" y1="35" x2="30" y2="40"/>
-              </g>
-              
-              <!-- Дом -->
-              <g fill="#fbbf24">
-                <!-- Крыша -->
-                <polygon points="35,45 50,30 65,45" />
-                <!-- Стены -->
-                <rect x="35" y="45" width="30" height="20" />
-                <!-- Дверь -->
-                <rect x="47" y="55" width="6" height="10" fill="#1e3a8a" />
-              </g>
-              
-              <!-- Волны моря -->
-              <g stroke="#fbbf24" stroke-width="2" fill="none">
-                <path d="M 20 75 Q 30 70 40 75 T 60 75 T 80 75" />
-                <path d="M 25 80 Q 35 75 45 80 T 65 80 T 85 80" />
-                <path d="M 15 85 Q 25 80 35 85 T 55 85 T 75 85" />
-              </g>
-            </svg>
-          </div>
-          <span class="text-2xl font-bold font-heading tracking-wide bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">SIANORO</span>
-        </a>
-      </div>
-      
-      <!-- Правая часть: языки и избранное -->
-      <div class="flex items-center gap-4">
-        <!-- Переключатель языков -->
-        <div class="relative group">
-          <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-200/50 transition-colors text-slate-700">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3C7.03 3 3 7.03 3 12s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 0c2.21 0 4 4.03 4 9s-1.79 9-4 9-4-4.03-4-9 1.79-9 4-9z"/>
-            </svg>
-            <span class="uppercase font-medium">{{ lang }}</span>
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </button>
-          <div class="dropdown-menu absolute right-0 mt-2 w-32 bg-white text-gray-800 rounded-xl shadow-xl py-2 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
-            <a href="/lang/ru" onclick="setLanguage('ru')" class="block px-4 py-2 hover:bg-blue-50 transition-colors">🇷🇺 Русский</a>
-            <a href="/lang/en" onclick="setLanguage('en')" class="block px-4 py-2 hover:bg-blue-50 transition-colors">🇺🇸 English</a>
-            <a href="/lang/th" onclick="setLanguage('th')" class="block px-4 py-2 hover:bg-blue-50 transition-colors">🇹🇭 ไทย</a>
-            <a href="/lang/zh" onclick="setLanguage('zh')" class="block px-4 py-2 hover:bg-blue-50 transition-colors">🇨🇳 中文</a>
-          </div>
-        </div>
-        
-        <!-- Красивая кнопка избранного -->
-        <a href="/{{ lang }}/favorites" class="flex items-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl shadow-lg transition-all transform hover:scale-105" title="{{ _('navigation.favorites') }}">
-          <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-          <span class="font-medium hidden md:inline">{{ _("navigation.favorites") }}</span>
-        </a>
-      </div>
-    </div>
-    
-    <!-- Декоративная нижняя полоса -->
-    <div class="h-px bg-gradient-to-r from-transparent via-blue-300/50 to-transparent"></div>
-  </header>
+<body class="bg-gray-50 text-gray-900 font-modern flex flex-col min-h-screen">
+  {% include 'components/navbar.html' %}
 
   <!-- Вертикальная панель социальных сетей (справа) -->
-  <div class="social-sidebar md:block hidden">
-    <a href="/auth/telegram" class="social-icon bg-blue-500 hover:bg-blue-600 text-white" title="Telegram">
-      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M9.04 16.34l-.39 3.67c.56 0 .8-.24 1.09-.53l2.62-2.49 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.76c.32-1.49-.54-2.07-1.5-1.72L2.2 9.47c-1.46.57-1.44 1.38-.25 1.75l4.6 1.44 10.67-6.72c.5-.32.96-.14.58.18"/>
-      </svg>
-    </a>
-    
-    <a href="/auth/whatsapp" class="social-icon bg-green-500 hover:bg-green-600 text-white" title="WhatsApp">
-      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.099 3.2 5.077 4.366.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.288.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-      </svg>
-    </a>
-    
-    <a href="#" id="btn-instagram-modal" class="social-icon bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 text-white" title="Instagram">
-      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.056 1.97.24 2.43.41.59.22 1.01.48 1.45.92.44.44.7.86.92 1.45.17.46.354 1.26.41 2.43.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.24 1.97-.41 2.43-.22.59-.48 1.01-.92 1.45-.44.44-.86.7-1.45.92-.46.17-1.26.354-2.43.41-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.24-2.43-.41-.59-.22-1.01-.48-1.45-.92-.44-.44-.7-.86-.92-1.45-.17-.46-.354-1.26-.41-2.43C2.212 15.784 2.2 15.4 2.2 12s.012-3.584.07-4.85c.056-1.17.24-1.97.41-2.43.22-.59.48-1.01.92-1.45.44-.44.86-.7 1.45-.92.46-.17 1.26-.354 2.43-.41C8.416 2.212 8.8 2.2 12 2.2zm0-2.2C8.736 0 8.332.012 7.052.07 5.77.128 4.77.312 4.01.54c-.77.23-1.42.54-2.07 1.19-.65.65-.96 1.3-1.19 2.07C.312 4.77.128 5.77.07 7.052.012 8.332 0 8.736 0 12c0 3.264.012 3.668.07 4.948.058 1.282.242 2.282.47 3.042.23.77.54 1.42 1.19 2.07.65.65 1.3.96 2.07 1.19.76.228 1.76.412 3.042.47C8.332 23.988 8.736 24 12 24s3.668-.012 4.948-.07c1.282-.058 2.282-.242 3.042-.47.77-.23 1.42-.54 2.07-1.19.65-.65.96-1.3 1.19-2.07.228-.76.412-1.76.47-3.042.058-1.28.07-1.684.07-4.948s-.012-3.668-.07-4.948c-.058-1.282-.242-2.282-.47-3.042-.23-.77-.54-1.42-1.19-2.07-.65-.65-1.3-.96-2.07-1.19-.76-.228-1.76-.412-3.042-.47C15.668.012 15.264 0 12 0z"/>
-        <circle cx="12" cy="12" r="3.6"/>
-        <circle cx="18.406" cy="5.594" r="1.44"/>
-      </svg>
-    </a>
-  </div>
-
+  
   <!-- Мобильная версия социальных сетей -->
-  <div class="social-sidebar md:hidden">
-    <a href="/auth/telegram" class="social-icon bg-blue-500 hover:bg-blue-600 text-white" title="Telegram">
-      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M9.04 16.34l-.39 3.67c.56 0 .8-.24 1.09-.53l2.62-2.49 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.76c.32-1.49-.54-2.07-1.5-1.72L2.2 9.47c-1.46.57-1.44 1.38-.25 1.75l4.6 1.44 10.67-6.72c.5-.32.96-.14.58.18"/>
-      </svg>
-    </a>
-    
-    <a href="/auth/whatsapp" class="social-icon bg-green-500 hover:bg-green-600 text-white" title="WhatsApp">
-      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.472-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.447-.52.149-.174.198-.298.298-.497.099-.198.05-.372-.025-.521-.075-.148-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.372-.01-.571-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.099 3.2 5.077 4.366.71.306 1.263.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.288.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-      </svg>
-    </a>
-    
-    <a href="#" class="social-icon bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 hover:opacity-90 text-white" title="Instagram">
-      <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2.2c3.2 0 3.584.012 4.85.07 1.17.056 1.97.24 2.43.41.59.22 1.01.48 1.45.92.44.44.7.86.92 1.45.17.46.354 1.26.41 2.43.058 1.266.07 1.65.07 4.85s-.012 3.584-.07 4.85c-.056 1.17-.24 1.97-.41 2.43-.22.59-.48 1.01-.92 1.45-.44.44-.86.7-1.45.92-.46.17-1.26.354-2.43.41-1.266.058-1.65.07-4.85.07s-3.584-.012-4.85-.07c-1.17-.056-1.97-.24-2.43-.41-.59-.22-1.01-.48-1.45-.92-.44-.44-.7-.86-.92-1.45-.17-.46-.354-1.26-.41-2.43C2.212 15.784 2.2 15.4 2.2 12s.012-3.584.07-4.85c.056-1.17.24-1.97.41-2.43.22-.59.48-1.01.92-1.45.44-.44.86-.7 1.45-.92.46-.17 1.26-.354 2.43-.41C8.416 2.212 8.8 2.2 12 2.2zm0-2.2C8.736 0 8.332.012 7.052.07 5.77.128 4.77.312 4.01.54c-.77.23-1.42.54-2.07 1.19-.65.65-.96 1.3-1.19 2.07C.312 4.77.128 5.77.07 7.052.012 8.332 0 8.736 0 12c0 3.264.012 3.668.07 4.948.058 1.282.242 2.282.47 3.042.23.77.54 1.42 1.19 2.07.65.65 1.3.96 2.07 1.19.76.228 1.76.412 3.042.47C8.332 23.988 8.736 24 12 24s3.668-.012 4.948-.07c1.282-.058 2.282-.242 3.042-.47.77-.23 1.42-.54 2.07-1.19.65-.65.96-1.3 1.19-2.07.228-.76.412-1.76.47-3.042.058-1.28.07-1.684.07-4.948s-.012-3.668-.07-4.948c-.058-1.282-.242-2.282-.47-3.042-.23-.77-.54-1.42-1.19-2.07-.65-.65-1.3-.96-2.07-1.19-.76-.228-1.76-.412-3.042-.47C15.668.012 15.264 0 12 0z"/>
-        <circle cx="12" cy="12" r="3.6"/>
-        <circle cx="18.406" cy="5.594" r="1.44"/>
-      </svg>
-    </a>
-  </div>
-
+  
   <!-- Модальное окно Telegram -->
   <div id="modal-telegram" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
     <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full relative">
@@ -495,148 +343,19 @@
   </div>
 
   <!-- 📦 Контент -->
-  <main class="p-0">
+  <main class="p-0 flex-1">
     {% block content %}{% endblock %}
     
   </main>
 
-  <!-- 🌊 Современный футер -->
-  <footer class="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 mt-16">
-    <!-- Декоративные элементы -->
-    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
-    
-    <div class="relative container mx-auto px-4 py-16">
-      <!-- Основной контент футера -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-        
-        <!-- Логотип и описание -->
-        <div class="lg:col-span-2">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl flex items-center justify-center">
-              <span class="text-white font-bold text-xl">S</span>
-            </div>
-            <h3 class="text-2xl font-bold bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">
-              Sianoro
-            </h3>
-          </div>
-          <p class="text-slate-300 leading-relaxed mb-6 max-w-md">
-            {{ _("footer.about") }}
-          </p>
-          
-          <!-- Социальные сети -->
-          <div class="flex gap-4">
-            <a href="#" class="group">
-              <div class="w-10 h-10 bg-slate-800/50 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                <i class="fab fa-whatsapp text-green-400 group-hover:text-white transition-colors"></i>
-              </div>
-            </a>
-            <a href="#" class="group">
-              <div class="w-10 h-10 bg-slate-800/50 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                <i class="fab fa-telegram text-blue-400 group-hover:text-white transition-colors"></i>
-              </div>
-            </a>
-            <a href="#" class="group">
-              <div class="w-10 h-10 bg-slate-800/50 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                <i class="fab fa-instagram text-pink-400 group-hover:text-white transition-colors"></i>
-              </div>
-            </a>
-            <a href="#" class="group">
-              <div class="w-10 h-10 bg-slate-800/50 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110">
-                <i class="fas fa-envelope text-slate-400 group-hover:text-white transition-colors"></i>
-              </div>
-            </a>
-          </div>
-        </div>
-        
-        <!-- Контакты -->
-        <div>
-          <h4 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <i class="fas fa-phone-alt text-blue-400"></i>
-            {{ _("footer.contacts") }}
-          </h4>
-          <div class="space-y-4">
-            <div class="group">
-              <a href="tel:+66923265978" class="flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
-                <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center group-hover:bg-green-500/30 transition-colors">
-                  <i class="fas fa-mobile-alt text-green-400 text-sm"></i>
-                </div>
-                <span class="text-sm">+66 92 326 5978</span>
-              </a>
-            </div>
-            <div class="group">
-              <a href="mailto:info@sianoro.com" class="flex items-center gap-3 text-slate-300 hover:text-white transition-colors">
-                <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
-                  <i class="fas fa-envelope text-blue-400 text-sm"></i>
-                </div>
-                <span class="text-sm">info@sianoro.com</span>
-              </a>
-            </div>
-            <div class="flex items-center gap-3 text-slate-300">
-              <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <i class="fas fa-map-marker-alt text-purple-400 text-sm"></i>
-              </div>
-              <span class="text-sm">{{ _("footer.office_address") }}</span>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Услуги -->
-        <div>
-          <h4 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <i class="fas fa-building text-blue-400"></i>
-            {{ _("navigation.real_estate") }}
-          </h4>
-          <div class="space-y-3">
-            <a href="/{{ lang }}/properties?deal_type=buy" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm group">
-              <i class="fas fa-chevron-right text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
-              <span>{{ _("services.property_sales") }}</span>
-            </a>
-            <a href="/{{ lang }}/rent" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm group">
-              <i class="fas fa-chevron-right text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
-              <span>{{ _("services.apartment_rental") }}</span>
-            </a>
-            <a href="/{{ lang }}/projects" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm group">
-              <i class="fas fa-chevron-right text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
-              <span>{{ _("services.new_build_investments") }}</span>
-            </a>
-            <a href="#" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm group">
-              <i class="fas fa-chevron-right text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
-              <span>{{ _("services.legal_support") }}</span>
-            </a>
-            <a href="#" class="flex items-center gap-2 text-slate-300 hover:text-blue-400 transition-colors text-sm group">
-              <i class="fas fa-chevron-right text-xs text-slate-500 group-hover:text-blue-400 transition-colors"></i>
-              <span>{{ _("services.property_management") }}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Разделитель -->
-      <div class="h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent my-12"></div>
-      
-      <!-- Нижняя часть футера -->
-      <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="text-sm text-slate-400">
-          <span>© {{ now().year }} </span>
-          <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent font-semibold">Sianoro</span>
-          <span>. {{ _("footer.rights") }}</span>
-        </div>
-        
-        <div class="flex gap-6 text-sm">
-          <a href="/{{ lang }}/privacy" class="text-slate-400 hover:text-blue-400 transition-colors">
-            {{ _("legal.privacy_policy") }}
-          </a>
-          <a href="/{{ lang }}/terms" class="text-slate-400 hover:text-blue-400 transition-colors">
-            {{ _("legal.terms_of_use") }}
-          </a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Декоративные элементы внизу -->
-    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"></div>
-  </footer>
+  <!-- Компактный футер в стиле Zillow -->
+  {% include 'components/footer.html' %}
+  
+  <!-- Калькулятор ипотеки -->
+  {% include 'components/mortgage_calculator.html' %}
+  
+  <!-- Оценка недвижимости -->
+  {% include 'components/property_valuation.html' %}
 
   <!-- ИИ-подбор модальное окно -->
   <div id="modal-ai-search" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -700,12 +419,12 @@
               <option value="">{{ _("ai.any_district") }}</option>
               <option>{{ _("districts.wongamat") }}</option>
               <option>{{ _("districts.central") }}</option>
-              <option>Восточная Паттайя</option>
-              <option>Наклуа</option>
+              <option>{{ _("districts.east") }}</option>
+              <option>{{ _("districts.naklua") }}</option>
               <option>{{ _("districts.pratumnak") }}</option>
               <option>{{ _("districts.jomtien") }}</option>
-              <option>На Джомтьен</option>
-              <option>Юг</option>
+              <option>{{ _("districts.na_jomtien") }}</option>
+              <option>{{ _("districts.south") }}</option>
             </select>
           </div>
           <div>
@@ -715,7 +434,7 @@
               <option>{{ _("common.condo") }}</option>
               <option>{{ _("common.apartments") }}</option>
               <option>{{ _("common.villa") }}</option>
-              <option>Таунхаус</option>
+              <option>{{ _("common.townhouse") }}</option>
             </select>
           </div>
         </div>
@@ -741,11 +460,33 @@
       
       <!-- Результаты поиска -->
       <div id="ai-search-results" class="mt-8 hidden">
-        <h3 class="text-xl font-semibold mb-4">Результаты поиска:</h3>
+        <h3 class="text-xl font-semibold mb-4">{{ _('ai.search_results') }}</h3>
         <div id="ai-results-content"></div>
       </div>
     </div>
   </div>
+
+  <!-- Floating Social Menu -->
+  <div class="floating-social-menu">
+    <div class="social-buttons">
+      <button onclick="openTelegramModal()" title="Telegram" class="social-btn telegram-btn flex items-center justify-center">
+        <!-- Telegram SVG Icon -->
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#229ED9"/>
+          <path d="M36.5 13.5L31.5 35.5C31.5 35.5 30.8 37 29 36.5L22.5 31.5L19.5 34.5C19.5 34.5 19.2 34.8 18.5 34.5C17.8 34.2 17.9 33.5 17.9 33.5L18.5 29.5L32.5 16.5C32.5 16.5 33.5 15.5 32.5 15.5C31.5 15.5 16.5 25.5 16.5 25.5L12.5 24C12.5 24 11.5 23.7 12.5 23.2L35.5 13.5C35.5 13.5 36.5 13 36.5 13.5Z" fill="white"/>
+        </svg>
+      </button>
+      <button onclick="openWhatsappModal()" title="WhatsApp" class="social-btn whatsapp-btn flex items-center justify-center">
+        <!-- WhatsApp SVG Icon -->
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#25D366"/>
+          <path d="M34.6 29.2c-.5-.2-2.9-1.4-3.3-1.6-.4-.2-.7-.2-1 .2-.3.4-1.1 1.6-1.4 1.9-.3.3-.5.4-1 .1-.5-.2-2-0.7-3.8-2.2-1.4-1.2-2.3-2.7-2.6-3.2-.3-.5 0-.7.2-.9.2-.2.5-.6.7-.9.2-.3.2-.5.3-.8.1-.3 0-.6-.1-.8-.1-.2-1-2.4-1.4-3.3-.4-.9-.7-.8-1-.8-.3 0-.6 0-.9 0-.3 0-.8.1-1.2.5-.4.4-1.6 1.6-1.6 3.8 0 2.2 1.6 4.3 1.8 4.6.2.3 3.2 5.1 7.8 6.7 1.1.4 2 .7 2.7.9 1.1.3 2.1.3 2.9.2.9-.1 2.9-1.2 3.3-2.4.4-1.2.4-2.2.3-2.4-.1-.2-.4-.3-.9-.5z" fill="white"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+
 
   <!-- JS для модалок и навигации -->
   <script>
@@ -814,7 +555,7 @@
         <div class="fixed top-0 right-0 h-full w-80 bg-white shadow-xl transform transition-transform">
           <div class="p-6">
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-xl font-bold text-gray-900">Меню</h2>
+              <h2 class="text-xl font-bold text-gray-900">{{ _('navigation.menu') }}</h2>
               <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-700">
                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -835,7 +576,7 @@
                   🏗️ {{ _("navigation.new_builds") }}
                 </a>
                 <button onclick="openAiSearchModal(); closeMobileMenu();" class="w-full text-left py-2 px-4 text-purple-700 hover:bg-purple-50 rounded-lg transition-colors">
-                  🤖 ИИ-подбор
+                  🤖 {{ _('navigation.ai_assistant') }}
                 </button>
               </div>
               
@@ -928,11 +669,22 @@
       }, 2000);
     }
     
+    // Функции для открытия модалок
+    function openTelegramModal() {
+      document.getElementById('modal-telegram').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function openWhatsappModal() {
+      document.getElementById('modal-whatsapp').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
     // Открытие модалки Telegram
     document.querySelectorAll('a[href="/auth/telegram"]').forEach(btn => {
       btn.addEventListener('click', function(e) {
         e.preventDefault();
-        document.getElementById('modal-telegram').classList.remove('hidden');
+        openTelegramModal();
       });
     });
     
@@ -940,7 +692,7 @@
      document.querySelectorAll('a[href="/auth/whatsapp"]').forEach(btn => {
        btn.addEventListener('click', function(e) {
          e.preventDefault();
-         document.getElementById('modal-whatsapp').classList.remove('hidden');
+         openWhatsappModal();
        });
      });
      
@@ -1073,7 +825,47 @@
                 loadTranslations(lang);
             }
         });
+        
+        // Мобильное меню
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Закрытие меню при клике вне его
+            document.addEventListener('click', function(e) {
+                if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+        
+        // Выпадающие меню
+        const dropdowns = document.querySelectorAll('.group');
+        dropdowns.forEach(dropdown => {
+            const button = dropdown.querySelector('button');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            
+            if (button && menu) {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('show');
+                });
+            }
+        });
+        
+        // Закрытие выпадающих меню при клике вне их
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
     });
+
+
   </script>
 
   <!-- Скрипты -->

@@ -130,7 +130,7 @@ def list_properties(
     districts = [d[0] for d in districts if d[0]]
     
     # Выбираем шаблон в зависимости от типа сделки
-    template_name = "properties_catalog.html" if deal_type == "buy" else "landing_sections/rent_page.html"
+    template_name = "properties_catalog.html" if deal_type == "buy" else "rent.html"
     
     return templates.TemplateResponse(template_name, {
         "request": request,

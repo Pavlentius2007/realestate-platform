@@ -1,67 +1,196 @@
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" id="results">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="results">
   {% for property in properties %}
-    <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 transition hover:shadow-lg">
-      <img src="/static/images/{{ property.preview_image or 'default.jpg' }}" alt="{{ property.title }}"
-           class="w-full h-48 object-cover">
-
-      <div class="p-4 space-y-2">
-        <!-- 💸 Цена -->
-        <div class="text-xl font-bold text-sber">
-          ฿ {{ "{:,.0f}".format(property.price) }}
+    <div class="property-card-zillow bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+      <div class="relative">
+        <img src="/static/images/{{ property.preview_image or 'default.jpg' }}" alt="{{ property.title }}"
+             class="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-300">
+        
+        <!-- Бейджи в стиле Zillow -->
+        <div class="absolute top-3 left-3 flex flex-col gap-2">
+          {% if property.is_new %}
+            <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">НОВОЕ</span>
+          {% endif %}
+          {% if property.is_hot %}
+            <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">ГОРЯЧЕЕ</span>
+          {% endif %}
           {% if property.old_price and property.old_price > property.price %}
-            <span class="text-sm text-gray-400 line-through ml-2">
-              ฿ {{ "{:,.0f}".format(property.old_price) }}
+            <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">
+              -{{ "{:.0f}".format((property.old_price - property.price) / property.old_price * 100) }}%
             </span>
           {% endif %}
         </div>
-
-        <!-- 🏢 Название и район -->
-        <h3 class="text-lg font-bold text-gray-800 truncate">{{ property.title }}</h3>
-        <div class="text-gray-800 font-semibold text-sm truncate">🏢 {{ property.condo_name or "–" }}</div>
-        <div class="text-gray-500 text-sm truncate">📍 {{ property.district or "–" }}, {{ property.location or "–" }}</div>
-
-        <!-- 🍿 Характеристики -->
-        <div class="flex justify-between text-xs text-gray-600 mt-2">
-          <span>🏧 {{ property.bedrooms or "–" }} спальн.</span>
-          <span>🚻 {{ property.bathrooms or "–" }} ванн.</span>
+        
+        <!-- Кнопка избранного в стиле Zillow -->
+        <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition-colors duration-200 favorite-btn" 
+                data-property-id="{{ property.id }}" title="Добавить в избранное">
+          <svg class="w-5 h-5 text-gray-600 favorite-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </button>
+        
+        <!-- Zestimate-подобная оценка -->
+        <div class="absolute bottom-3 left-3 bg-black bg-opacity-75 text-white text-xs px-2 py-1 rounded">
+          Оценка: ฿{{ "{:,.0f}".format(property.price * 0.95) }} - ฿{{ "{:,.0f}".format(property.price * 1.05) }}
         </div>
-
-        <div class="flex justify-between text-xs text-gray-600">
-          <span>📀 {{ property.area or "–" }} м²</span>
-          <span>🏢 {{ property.floor or "—" }} этаж</span>
+      </div>
+      
+      <div class="p-4 sm:p-6">
+        <!-- Цена в стиле Zillow -->
+        <div class="flex justify-between items-start mb-3">
+          <div class="text-2xl font-bold text-gray-900">฿{{ "{:,.0f}".format(property.price) }}</div>
+          {% if property.old_price and property.old_price > property.price %}
+            <div class="text-sm text-gray-500 line-through">฿{{ "{:,.0f}".format(property.old_price) }}</div>
+          {% endif %}
         </div>
-
-        <!-- 🔗 Подробнее -->
-        <div class="pt-2 text-right">
-          <a href="/{{ lang }}/properties/{{ property.id }}" class="text-sm text-sber-dark font-medium underline">Подробнее</a>
+        
+        <!-- Ежемесячный платеж (для аренды) -->
+        {% if property.deal_type == 'rent' %}
+          <div class="text-sm text-gray-600 mb-3">
+            ~฿{{ "{:,.0f}".format(property.price // 12) }}/мес при покупке
+          </div>
+        {% endif %}
+        
+        <!-- Заголовок и адрес -->
+        <h3 class="font-semibold text-lg mb-2 text-gray-900 line-clamp-2 leading-tight">{{ property.title }}</h3>
+        <p class="text-gray-600 text-sm mb-4 flex items-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+          {{ property.district or "–" }}, {{ property.location or "–" }}
+        </p>
+        
+        <!-- Характеристики в стиле Zillow -->
+        <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+          <span class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 12a8 8 0 018-8 8 8 0 018 8M4 12a8 8 0 018 8 8 8 0 018-8"/>
+            </svg>
+            <span class="font-medium">{{ property.area or "–" }} м²</span>
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0v4"/>
+            </svg>
+            <span class="font-medium">{{ property.bedrooms or "–" }} спал.</span>
+          </span>
+          <span class="flex items-center gap-1">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10V6a5 5 0 0110 0v4"/>
+            </svg>
+            <span class="font-medium">{{ property.bathrooms or "–" }} ванн.</span>
+          </span>
+        </div>
+        
+        <!-- Дополнительные характеристики -->
+        {% if property.floor or property.total_floors or property.year_built %}
+          <div class="flex flex-wrap gap-3 text-xs text-gray-500 mb-4">
+            {% if property.floor %}
+              <span>{{ property.floor }}/{{ property.total_floors or "?" }} этаж</span>
+            {% endif %}
+            {% if property.year_built %}
+              <span>{{ property.year_built }} год</span>
+            {% endif %}
+            {% if property.property_type %}
+              <span class="capitalize">{{ property.property_type }}</span>
+            {% endif %}
+          </div>
+        {% endif %}
+        
+        <!-- Кнопка действия в стиле Zillow -->
+        <div class="flex gap-2">
+          <a href="/{{ lang }}/properties/{{ property.id }}" 
+             class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-semibold transition duration-200 text-sm">
+            Подробнее
+          </a>
+          <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-3 rounded-xl transition duration-200" 
+                  title="Быстрый просмотр">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
   {% else %}
-    <p class="text-gray-500 col-span-full text-center">Нет предложений по фильтрам.</p>
+    <div class="col-span-full text-center py-16">
+      <div class="text-gray-400 text-6xl mb-4">🏠</div>
+      <h3 class="text-xl font-semibold text-gray-900 mb-2">Нет объектов по вашим критериям</h3>
+      <p class="text-gray-600 mb-6">Попробуйте изменить параметры поиска</p>
+      <button onclick="resetFilters()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition">
+        Сбросить фильтры
+      </button>
+    </div>
   {% endfor %}
 </div>
 
-<div id="loading-indicator" class="text-center py-6 hidden">
-  <span class="text-gray-500 text-sm">Загрузка...</span>
+<!-- Индикатор загрузки -->
+<div id="loading-indicator" class="text-center py-8 hidden">
+  <div class="inline-flex items-center gap-2 text-gray-500">
+    <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+    <span>Загрузка...</span>
+  </div>
 </div>
 
+<!-- Кнопка "Показать ещё" -->
 {% if next_page %}
-  <div class="text-center pt-6">
+  <div class="text-center pt-8">
     <button
       hx-get="/{{ lang }}/properties/filter?page={{ next_page }}"
       hx-target="#results"
-      hx-swap="afterend"
-      class="bg-sber hover:bg-sber-dark text-white py-2 px-4 rounded-xl shadow">
+      hx-swap="beforeend"
+      hx-indicator="#loading-indicator"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold transition duration-200 flex items-center gap-2 mx-auto">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
       Показать ещё
     </button>
   </div>
 {% endif %}
 
 <script>
+  // Обработка избранного
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const propertyId = this.dataset.propertyId;
+        const icon = this.querySelector('.favorite-icon');
+        
+        // Анимация клика
+        this.classList.add('scale-95');
+        setTimeout(() => this.classList.remove('scale-95'), 150);
+        
+        // Переключение состояния
+        if (icon.style.fill === 'currentColor') {
+          icon.style.fill = 'none';
+          icon.style.stroke = 'currentColor';
+        } else {
+          icon.style.fill = 'currentColor';
+          icon.style.stroke = 'none';
+        }
+        
+        // Здесь можно добавить AJAX запрос для сохранения в избранное
+        console.log('Toggle favorite for property:', propertyId);
+      });
+    });
+  });
+  
+  // Сброс фильтров
+  function resetFilters() {
+    window.location.href = '/{{ lang }}/properties';
+  }
+  
+  // HTMX обработчики
   document.body.addEventListener("htmx:beforeRequest", () => {
     document.getElementById("loading-indicator").classList.remove("hidden");
   });
+  
   document.body.addEventListener("htmx:afterSwap", () => {
     document.getElementById("loading-indicator").classList.add("hidden");
   });

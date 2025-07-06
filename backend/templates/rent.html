@@ -3,467 +3,764 @@
 {% block title %}{{ _("rent.title") }}{% endblock %}
 
 {% block head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
 <style>
-  .filter-card {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    border: 1px solid #e5e7eb;
-    transition: all 0.3s ease;
-  }
-  
   .property-card {
     background: white;
-    border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
     transition: all 0.3s ease;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
   
   .property-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    border-color: #3b82f6;
+  }
+  
+  .property-card.highlighted {
+    border-color: #ef4444;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+    transform: translateY(-4px);
   }
   
   .amenity-badge {
     background: #f1f5f9;
     color: #475569;
-    padding: 4px 10px;
-    border-radius: 20px;
+    padding: 4px 8px;
+    border-radius: 6px;
     font-size: 12px;
     margin: 2px;
     display: inline-block;
+    font-weight: 500;
   }
   
   .price-badge {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
     color: white;
     padding: 8px 16px;
-    border-radius: 12px;
-    font-weight: 600;
+    border-radius: 8px;
+    font-weight: 700;
     display: inline-block;
+    font-size: 18px;
   }
   
   .date-input {
     background: white;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
     padding: 12px 16px;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    font-size: 14px;
   }
   
   .date-input:focus {
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    outline: none;
   }
   
-  .request-modal {
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(4px);
+  .filter-sidebar {
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+  }
+  
+  .filter-section {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-section:last-child {
+    border-bottom: none;
+  }
+  
+  .results-header {
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 20px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .property-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  
+  .property-image {
+    height: 220px;
+    background: #f3f4f6;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .property-image img {
+    transition: transform 0.3s ease;
+  }
+  
+  .property-card:hover .property-image img {
+    transform: scale(1.05);
+  }
+  
+  .property-price {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #1f2937;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .property-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 12px 0;
+  }
+  
+  .property-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+  }
+  
+  .property-stat i {
+    color: #3b82f6;
+  }
+  
+  /* Карта в стиле Zillow */
+  #map {
+    height: calc(100vh - 140px);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border: 1px solid #e5e7eb;
+  }
+  
+  .map-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    display: flex;
+    gap: 10px;
+  }
+  
+  .map-control-btn {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .map-control-btn:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+  }
+  
+  .map-control-btn.active {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+  }
+  
+  /* Кастомные маркеры в стиле Zillow */
+  .custom-marker {
+    background: #3b82f6;
+    color: white;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .custom-marker:hover {
+    background: #1d4ed8;
+    transform: scale(1.1);
+  }
+  
+  .custom-marker.highlighted {
+    background: #ef4444;
+    border-color: #fef2f2;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  
+  /* Popup в стиле Zillow */
+  .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+    border: 1px solid #e5e7eb;
+  }
+  
+  .leaflet-popup-content {
+    margin: 0;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .popup-content {
+    padding: 16px;
+    max-width: 280px;
+  }
+  
+  .popup-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+  
+  .popup-location {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .popup-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #3b82f6;
+    margin-bottom: 12px;
+  }
+  
+  .popup-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 12px;
+  }
+  
+  .popup-btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+  }
+  
+  .popup-btn:hover {
+    background: #1d4ed8;
+  }
+  
+  .favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .favorite-btn:hover {
+    background: #f8fafc;
+    border-color: #3b82f6;
+  }
+  
+  .favorite-btn.favorited {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: white;
+  }
+  
+  .view-details-btn {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+  }
+  
+  .view-details-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    text-decoration: none;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .property-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    #map {
+      height: 300px;
+      margin-bottom: 20px;
+    }
+    
+    .property-image {
+      height: 200px;
+    }
   }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="bg-gradient-to-br from-blue-50 to-cyan-50 min-h-screen">
+<div class="bg-gray-50 min-h-screen">
   
-  <!-- Hero секция -->
-  <div class="bg-gradient-to-r from-blue-600 to-cyan-600 text-white py-16">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ _("rent.title") }}</h1>
-      <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-        {{ _("rent.subtitle") }}
-      </p>
+  <!-- Results Header -->
+  <div class="results-header">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
+          <i class="fas fa-home text-blue-600 mr-2"></i>
+          {{ _("rent.title") }}
+          {% if properties %}
+          <span class="text-lg font-normal text-gray-600 ml-2">
+            ({{ properties|length }} {{ _("search.objects_found") }})
+          </span>
+          {% endif %}
+        </h1>
+        <div class="flex items-center gap-4">
+          <label class="text-sm text-gray-600 font-medium">{{ _("search.sorting") }}:</label>
+          <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="newest">{{ _("sorting.newest") }}</option>
+            <option value="price_asc">{{ _("sorting.price_asc") }}</option>
+            <option value="price_desc">{{ _("sorting.price_desc") }}</option>
+          </select>
+        </div>
+      </div>
     </div>
   </div>
-
-  <div class="max-w-7xl mx-auto px-4 py-8">
+  
+  <!-- Main Content -->
+  <div class="flex flex-col lg:flex-row">
     
-    <!-- Фильтры -->
-    <div class="filter-card p-6 mb-8">
-      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-        <span class="text-3xl mr-3">🔍</span>
-        {{ _("rent.search_title") }}
-      </h2>
-      
+    <!-- Left Sidebar - Filters -->
+    <div class="lg:w-80 filter-sidebar p-6 overflow-y-auto lg:border-r lg:border-gray-200" style="height: calc(100vh - 140px);">
       <form id="rentalFilters" class="space-y-6" onsubmit="searchRentals(); return false;">
         
-        <!-- Основные параметры -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-slate-300 mb-2">🏠 {{ _("forms.property_type") }}</label>
-            <select name="property_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-              <option value="">{{ _("common.any_type") }}</option>
-              <option value="apartment">{{ _("common.apartments") }}</option>
-              <option value="villa">{{ _("common.villa") }}</option>
-              <option value="townhouse">{{ _("property.types.townhouse") }}</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.bedrooms_count") }}</label>
-            <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-              <option value="">{{ _("common.any_amount") }}</option>
-              <option value="0">{{ _("common.studio") }}</option>
-              <option value="1">{{ _("common.1_bedroom") }}</option>
-              <option value="2">{{ _("common.2_bedrooms") }}</option>
-              <option value="3">{{ _("common.3_bedrooms") }}</option>
-              <option value="4">4+ {{ _("common.bedrooms") }}</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.district") }}</label>
-            <select name="district" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-              <option value="">{{ _("forms.any_district") }}</option>
-              <option value="central_pattaya">{{ _("districts.central") }}</option>
-              <option value="north_pattaya">{{ _("districts.north") }}</option>
-              <option value="south_pattaya">{{ _("districts.south") }}</option>
-              <option value="jomtien">{{ _("districts.jomtien") }}</option>
-              <option value="naklua">{{ _("districts.naklua") }}</option>
-              <option value="wong_amat">{{ _("districts.wongamat") }}</option>
-            </select>
-          </div>
-          
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.rental_type") }}</label>
-            <select name="rental_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-              <option value="">{{ _("rent.any_period") }}</option>
-              <option value="daily">{{ _("rent.daily") }}</option>
-              <option value="weekly">{{ _("rent.weekly") }}</option>
-              <option value="monthly">{{ _("rent.monthly") }}</option>
-              <option value="long_term">{{ _("rent.long_term") }}</option>
-            </select>
-          </div>
+        <!-- Property Type -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("forms.property_type") }}</h3>
+          <select name="property_type" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _("common.any_type") }}</option>
+            <option value="apartment">{{ _("common.apartments") }}</option>
+            <option value="villa">{{ _("common.villa") }}</option>
+            <option value="townhouse">{{ _("property.types.townhouse") }}</option>
+          </select>
         </div>
-
-        <!-- Бюджет -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.budget_monthly") }}</label>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Bedrooms -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("rent.bedrooms_count") }}</h3>
+          <select name="bedrooms" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _("common.any_amount") }}</option>
+            <option value="0">{{ _("common.studio") }}</option>
+            <option value="1">{{ _("common.1_bedroom") }}</option>
+            <option value="2">{{ _("common.2_bedrooms") }}</option>
+            <option value="3">{{ _("common.3_bedrooms") }}</option>
+            <option value="4">4+ {{ _("common.bedrooms") }}</option>
+          </select>
+        </div>
+        
+        <!-- District -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("rent.district") }}</h3>
+          <select name="district" class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _("forms.any_district") }}</option>
+            <option value="central_pattaya">{{ _("districts.central") }}</option>
+            <option value="north_pattaya">{{ _("districts.north") }}</option>
+            <option value="south_pattaya">{{ _("districts.south") }}</option>
+            <option value="jomtien">{{ _("districts.jomtien") }}</option>
+            <option value="naklua">{{ _("districts.naklua") }}</option>
+            <option value="wong_amat">{{ _("districts.wongamat") }}</option>
+          </select>
+        </div>
+        
+        <!-- Budget -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("rent.budget_monthly") }}</h3>
+          <div class="space-y-3">
             <input type="number" name="price_from" placeholder="{{ _('rent.from_placeholder') }}" 
-                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
             <input type="number" name="price_to" placeholder="{{ _('rent.to_placeholder') }}" 
-                   class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
+                   class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
           </div>
         </div>
-
-        <!-- Даты аренды -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">{{ _("rent.rental_period") }}</label>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <input type="text" id="check_in" name="check_in" placeholder="{{ _('rent.check_in') }}" 
-                     class="date-input w-full focus:outline-none" readonly>
-            </div>
-            <div>
-              <input type="text" id="check_out" name="check_out" placeholder="{{ _('rent.check_out') }}" 
-                     class="date-input w-full focus:outline-none" readonly>
-            </div>
+        
+        <!-- Rental Period -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("rent.rental_period") }}</h3>
+          <div class="space-y-3">
+            <input type="text" id="check_in" name="check_in" placeholder="{{ _('rent.check_in') }}" 
+                   class="date-input w-full focus:outline-none" readonly>
+            <input type="text" id="check_out" name="check_out" placeholder="{{ _('rent.check_out') }}" 
+                   class="date-input w-full focus:outline-none" readonly>
           </div>
         </div>
-
-        <!-- Удобства -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-3">{{ _("rent.amenities") }}</label>
-          <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="pool" class="rounded">
-              <span class="text-sm">🏊 {{ _("amenities.pool") }}</span>
+        
+        <!-- Amenities -->
+        <div class="filter-section">
+          <h3 class="font-bold text-gray-900 mb-4 text-lg">{{ _("rent.amenities") }}</h3>
+          <div class="grid grid-cols-1 gap-3">
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="pool" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">🏊‍♂️ {{ _("amenities.pool") }}</span>
             </label>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="gym" class="rounded">
-              <span class="text-sm">💪 {{ _("amenities.gym") }}</span>
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="gym" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">🏋️‍♂️ {{ _("amenities.gym") }}</span>
             </label>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="sea_view" class="rounded">
-              <span class="text-sm">🌊 {{ _("common.sea_view") }}</span>
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="sea_view" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">🌊 {{ _("common.sea_view") }}</span>
             </label>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="parking" class="rounded">
-              <span class="text-sm">🚗 {{ _("amenities.parking") }}</span>
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="parking" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">🚗 {{ _("amenities.parking") }}</span>
             </label>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="wifi" class="rounded">
-              <span class="text-sm">📶 {{ _("amenities.wifi") }}</span>
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="wifi" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">📶 {{ _("amenities.wifi") }}</span>
             </label>
-            <label class="flex items-center space-x-2 cursor-pointer">
-              <input type="checkbox" name="amenities" value="air_con" class="rounded">
-              <span class="text-sm">❄️ {{ _("amenities.air_con") }}</span>
+            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded-lg hover:bg-gray-100 transition-colors">
+              <input type="checkbox" name="amenities" value="air_con" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+              <span class="text-sm font-medium">❄️ {{ _("amenities.air_con") }}</span>
             </label>
           </div>
         </div>
-
-        <div class="flex items-center justify-between">
-          <button type="button" onclick="clearFilters()" 
-                  class="text-gray-600 hover:text-gray-800 underline">
-            {{ _("rent.clear_filters") }}
+        
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+          <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-semibold text-sm shadow-lg">
+            <i class="fas fa-search mr-2"></i>
+            {{ _("search.find_property") }}
           </button>
-          <button type="submit" 
-                  class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors flex items-center gap-2">
-            <span>🔍</span>
-            {{ _("rent.find_objects") }}
+          <button type="button" onclick="resetFilters()" class="w-full bg-gray-200 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors font-semibold text-sm">
+            <i class="fas fa-undo mr-2"></i>
+            {{ _("search.reset_filters") }}
           </button>
         </div>
       </form>
     </div>
-
-    <!-- Результаты поиска -->
-    <div id="searchResults">
-      <!-- Заглушка пока нет результатов -->
-      <div class="text-center py-16">
-        <div class="text-6xl mb-4">🏖️</div>
-        <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ _("forms.select_search_parameters") }}</h3>
-        <p class="text-gray-600 mb-6">{{ _("forms.search_instruction") }}</p>
-        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-          <p class="text-blue-800 text-sm">
-            {{ _("rent.tip_title") }} <strong>{{ _("rent.tip_text") }}</strong>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Популярные объекты -->
-    <div class="mt-16">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">{{ _("rent.popular_objects") }}</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Пример карточки объекта -->
-        <div class="property-card">
-          <div class="relative">
-            <img src="/static/images/default.jpg" alt="Кондо" class="w-full h-48 object-cover">
-            <div class="absolute top-4 left-4">
-              <span class="price-badge">25,000 ฿/мес</span>
-            </div>
-            <div class="absolute top-4 right-4">
-              <button onclick="openRequestModal('Luxury Condo Jomtien')" 
-                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
-                {{ _("rent.contact") }}
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Luxury Condo Jomtien</h3>
-            <p class="text-gray-600 mb-3">📍 Джомтьен, в 50 метрах от пляжа</p>
-            <p class="text-gray-700 mb-4">Современные апартаменты с потрясающим видом на море. 1 спальня, полностью меблированы.</p>
-            
-            <div class="flex flex-wrap gap-1 mb-4">
-              <span class="amenity-badge">🏊 Бассейн</span>
-              <span class="amenity-badge">💪 Фитнес</span>
-              <span class="amenity-badge">🌊 Вид на море</span>
-              <span class="amenity-badge">🚗 Парковка</span>
-            </div>
-            
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-500">1 спальня • 45 м²</span>
-              <button onclick="openRequestModal('Luxury Condo Jomtien')" 
-                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
-                {{ _("rent.book") }}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Еще примеры -->
-        <div class="property-card">
-          <div class="relative">
-            <img src="/static/images/default.jpg" alt="Вилла" class="w-full h-48 object-cover">
-            <div class="absolute top-4 left-4">
-              <span class="price-badge">85,000 ฿/мес</span>
-            </div>
-            <div class="absolute top-4 right-4">
-              <button onclick="openRequestModal('Villa Central Pattaya')" 
-                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
-                📞 Связаться
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Villa Central Pattaya</h3>
-            <p class="text-gray-600 mb-3">📍 Центральная Паттайя</p>
-            <p class="text-gray-700 mb-4">Роскошная вилла с частным бассейном. Идеально для семейного отдыха или компании друзей.</p>
-            
-            <div class="flex flex-wrap gap-1 mb-4">
-              <span class="amenity-badge">🏊 Частный бассейн</span>
-              <span class="amenity-badge">🏠 3 спальни</span>
-              <span class="amenity-badge">🌴 Сад</span>
-              <span class="amenity-badge">🚗 Парковка</span>
-            </div>
-            
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-500">3 спальни • 180 м²</span>
-              <button onclick="openRequestModal('Villa Central Pattaya')" 
-                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
-                Забронировать
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="property-card">
-          <div class="relative">
-            <img src="/static/images/default.jpg" alt="Студия" class="w-full h-48 object-cover">
-            <div class="absolute top-4 left-4">
-              <span class="price-badge">18,000 ฿/мес</span>
-            </div>
-            <div class="absolute top-4 right-4">
-              <button onclick="openRequestModal('Modern Studio Naklua')" 
-                      class="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-800 px-3 py-2 rounded-lg text-sm font-medium transition-all">
-                📞 Связаться
-              </button>
-            </div>
-          </div>
-          
-          <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Modern Studio Naklua</h3>
-            <p class="text-gray-600 mb-3">📍 Наклуа, тихий район</p>
-            <p class="text-gray-700 mb-4">Уютная студия для одного или пары. Отличное соотношение цены и качества.</p>
-            
-            <div class="flex flex-wrap gap-1 mb-4">
-              <span class="amenity-badge">📶 Wi-Fi</span>
-              <span class="amenity-badge">❄️ Кондиционер</span>
-              <span class="amenity-badge">🍴 Кухня</span>
-              <span class="amenity-badge">🏊 Общий бассейн</span>
-            </div>
-            
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-500">Студия • 32 м²</span>
-              <button onclick="openRequestModal('Modern Studio Naklua')" 
-                      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition-colors">
-                Забронировать
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Преимущества аренды с нами -->
-    <div class="bg-white rounded-2xl p-8 mt-16">
-      <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">{{ _("rent.why_choose_us") }}</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="text-center p-6">
-          <div class="text-4xl mb-4">🏆</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.verified_properties") }}</h3>
-          <p class="text-gray-600 text-sm">{{ _("rent.verified_desc") }}</p>
-        </div>
-        
-        <div class="text-center p-6">
-          <div class="text-4xl mb-4">💬</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.support_24_7") }}</h3>
-          <p class="text-gray-600 text-sm">{{ _("rent.support_desc") }}</p>
-        </div>
-        
-        <div class="text-center p-6">
-          <div class="text-4xl mb-4">💳</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.transparent_prices") }}</h3>
-          <p class="text-gray-600 text-sm">{{ _("rent.transparent_desc") }}</p>
-        </div>
-        
-        <div class="text-center p-6">
-          <div class="text-4xl mb-4">🚗</div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2">{{ _("rent.free_transfer") }}</h3>
-          <p class="text-gray-600 text-sm">{{ _("rent.transfer_desc") }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Модальное окно заявки -->
-<div id="requestModal" class="request-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4">
-  <div class="bg-white rounded-2xl max-w-md w-full p-6 transform transition-all">
-    <div class="flex items-center justify-between mb-6">
-      <h3 class="text-xl font-bold text-gray-900">{{ _("rent.request_modal") }}</h3>
-      <button onclick="closeRequestModal()" class="text-gray-400 hover:text-gray-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
     
-    <form onsubmit="submitRentalRequest(); return false;" class="space-y-4">
-      <input type="hidden" id="propertyName" name="property_name">
+    <!-- Right Content - Properties List and Map -->
+    <div class="flex-1 flex flex-col lg:flex-row">
       
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.your_name") }}</label>
-        <input type="text" name="name" required 
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.phone") }}</label>
-        <input type="tel" name="phone" required placeholder="+66 или +7" 
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.whatsapp") }}</label>
-        <input type="tel" name="whatsapp" placeholder="+66123456789" 
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-      </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.telegram") }}</label>
-        <input type="text" name="telegram" placeholder="@username" 
-               class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-      </div>
-      
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.check_in") }}</label>
-          <input type="text" name="check_in_date" id="modalCheckIn" 
-                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500" readonly>
+      <!-- Properties List -->
+      <div class="flex-1 p-6 overflow-y-auto" style="height: calc(100vh - 140px);">
+        {% if properties and properties|length > 0 %}
+        <div class="property-grid" id="properties-list">
+          {% for property in properties %}
+          <div class="property-card" 
+               data-lat="{{ property.lat or '' }}" 
+               data-lng="{{ property.lng or '' }}"
+               data-id="{{ property.id }}"
+               onclick="highlightProperty({{ property.id }})">
+            
+            <!-- Property Image -->
+            <div class="property-image">
+              {% if property.main_image_url %}
+              <img src="{{ property.main_image_url }}" 
+                   alt="{{ property.title }}" 
+                   class="w-full h-full object-cover">
+              {% else %}
+              <div class="w-full h-full flex items-center justify-center text-gray-400 bg-gray-100">
+                <i class="fas fa-home text-4xl"></i>
+              </div>
+              {% endif %}
+              
+              <!-- Favorite Button -->
+              <button class="favorite-btn" onclick="event.stopPropagation(); toggleFavorite({{ property.id }})">
+                <i class="fas fa-heart text-gray-400"></i>
+              </button>
+            </div>
+            
+            <!-- Property Info -->
+            <div class="p-5">
+              <h3 class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{{ property.title }}</h3>
+              
+              <div class="flex items-center text-gray-600 mb-3 text-sm">
+                <i class="fas fa-map-marker-alt mr-2 text-blue-600"></i>
+                <span class="font-medium">{{ property.district }}</span>
+              </div>
+              
+              <div class="property-stats">
+                <div class="property-stat">
+                  <i class="fas fa-bed"></i>
+                  <span>{{ property.bedrooms }}</span>
+                </div>
+                <div class="property-stat">
+                  <i class="fas fa-bath"></i>
+                  <span>{{ property.bathrooms }}</span>
+                </div>
+                <div class="property-stat">
+                  <i class="fas fa-ruler-combined"></i>
+                  <span>{{ property.area }} м²</span>
+                </div>
+              </div>
+              
+              <div class="flex justify-between items-center mt-4">
+                <div class="property-price">
+                  {{ "{:,.0f}".format(property.price) }} ฿
+                  <span class="text-sm font-normal text-gray-500">/мес</span>
+                </div>
+                <a href="/{{ lang }}/properties/{{ property.id }}" 
+                   class="view-details-btn"
+                   onclick="event.stopPropagation()">
+                  {{ _("property.view_details") }}
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.check_out") }}</label>
-          <input type="text" name="check_out_date" id="modalCheckOut" 
-                 class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500" readonly>
+        {% else %}
+        <div class="text-center py-16">
+          <div class="text-gray-400 mb-6">
+            <i class="fas fa-search text-6xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">{{ _("search.no_objects") }}</h3>
+          <p class="text-gray-600 mb-6">{{ _("search.try_change_filters") }}</p>
+          <button onclick="resetFilters()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+            <i class="fas fa-undo mr-2"></i>
+            {{ _("search.reset_filters") }}
+          </button>
         </div>
+        {% endif %}
       </div>
       
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.guests") }}</label>
-        <select name="guests" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500">
-          <option value="1">1 человек</option>
-          <option value="2">2 человека</option>
-          <option value="3">3 человека</option>
-          <option value="4">4 человека</option>
-          <option value="5+">5+ человек</option>
-        </select>
+      <!-- Map -->
+      <div class="w-full lg:w-1/2 p-6 relative">
+        <div class="map-controls">
+          <button class="map-control-btn active" onclick="toggleMapView('satellite')">
+            <i class="fas fa-satellite mr-1"></i>
+            Спутник
+          </button>
+          <button class="map-control-btn" onclick="toggleMapView('streets')">
+            <i class="fas fa-map mr-1"></i>
+            Карта
+          </button>
+        </div>
+        <div id="map"></div>
       </div>
-      
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">{{ _("rent.comment") }}</label>
-        <textarea name="message" rows="3" placeholder="Дополнительные пожелания..." 
-                  class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500"></textarea>
-      </div>
-      
-      <div class="flex items-center justify-end gap-3 pt-4">
-        <button type="button" onclick="closeRequestModal()" 
-                class="px-4 py-2 text-gray-600 hover:text-gray-800">
-          {{ _("rent.cancel") }}
-        </button>
-        <button type="submit" 
-                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-          {{ _("rent.submit_request") }}
-        </button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>
 
 <script>
-// Инициализация календарей
+// Инициализация карты
+let map, markers = [], currentMapView = 'satellite';
+
 document.addEventListener('DOMContentLoaded', function() {
-  // Основные поля дат
+  initMap();
+  initPropertyCards();
+  initCalendars();
+});
+
+function initMap() {
+  // Создаем карту с центром в Паттайе
+  map = L.map('map', {
+    zoomControl: false
+  }).setView([12.9236, 100.8825], 12);
+  
+  // Добавляем контрол зума в правый нижний угол
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
+  
+  // Начальный слой - спутник
+  updateMapLayer();
+  
+  // Добавляем маркеры для объектов
+  {% if properties %}
+  {% for property in properties %}
+  {% if property.lat and property.lng %}
+     const marker{{ property.id }} = L.marker([{{ property.lat }}, {{ property.lng }}], {
+     icon: L.divIcon({
+       className: 'custom-marker',
+       html: '<div class="custom-marker" id="marker-{{ property.id }}">{{ "{:,.0f}".format(property.price // 1000) }}K ฿</div>',
+       iconSize: [60, 30],
+       iconAnchor: [30, 15]
+     })
+   }).addTo(map);
+  
+     const popupContent = `
+     <div class="popup-content">
+       {% if property.main_image_url %}<img src="{{ property.main_image_url }}" alt="{{ property.title }}" class="popup-image">{% endif %}
+       <div class="popup-title">{{ property.title }}</div>
+       <div class="popup-location">
+         <i class="fas fa-map-marker-alt"></i>
+         {{ property.district }}
+       </div>
+       <div class="popup-price">{{ "{:,.0f}".format(property.price) }} ฿/мес</div>
+       <div class="popup-stats">
+         <span><i class="fas fa-bed mr-1"></i>{{ property.bedrooms }}</span>
+         <span><i class="fas fa-bath mr-1"></i>{{ property.bathrooms }}</span>
+         <span><i class="fas fa-ruler-combined mr-1"></i>{{ property.area }} м²</span>
+       </div>
+       <button class="popup-btn" onclick="window.location.href='/{{ lang }}/properties/{{ property.id }}'">
+         <i class="fas fa-eye mr-1"></i>
+         Подробнее
+       </button>
+     </div>
+   `;
+  
+  marker{{ property.id }}.bindPopup(popupContent, {
+    maxWidth: 300,
+    className: 'zillow-popup'
+  });
+  
+  // Добавляем обработчик клика на маркер
+  marker{{ property.id }}.on('click', function() {
+    highlightProperty({{ property.id }});
+  });
+  
+  markers.push({
+    marker: marker{{ property.id }},
+    id: {{ property.id }}
+  });
+  {% endif %}
+  {% endfor %}
+  {% endif %}
+}
+
+function updateMapLayer() {
+  // Удаляем все слои
+  map.eachLayer(function(layer) {
+    if (layer instanceof L.TileLayer) {
+      map.removeLayer(layer);
+    }
+  });
+  
+  // Добавляем нужный слой
+  if (currentMapView === 'satellite') {
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '© Esri'
+    }).addTo(map);
+  } else {
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+  }
+}
+
+function toggleMapView(view) {
+  currentMapView = view;
+  updateMapLayer();
+  
+  // Обновляем кнопки
+  document.querySelectorAll('.map-control-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+}
+
+function initPropertyCards() {
+  // Добавляем обработчик клика по карточкам для показа на карте
+  document.querySelectorAll('.property-card').forEach(card => {
+         card.addEventListener('mouseenter', function() {
+       const propertyId = this.dataset.id;
+       const markerElement = document.getElementById('marker-' + propertyId);
+       if (markerElement) {
+         markerElement.classList.add('highlighted');
+       }
+     });
+     
+     card.addEventListener('mouseleave', function() {
+       const propertyId = this.dataset.id;
+       const markerElement = document.getElementById('marker-' + propertyId);
+       if (markerElement) {
+         markerElement.classList.remove('highlighted');
+       }
+     });
+  });
+}
+
+ function highlightProperty(propertyId) {
+   // Убираем выделение со всех карточек
+   document.querySelectorAll('.property-card').forEach(card => {
+     card.classList.remove('highlighted');
+   });
+   
+   // Убираем выделение со всех маркеров
+   document.querySelectorAll('.custom-marker').forEach(marker => {
+     marker.classList.remove('highlighted');
+   });
+   
+   // Выделяем нужную карточку
+   const propertyCard = document.querySelector('[data-id="' + propertyId + '"]');
+   if (propertyCard) {
+     propertyCard.classList.add('highlighted');
+     propertyCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+   }
+   
+   // Выделяем маркер
+   const markerElement = document.getElementById('marker-' + propertyId);
+   if (markerElement) {
+     markerElement.classList.add('highlighted');
+   }
+   
+   // Находим маркер и центрируем карту
+   const markerData = markers.find(m => m.id === propertyId);
+   if (markerData) {
+     const latLng = markerData.marker.getLatLng();
+     map.setView(latLng, 16);
+     markerData.marker.openPopup();
+   }
+ }
+
+function initCalendars() {
+  // Инициализация календарей
   flatpickr("#check_in", {
     locale: "ru",
     dateFormat: "d.m.Y",
@@ -480,59 +777,73 @@ document.addEventListener('DOMContentLoaded', function() {
     dateFormat: "d.m.Y",
     minDate: "today"
   });
-  
-  // Поля в модальном окне
-  flatpickr("#modalCheckIn", {
-    locale: "ru",
-    dateFormat: "d.m.Y",
-    minDate: "today",
-    onChange: function(selectedDates, dateStr, instance) {
-      if (selectedDates[0]) {
-        document.getElementById('modalCheckOut')._flatpickr.set('minDate', selectedDates[0]);
-      }
-    }
-  });
-  
-  flatpickr("#modalCheckOut", {
-    locale: "ru",
-    dateFormat: "d.m.Y",
-    minDate: "today"
-  });
-});
-
-// Функции для работы с модальным окном
-function openRequestModal(propertyName) {
-  document.getElementById('propertyName').value = propertyName;
-  document.getElementById('requestModal').classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
 }
 
-function closeRequestModal() {
-  document.getElementById('requestModal').classList.add('hidden');
-  document.body.style.overflow = 'auto';
-}
-
-// Закрытие модального окна при клике вне его области
-document.getElementById('requestModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeRequestModal();
-  }
-});
-
-function submitRentalRequest() {
-  // Здесь будет логика отправки формы
-  alert('Ваша заявка отправлена! Мы свяжемся с вами в ближайшее время.');
-  closeRequestModal();
-}
-
-function clearFilters() {
+function resetFilters() {
   document.getElementById('rentalFilters').reset();
-  // Дополнительная логика очистки, если нужна
+  // Убираем выделение
+  document.querySelectorAll('.property-card').forEach(card => {
+    card.classList.remove('highlighted');
+  });
+  document.querySelectorAll('.custom-marker').forEach(marker => {
+    marker.classList.remove('highlighted');
+  });
+     // Центрируем карту на Паттайе
+   if (map) {
+     map.setView([12.9236, 100.8825], 12);
+   }
 }
 
 function searchRentals() {
   // Здесь будет логика поиска
   alert('Функция поиска в разработке');
 }
+
+// Функция добавления в избранное
+async function toggleFavorite(propertyId) {
+  try {
+         const response = await fetch('/{{ lang }}/favorites/toggle/' + propertyId, {
+       method: 'POST',
+       headers: {
+         'Content-Type': 'application/json',
+       }
+     });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+             const btn = document.querySelector('[onclick*="toggleFavorite(' + propertyId + ')"]');
+      if (result.favorited) {
+        btn.querySelector('i').className = 'fas fa-heart text-red-500';
+        btn.classList.add('favorited');
+      } else {
+        btn.querySelector('i').className = 'fas fa-heart text-gray-400';
+        btn.classList.remove('favorited');
+      }
+    }
+  } catch (error) {
+    console.error('Ошибка при добавлении в избранное:', error);
+  }
+}
+
+// Загружаем статус избранного при загрузке страницы
+document.addEventListener('DOMContentLoaded', async function() {
+  try {
+    const response = await fetch('/{{ lang }}/favorites/list');
+    const favorites = await response.json();
+    
+    if (favorites.favorites) {
+      favorites.favorites.forEach(fav => {
+                 const btn = document.querySelector('[onclick*="toggleFavorite(' + fav.property_id + ')"]');
+        if (btn) {
+          btn.querySelector('i').className = 'fas fa-heart text-red-500';
+          btn.classList.add('favorited');
+        }
+      });
+    }
+  } catch (error) {
+    console.error('Ошибка при загрузке избранного:', error);
+  }
+});
 </script>
 {% endblock %} 

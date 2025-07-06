@@ -1,0 +1,115 @@
+{# Простое меню в одну строчку #}
+<nav class="navbar">
+  <div class="container">
+    <!-- Левый блок: логотип -->
+    <a href="/{{ lang }}" class="logo">
+      <i class="fa-solid fa-house"></i> SIANORO
+    </a>
+    
+    <!-- Центр: простое меню -->
+    <ul class="nav-menu">
+      <li>
+        <a href="/{{ lang }}/properties?deal_type=buy">{{ _('navigation.buy_property') or 'Купить' }}</a>
+      </li>
+      <li>
+        <a href="/{{ lang }}/rent">{{ _('navigation.rent_property') or 'Снять' }}</a>
+      </li>
+      <li>
+        <a href="/{{ lang }}/projects">{{ _('navigation.new_builds') or 'Новостройки' }}</a>
+      </li>
+      <li>
+        <a href="#" onclick="event.preventDefault(); openAiSearchModal();">{{ _('navigation.ai_assistant') or 'ИИ-ассистент' }}</a>
+      </li>
+      <li>
+        <a href="/{{ lang }}/articles">{{ _('navigation.useful') or 'Статьи' }}</a>
+      </li>
+    </ul>
+    
+    <!-- Языковой переключатель -->
+    <div class="language-switcher">
+      <select id="language-switcher">
+        <option value="en" {% if lang == 'en' %}selected{% endif %}>EN</option>
+        <option value="ru" {% if lang == 'ru' %}selected{% endif %}>RU</option>
+        <option value="th" {% if lang == 'th' %}selected{% endif %}>TH</option>
+        <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
+      </select>
+    </div>
+    
+    <!-- Мобильный бургер -->
+    <button id="navbar-burger" class="mobile-burger">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </div>
+  
+  <!-- Мобильное меню -->
+  <div id="mobile-menu" class="mobile-menu">
+    <ul>
+      <li><a href="/{{ lang }}/properties?deal_type=buy">{{ _('navigation.buy_property') or 'Купить' }}</a></li>
+      <li><a href="/{{ lang }}/rent">{{ _('navigation.rent_property') or 'Снять' }}</a></li>
+      <li><a href="/{{ lang }}/projects">{{ _('navigation.new_builds') or 'Новостройки' }}</a></li>
+      <li><a href="#" onclick="event.preventDefault(); openAiSearchModal();">{{ _('navigation.ai_assistant') or 'ИИ-ассистент' }}</a></li>
+      <li><a href="/{{ lang }}/articles">{{ _('navigation.useful') or 'Статьи' }}</a></li>
+      <li>
+        <select id="mobile-language-switcher">
+          <option value="en" {% if lang == 'en' %}selected{% endif %}>EN</option>
+          <option value="ru" {% if lang == 'ru' %}selected{% endif %}>RU</option>
+          <option value="th" {% if lang == 'th' %}selected{% endif %}>TH</option>
+          <option value="zh" {% if lang == 'zh' %}selected{% endif %}>中文</option>
+        </select>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<script>
+// Мобильное меню
+document.addEventListener('DOMContentLoaded', function() {
+  const burger = document.getElementById('navbar-burger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (burger && mobileMenu) {
+    burger.addEventListener('click', function() {
+      mobileMenu.classList.toggle('show');
+    });
+  }
+  
+  // Языковой переключатель
+  const languageSwitcher = document.getElementById('language-switcher');
+  const mobileLangSwitcher = document.getElementById('mobile-language-switcher');
+  
+  function switchLanguage(lang) {
+    const currentPath = window.location.pathname;
+    const pathParts = currentPath.split('/').filter(part => part !== '');
+    
+    // Убираем текущий язык из пути
+    if (pathParts.length > 0 && ['en', 'ru', 'th', 'zh'].includes(pathParts[0])) {
+      pathParts.shift();
+    }
+    
+    // Создаем новый путь с новым языком
+    const newPath = '/' + lang + (pathParts.length > 0 ? '/' + pathParts.join('/') : '');
+    window.location.href = newPath;
+  }
+  
+  if (languageSwitcher) {
+    languageSwitcher.addEventListener('change', function() {
+      switchLanguage(this.value);
+    });
+  }
+  
+  if (mobileLangSwitcher) {
+    mobileLangSwitcher.addEventListener('change', function() {
+      switchLanguage(this.value);
+    });
+  }
+});
+
+// Функция для открытия калькулятора
+function openInvestmentCalculator() {
+  const modal = document.getElementById('investment-calculator-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+</script> 

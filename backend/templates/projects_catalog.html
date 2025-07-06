@@ -95,7 +95,22 @@
             {% include "components/project_cards.html" %}
         </div>
     </div>
+
+    <button onclick="openInvestCalcModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition mb-4">
+        Инвестиционный калькулятор
+    </button>
+
+    <div id="invest-calc-modal" class="modal-invest-calc hidden">
+        <div class="modal-content relative max-w-2xl w-full mx-auto">
+            <button class="close-btn" onclick="closeInvestCalcModal()">&times;</button>
+            {% include 'components/investment_calculator.html' %}
+        </div>
+    </div>
 </div>
+
+<link rel="stylesheet" href="/css/investment_calculator.css">
+<script src="/js/investment_calculator.js"></script>
+<script src="/js/investment_calc_modal.js"></script>
 
 <script>
 // Filter projects function
@@ -221,7 +236,6 @@ function renderProjectCards(projects) {
     
     container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cardsHtml}</div>`;
 }
-
 
 </script>
 

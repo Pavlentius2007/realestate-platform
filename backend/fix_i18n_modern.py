@@ -20,12 +20,21 @@ from backend.config.i18n import (
     LANGUAGE_DETECTION_ORDER
 )
 
-try:
-    # Попробуем импортировать BASE_DIR из main.py
-    from backend.main import BASE_DIR
-except ImportError:
-    # Fallback: определяем BASE_DIR относительно этого файла
-    BASE_DIR = Path(__file__).resolve().parent.parent
+# Определяем корневую директорию проекта независимо от рабочей директории
+CURRENT_FILE = Path(__file__).resolve()
+if CURRENT_FILE.parent.name == "backend":
+    # Запуск из backend директории или файл находится в backend
+    BASE_DIR = CURRENT_FILE.parent.parent  # realestate-platform
+else:
+    # Запуск из корневой директории
+    BASE_DIR = CURRENT_FILE.parent  # realestate-platform
+
+# Проверяем что locales директория существует
+LOCALES_DIR = BASE_DIR / "locales"
+if not LOCALES_DIR.exists():
+    print(f"⚠️ Директория переводов не найдена: {LOCALES_DIR}")
+    print(f"📁 Создаю директорию: {LOCALES_DIR}")
+    LOCALES_DIR.mkdir(exist_ok=True)
 
 class LRUCache:
     """Кэш с ограниченным размером и временем жизни записей"""
@@ -84,12 +93,10 @@ class ModernI18n:
         """Загружает переводы из JSON файлов"""
         self.cache.clear()
         print("🧹 Кэш очищен")
-        # Используем BASE_DIR для абсолютного пути
-        locales_dir = BASE_DIR / "locales"
-        print(f"🔍 Поиск переводов в: {locales_dir}")
+        print(f"🔍 Поиск переводов в: {LOCALES_DIR}")
         with self._lock:
             for lang in SUPPORTED_LANGUAGES:
-                json_file = locales_dir / f"{lang}.json"
+                json_file = LOCALES_DIR / f"{lang}.json"
                 try:
                     if json_file.exists():
                         with open(json_file, 'r', encoding='utf-8') as f:
@@ -102,7 +109,7 @@ class ModernI18n:
                     print(f"❌ Ошибка загрузки переводов для {lang}: {e}")
             if not any(self.translations.values()):
                 print("❌ ВНИМАНИЕ: Не загружено ни одного перевода!")
-                print(f"📁 Проверьте наличие файлов .json в директории: {locales_dir}")
+                print(f"📁 Проверьте наличие файлов .json в директории: {LOCALES_DIR}")
             else:
                 print(f"📊 Загружено языков: {list(self.translations.keys())}")
     
@@ -145,10 +152,11 @@ class ModernI18n:
                         return parts[0]
             elif priority == 'session':
                 try:
-                    session_lang = request.session.get(LANGUAGE_SESSION_KEY)
-                    if session_lang and session_lang in SUPPORTED_LANGUAGES:
-                        print(f"🌍 Язык из сессии: {session_lang}")
-                        return session_lang
+                    if hasattr(request, 'session') and request.session:
+                        session_lang = request.session.get(LANGUAGE_SESSION_KEY)
+                        if session_lang and session_lang in SUPPORTED_LANGUAGES:
+                            print(f"🌍 Язык из сессии: {session_lang}")
+                            return session_lang
                 except Exception as e:
                     print(f"🌍 Ошибка получения языка из сессии: {e}")
             elif priority == 'cookie':
@@ -258,6 +266,17 @@ class ModernI18nMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         # Определяем язык
         try:
+            # Пропускаем статические файлы, API запросы и маршрут смены языка
+            path = request.url.path
+            if (path.startswith("/static/") or 
+                path.startswith("/api/") or 
+                path.startswith("/admin") or
+                path.startswith("/favicon.ico") or
+                path.startswith("/robots.txt") or
+                path.startswith("/lang/")):
+                response = await call_next(request)
+                return response
+
             lang = i18n.get_user_language(request)
             
             # Создаем функцию перевода
@@ -291,14 +310,12 @@ class ModernI18nMiddleware(BaseHTTPMiddleware):
                 pass
                 
             # Проверяем URL и редиректим если нужно
-            path = request.url.path
+            path_parts = path.strip('/').split('/')
 
-            # ⏭️  Пропускаем админские пути, чтобы избежать циклов
-            if path.startswith("/admin"):
+            # НЕ делаем редирект для маршрута смены языка
+            if path.startswith('/lang/'):
                 response = await call_next(request)
                 return response
-
-            path_parts = path.strip('/').split('/')
 
             if not path_parts or path_parts[0] not in SUPPORTED_LANGUAGES:
                 from starlette.responses import RedirectResponse
