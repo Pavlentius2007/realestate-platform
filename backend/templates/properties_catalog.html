@@ -6,9 +6,9 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="/css/investment_calculator.css">
-<script src="/js/investment_calculator.js"></script>
-<script src="/js/investment_calc_modal.js"></script>
+<link rel="stylesheet" href="/static/css/investment_calculator.css">
+<script src="/static/js/investment_calculator.js"></script>
+<script src="/static/js/investment_calc_modal.js"></script>
 <style>
   .property-card {
     transition: transform 0.2s, box-shadow 0.2s;
@@ -81,6 +81,7 @@
 {% endblock %}
 
 {% block content %}
+{% set property_ids = properties | map(attribute='id') | list if properties else [] %}
 <div class="bg-white min-h-screen">
   
   <!-- Results Header -->
@@ -395,7 +396,7 @@ async function loadFavoriteStatus() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        property_ids: [{% for property in properties %}{{ property.id }}{% if not loop.last %},{% endif %}{% endfor %}]
+        property_ids: {{ property_ids | tojson }}
       })
     });
     

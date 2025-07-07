@@ -20,6 +20,8 @@ try:
     from backend.routers.auto_translation import router as auto_translation_router
     from backend.models.property import Property
     from backend.models.property_image import PropertyImage
+    from backend.config.settings import settings
+    from backend.utils.config_utils import get_config_for_template, get_analytics_scripts
 except ImportError:
     # Относительные импорты (когда запускаем из backend/)
     from database import engine, Base, SessionLocal, get_db
@@ -29,6 +31,8 @@ except ImportError:
     from routers.auto_translation import router as auto_translation_router
     from models.property import Property
     from models.property_image import PropertyImage
+    from config.settings import settings
+    from utils.config_utils import get_config_for_template, get_analytics_scripts
 from sqlalchemy.orm import Session, joinedload
 import markdown
 import frontmatter
@@ -69,7 +73,7 @@ except ImportError:
     )
 
 def inject_translator_to_templates(templates: Jinja2Templates, request: Request):
-    """Добавляет функцию перевода в шаблоны"""
+    """Добавляет функцию перевода и конфигурацию в шаблоны"""
     lang = i18n.get_user_language(request)
     
     def _(key: str, **kwargs) -> str:
@@ -78,6 +82,11 @@ def inject_translator_to_templates(templates: Jinja2Templates, request: Request)
     templates.env.globals['_'] = _
     templates.env.globals['lang'] = lang
     templates.env.globals['supported_languages'] = SUPPORTED_LANGUAGES
+    
+    # Добавляем конфигурацию для white label
+    config = get_config_for_template()
+    templates.env.globals['config'] = config
+    templates.env.globals['analytics_scripts'] = get_analytics_scripts()
 
 # 🚀 Инициализация FastAPI
 app = FastAPI(debug=True)
