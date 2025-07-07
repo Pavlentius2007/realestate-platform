@@ -20,6 +20,19 @@
       <li>
         <a href="#" onclick="event.preventDefault(); openAiSearchModal();">{{ _('navigation.ai_assistant') or 'ИИ-ассистент' }}</a>
       </li>
+      {% set show_calculator = false %}
+      {% if request.url.path.startswith('/' ~ lang ~ '/projects') %}
+        {% set show_calculator = true %}
+      {% elif request.url.path.startswith('/' ~ lang ~ '/properties') and request.query_params.get('deal_type') == 'buy' %}
+        {% set show_calculator = true %}
+      {% endif %}
+      {% if show_calculator %}
+        <li>
+          <a href="#" class="calculator-btn" onclick="openInvestmentCalculatorModal()">
+            💰 {{ _('navigation.calculator') or 'Калькулятор' }}
+          </a>
+        </li>
+      {% endif %}
       <li>
         <a href="/{{ lang }}/articles">{{ _('navigation.useful') or 'Статьи' }}</a>
       </li>
@@ -48,6 +61,7 @@
       <li><a href="/{{ lang }}/rent">{{ _('navigation.rent_property') or 'Снять' }}</a></li>
       <li><a href="/{{ lang }}/projects">{{ _('navigation.new_builds') or 'Новостройки' }}</a></li>
       <li><a href="#" onclick="event.preventDefault(); openAiSearchModal();">{{ _('navigation.ai_assistant') or 'ИИ-ассистент' }}</a></li>
+      <li><a href="#" onclick="event.preventDefault(); openInvestmentCalculator();">💰 {{ _('navigation.calculator') or 'Калькулятор' }}</a></li>
       <li><a href="/{{ lang }}/articles">{{ _('navigation.useful') or 'Статьи' }}</a></li>
       <li>
         <select id="mobile-language-switcher">

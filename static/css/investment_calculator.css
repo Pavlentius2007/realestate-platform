@@ -1,4 +1,4 @@
-/* Инвестиционный калькулятор Sianoro: дополнительные стили */
+/* Инвестиционный калькулятор Sianoro: улучшенные стили */
 
 #investment-calculator {
   animation: fadeInUp 0.7s cubic-bezier(0.23, 1, 0.32, 1);
@@ -30,6 +30,7 @@
   justify-content: center;
   transition: opacity 0.3s;
 }
+
 .modal-invest-calc .modal-content {
   background: #fff;
   border-radius: 1.25rem;
@@ -39,6 +40,7 @@
   padding: 0;
   position: relative;
 }
+
 .modal-invest-calc .close-btn {
   position: absolute;
   top: 1rem;
@@ -53,8 +55,230 @@
   cursor: pointer;
   transition: background 0.2s;
 }
+
 .modal-invest-calc .close-btn:hover {
   background: #e0e7ef;
 }
 
-.hidden { display: none !important; } 
+/* Стили для графика */
+#price-chart {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Градиентные карточки результатов */
+.result-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 1px solid #cbd5e1;
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+/* Кнопки предустановленных сценариев */
+.preset-button {
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.preset-button:hover {
+  border-color: #3b82f6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+  #investment-calculator-modal .bg-white {
+    margin: 1rem;
+    max-height: 95vh;
+    border-radius: 1rem;
+  }
+  
+  #investment-calculator-modal h2 {
+    font-size: 1.5rem;
+    line-height: 1.4;
+  }
+  
+  /* Уменьшаем отступы на мобильных */
+  #investment-calculator-modal .p-4 {
+    padding: 1rem;
+  }
+  
+  /* Адаптивная сетка для полей ввода */
+  #investmentForm .grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* Стили для кнопок на мобильных */
+  .preset-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* График на мобильных */
+  #price-chart {
+    height: 180px !important;
+  }
+  
+  /* Карточки результатов на мобильных */
+  .result-card {
+    padding: 1rem;
+  }
+  
+  .result-card .text-xl {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #investment-calculator-modal .bg-white {
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+  }
+  
+  #investment-calculator-modal h2 {
+    font-size: 1.25rem;
+  }
+  
+  /* Еще более компактные стили для очень маленьких экранов */
+  .preset-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+  
+  #price-chart {
+    height: 150px !important;
+  }
+  
+  .result-card .text-xl {
+    font-size: 1.1rem;
+  }
+  
+  .result-card .text-lg {
+    font-size: 1rem;
+  }
+}
+
+/* Анимации для результатов */
+.result-card {
+  animation: slideInUp 0.5s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Стили для полей ввода с улучшенным фокусом */
+#investmentForm input:focus,
+#investmentForm select:focus {
+  outline: none;
+  ring: 2px solid #3b82f6;
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Стили для кнопки расчета */
+#calculate-btn {
+  background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+}
+
+#calculate-btn:hover {
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Стили для кнопки PDF */
+#download-pdf {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+#download-pdf:hover {
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Улучшенные стили для валютного селектора */
+#currency {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Скрытие элементов */
+.hidden { 
+  display: none !important; 
+}
+
+/* Стили для загрузки */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Улучшенная типографика */
+.calculator-label {
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.calculator-input {
+  transition: all 0.2s ease;
+  background-color: #ffffff;
+}
+
+.calculator-input:hover {
+  border-color: #9ca3af;
+}
+
+/* Стили для курса валют */
+#currency-rate {
+  font-style: italic;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+/* Responsive canvas */
+@media (orientation: landscape) and (max-height: 500px) {
+  #price-chart {
+    height: 120px !important;
+  }
+} 
