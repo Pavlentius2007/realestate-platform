@@ -18,6 +18,7 @@ try:
     from backend.routers.articles import router as articles_router
     from backend.routers.properties import router as properties_router
     from backend.routers.auto_translation import router as auto_translation_router
+    from backend.routers.auth import router as auth_router
     from backend.models.property import Property
     from backend.models.property_image import PropertyImage
     from backend.config.settings import settings
@@ -29,6 +30,7 @@ except ImportError:
     from routers.articles import router as articles_router
     from routers.properties import router as properties_router
     from routers.auto_translation import router as auto_translation_router
+    from routers.auth import router as auth_router
     from models.property import Property
     from models.property_image import PropertyImage
     from config.settings import settings
@@ -183,6 +185,7 @@ async def switch_language(request: Request, lang_code: str):
     return response
 
 # 🔌 Подключение роутеров
+app.include_router(auth_router)  # 🔐 Аутентификация (без префикса языка)
 app.include_router(admin.router)
 app.include_router(analytics.router)
 app.include_router(crm.router)

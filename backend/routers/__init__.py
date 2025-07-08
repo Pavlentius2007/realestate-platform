@@ -1,3 +1,4 @@
-from . import admin, user_tools, stats, projects, submit_property, rental_request, favorites, properties
+# Упрощенный __init__.py без импортов чтобы избежать проблем с путями
+# Роутеры импортируются напрямую в main.py
 
-__all__ = ["admin", "user_tools", "stats", "projects", "submit_property", "rental_request", "favorites", "properties"]
+__all__ = []

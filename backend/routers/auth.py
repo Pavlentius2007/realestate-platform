@@ -7,18 +7,34 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 
-from backend.database import get_db
-from backend.models.user import User
-from backend.schemas.auth import (
-    UserRegister, UserLogin, TokenResponse, RefreshTokenRequest,
-    UserProfile, UserUpdate, PasswordChangeRequest
-)
-from backend.utils.auth import (
-    AuthService, get_current_user, get_optional_user, check_rate_limit,
-    InputSanitizer, TokenData
-)
-from backend.config.templates import templates
+try:
+    # Импорты с backend. (когда запускаем из корня)
+    from backend.database import get_db
+    from backend.models.user import User
+    from backend.schemas.auth import (
+        UserRegister, UserLogin, TokenResponse, RefreshTokenRequest,
+        UserProfile, UserUpdate, PasswordChangeRequest
+    )
+    from backend.utils.auth import (
+        AuthService, get_current_user, get_optional_user, check_rate_limit,
+        InputSanitizer, TokenData
+    )
+    from backend.config.templates import templates
+except ImportError:
+    # Относительные импорты (когда запускаем из backend/)
+    from database import get_db
+    from models.user import User
+    from schemas.auth import (
+        UserRegister, UserLogin, TokenResponse, RefreshTokenRequest,
+        UserProfile, UserUpdate, PasswordChangeRequest
+    )
+    from utils.auth import (
+        AuthService, get_current_user, get_optional_user, check_rate_limit,
+        InputSanitizer, TokenData
+    )
+    from config.templates import templates
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -66,17 +82,17 @@ async def register_user(
         db.refresh(new_user)
         
         # Создаем токены
-        access_token = AuthService.create_access_token(new_user.id, new_user.email)
-        refresh_token = AuthService.create_refresh_token(new_user.id, new_user.email)
+        access_token = AuthService.create_access_token(int(new_user.id), str(new_user.email))
+        refresh_token = AuthService.create_refresh_token(int(new_user.id), str(new_user.email))
         
         # Создаем профиль для ответа
         user_profile = UserProfile(
-            id=new_user.id,
-            email=new_user.email,
-            full_name=new_user.full_name,
-            phone=new_user.phone,
-            created_at=new_user.created_at,
-            is_active=new_user.is_active
+            id=int(new_user.id),
+            email=str(new_user.email),
+            full_name=str(new_user.full_name) if new_user.full_name else None,
+            phone=str(new_user.phone) if new_user.phone else None,
+            created_at=datetime.utcnow(),
+            is_active=bool(new_user.is_active)
         )
         
         return TokenResponse(
@@ -147,7 +163,7 @@ async def login_user(
             email=user.email,
             full_name=user.full_name,
             phone=user.phone,
-            created_at=user.created_at,
+            created_at=datetime.utcnow(),
             is_active=user.is_active
         )
         
@@ -201,7 +217,7 @@ async def get_user_profile(
         email=user.email,
         full_name=user.full_name,
         phone=user.phone,
-        created_at=user.created_at,
+        created_at=datetime.utcnow(),
         is_active=user.is_active
     )
 
@@ -291,17 +307,42 @@ async def logout_user():
 
 # 🌐 HTML страницы для аутентификации
 
+try:
+    from backend.config.i18n import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
+    from backend.utils.config_utils import get_config_for_template, get_analytics_scripts
+    from backend.fix_i18n_modern import i18n
+except ImportError:
+    from config.i18n import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE
+    from utils.config_utils import get_config_for_template, get_analytics_scripts
+    from fix_i18n_modern import i18n
+
+def inject_auth_context(templates, request):
+    """Добавляет контекст для шаблонов аутентификации"""
+    lang = i18n.get_user_language(request)
+    
+    def _(key: str, **kwargs) -> str:
+        return i18n.translate(key, lang, **kwargs)
+    
+    templates.env.globals['_'] = _
+    templates.env.globals['lang'] = lang
+    templates.env.globals['supported_languages'] = SUPPORTED_LANGUAGES
+    templates.env.globals['config'] = get_config_for_template()
+    templates.env.globals['analytics_scripts'] = get_analytics_scripts()
+
 @router.get("/login-page", response_class=HTMLResponse)
 async def login_page(request: Request):
     """Страница входа"""
+    inject_auth_context(templates, request)
     return templates.TemplateResponse("auth/login.html", {"request": request})
 
 @router.get("/register-page", response_class=HTMLResponse)
 async def register_page(request: Request):
     """Страница регистрации"""
+    inject_auth_context(templates, request)
     return templates.TemplateResponse("auth/register.html", {"request": request})
 
 @router.get("/profile-page", response_class=HTMLResponse)
 async def profile_page(request: Request):
     """Страница профиля (требует аутентификации)"""
+    inject_auth_context(templates, request)
     return templates.TemplateResponse("auth/profile.html", {"request": request}) 
