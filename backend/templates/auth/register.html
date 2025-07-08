@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('auth.register') }} | {{ config.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header text-center bg-success text-white">
+                    <h3><i class="fas fa-user-plus"></i> {{ _('auth.register') }}</h3>
+                </div>
+                <div class="card-body">
+                    <form id="registerForm" method="post" action="/api/auth/register">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">{{ _('auth.email') }} *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="full_name" class="form-label">{{ _('auth.full_name') }}</label>
+                                    <input type="text" class="form-control" id="full_name" name="full_name">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">{{ _('auth.password') }} *</label>
+                                    <input type="password" class="form-control" id="password" name="password" required minlength="6">
+                                    <div class="form-text">{{ _('auth.password_requirements') }}</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">{{ _('auth.phone') }}</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="+66...">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="agree_terms" required>
+                                <label class="form-check-label" for="agree_terms">
+                                    {{ _('auth.agree_terms_start') }} 
+                                    <a href="/{{ lang }}/terms" target="_blank">{{ _('auth.terms_of_use') }}</a>
+                                    {{ _('auth.agree_terms_and') }}
+                                    <a href="/{{ lang }}/privacy" target="_blank">{{ _('auth.privacy_policy') }}</a>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-user-plus"></i> {{ _('auth.create_account') }}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <p>{{ _('auth.have_account') }}</p>
+                        <a href="/api/auth/login-page" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt"></i> {{ _('auth.login') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        email: formData.get('email'),
+        password: formData.get('password'),
+        full_name: formData.get('full_name') || null,
+        phone: formData.get('phone') || null
+    };
+    
+    // Валидация на клиенте
+    if (data.password.length < 6) {
+        alert('{{ _("auth.password_too_short") }}');
+        return;
+    }
+    
+    if (!document.getElementById('agree_terms').checked) {
+        alert('{{ _("auth.must_agree_terms") }}');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Сохраняем токены
+            localStorage.setItem('access_token', result.access_token);
+            localStorage.setItem('refresh_token', result.refresh_token);
+            
+            // Успешная регистрация
+            alert('{{ _("auth.register_success") }}');
+            window.location.href = '/{{ lang }}';
+        } else {
+            alert('{{ _("auth.register_error") }}: ' + result.detail);
+        }
+    } catch (error) {
+        alert('{{ _("auth.connection_error") }}');
+        console.error('Registration error:', error);
+    }
+});
+
+// Валидация пароля в реальном времени
+document.getElementById('password').addEventListener('input', function() {
+    const password = this.value;
+    const isValid = password.length >= 6;
+    
+    this.classList.toggle('is-valid', isValid && password.length > 0);
+    this.classList.toggle('is-invalid', !isValid && password.length > 0);
+});
+</script>
+{% endblock %} 

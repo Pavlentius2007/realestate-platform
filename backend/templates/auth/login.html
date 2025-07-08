@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _('auth.login') }} | {{ config.company_name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3><i class="fas fa-sign-in-alt"></i> {{ _('auth.login') }}</h3>
+                </div>
+                <div class="card-body">
+                    <form id="loginForm" method="post" action="/api/auth/login">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">{{ _('auth.email') }}</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">{{ _('auth.password') }}</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-sign-in-alt"></i> {{ _('auth.login') }}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <hr>
+                    
+                    <div class="text-center">
+                        <p>{{ _('auth.no_account') }}</p>
+                        <a href="/api/auth/register-page" class="btn btn-outline-primary">
+                            <i class="fas fa-user-plus"></i> {{ _('auth.register') }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        email: formData.get('email'),
+        password: formData.get('password')
+    };
+    
+    try {
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Сохраняем токены
+            localStorage.setItem('access_token', result.access_token);
+            localStorage.setItem('refresh_token', result.refresh_token);
+            
+            // Успешный вход
+            alert('{{ _("auth.login_success") }}');
+            window.location.href = '/{{ lang }}';
+        } else {
+            alert('{{ _("auth.login_error") }}: ' + result.detail);
+        }
+    } catch (error) {
+        alert('{{ _("auth.connection_error") }}');
+        console.error('Login error:', error);
+    }
+});
+</script>
+{% endblock %} 

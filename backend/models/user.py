@@ -8,9 +8,9 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True, nullable=True)
-    hashed_password = Column(String, nullable=True)  # Разкомментировано после исправления БД
-    name = Column(String, nullable=False, default="Гость")  # NOT NULL после миграции
+    email = Column(String, unique=True, index=True, nullable=False)  # Теперь обязательное
+    hashed_password = Column(String, nullable=False)  # Обязательное поле для паролей
+    name = Column(String, nullable=False, default="Пользователь")  # NOT NULL после миграции
 
     # 👇 Основные поля пользователя
     full_name = Column(String, nullable=True)
