@@ -118,7 +118,9 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="stat
 app.mount("/css", StaticFiles(directory=str(BASE_DIR / "static" / "css")), name="css")
 app.mount("/js", StaticFiles(directory=str(BASE_DIR / "static" / "js")), name="js")
 app.mount("/images", StaticFiles(directory=str(BASE_DIR / "static" / "images")), name="images")
-app.mount("/locales", StaticFiles(directory=str(BASE_DIR / "locales")), name="locales")
+# Исправляем путь к locales - он должен быть в корне проекта
+locales_dir = str(BASE_DIR / "locales")
+app.mount("/locales", StaticFiles(directory=locales_dir), name="locales")
 
 # 🌍 Загрузка переводов
 i18n.load_translations()  # Принудительная перезагрузка переводов при старте
@@ -586,3 +588,19 @@ async def static_with_lang(lang: str, path: str):
     # Редиректим на правильный путь статики без обработки сессии
     from starlette.responses import RedirectResponse
     return RedirectResponse(url=f"/static/{path}", status_code=307)
+
+@app.get("/admin", response_class=HTMLResponse)
+def admin_page(request: Request, db: Session = Depends(get_db)):
+    """Главная страница админки"""
+    # Принудительная инжекция переводчика
+    inject_translator_to_templates(templates, request)
+    
+    # Получаем данные для дашборда
+    properties = db.query(Property).all()
+    
+    return templates.TemplateResponse("admin.html", {
+        "request": request,
+        "lang": "ru",  # Админка на русском
+        "page_title": "Панель администратора",
+        "properties": properties
+    })

@@ -5,7 +5,7 @@
 
 import os
 from typing import Dict, List, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 @dataclass
@@ -17,7 +17,7 @@ class BrandConfig:
     favicon_url: str = "/static/img/favicon.ico"
     
     # Цветовая схема
-    primary_color: str = "#0074E4"
+    primary_color: str = "#1e90ff"
     secondary_color: str = "#005bb5"
     accent_color: str = "#3b82f6"
     success_color: str = "#10b981"
@@ -35,9 +35,9 @@ class BrandConfig:
 @dataclass
 class ContactConfig:
     """Конфигурация контактов"""
-    phone: str = "+66 95 386 2858"
-    whatsapp: str = "+66 95 386 2858"
-    telegram: str = "t.me/InvestThailand"
+    phone: str = "+66 1234 5678"
+    whatsapp: str = "+66 1234 5678"
+    telegram: str = "InvestThailand"
     email: str = "info@sianoro.com"
     
     # Адрес
@@ -54,11 +54,7 @@ class ContactConfig:
 class LocalizationConfig:
     """Конфигурация локализации"""
     default_language: str = "ru"
-    supported_languages: List[str] = None
-    
-    def __post_init__(self):
-        if self.supported_languages is None:
-            self.supported_languages = ["ru", "en", "th", "zh"]
+    supported_languages: List[str] = field(default_factory=lambda: ["ru", "en", "th", "zh"])
 
 @dataclass
 class FeaturesConfig:
@@ -69,9 +65,13 @@ class FeaturesConfig:
     enable_articles: bool = True
     enable_projects: bool = True
     enable_rental: bool = True
-    
-    # Калькулятор
-    calculator_currencies: List[str] = None
+    enable_investment_calculator: bool = True
+    calculator_currencies: List[str] = field(default_factory=lambda: ["THB", "USD", "RUB", "CNY"])
+    enable_pdf_export: bool = True
+    enable_presets: bool = True
+    enable_crm: bool = True
+    enable_analytics: bool = True
+    enable_payments: bool = False
     
     def __post_init__(self):
         if self.calculator_currencies is None:
@@ -121,28 +121,39 @@ class Settings:
     def _load_from_env(self):
         """Загружает настройки из переменных окружения"""
         # Брендинг
-        if os.getenv("BRAND_NAME"):
-            self.brand.name = os.getenv("BRAND_NAME")
-        if os.getenv("BRAND_TAGLINE"):
-            self.brand.tagline = os.getenv("BRAND_TAGLINE")
-        if os.getenv("PRIMARY_COLOR"):
-            self.brand.primary_color = os.getenv("PRIMARY_COLOR")
+        brand_name = os.getenv("BRAND_NAME")
+        if brand_name is not None:
+            self.brand.name = brand_name
+        brand_tagline = os.getenv("BRAND_TAGLINE")
+        if brand_tagline is not None:
+            self.brand.tagline = brand_tagline
+        primary_color = os.getenv("PRIMARY_COLOR")
+        if primary_color is not None:
+            self.brand.primary_color = primary_color
         
         # Контакты
-        if os.getenv("CONTACT_PHONE"):
-            self.contact.phone = os.getenv("CONTACT_PHONE")
-        if os.getenv("CONTACT_WHATSAPP"):
-            self.contact.whatsapp = os.getenv("CONTACT_WHATSAPP")
-        if os.getenv("CONTACT_TELEGRAM"):
-            self.contact.telegram = os.getenv("CONTACT_TELEGRAM")
-        if os.getenv("CONTACT_EMAIL"):
-            self.contact.email = os.getenv("CONTACT_EMAIL")
+        contact_phone = os.getenv("CONTACT_PHONE")
+        if contact_phone is not None:
+            self.contact.phone = contact_phone
+        contact_whatsapp = os.getenv("CONTACT_WHATSAPP")
+        if contact_whatsapp is not None:
+            self.contact.whatsapp = contact_whatsapp
+        contact_telegram = os.getenv("CONTACT_TELEGRAM")
+        if contact_telegram is not None:
+            self.contact.telegram = contact_telegram
+        contact_email = os.getenv("CONTACT_EMAIL")
+        if contact_email is not None:
+            self.contact.email = contact_email
         
         # Функции
         if os.getenv("ENABLE_CALCULATOR"):
-            self.features.enable_calculator = os.getenv("ENABLE_CALCULATOR").lower() == "true"
+            enable_calc = os.getenv("ENABLE_CALCULATOR")
+            if enable_calc is not None:
+                self.features.enable_calculator = enable_calc.lower() == "true"
         if os.getenv("ENABLE_AI_ASSISTANT"):
-            self.features.enable_ai_assistant = os.getenv("ENABLE_AI_ASSISTANT").lower() == "true"
+            enable_ai = os.getenv("ENABLE_AI_ASSISTANT")
+            if enable_ai is not None:
+                self.features.enable_ai_assistant = enable_ai.lower() == "true"
     
     def get_dict(self) -> Dict:
         """Возвращает все настройки в виде словаря для передачи в шаблоны"""

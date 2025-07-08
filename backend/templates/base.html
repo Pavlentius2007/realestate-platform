@@ -4,22 +4,22 @@
 <html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8" />
-  <title>{{ _(page_title) if page_title else config.seo.site_title }}</title>
+  <title>{{ _(page_title) if page_title else (config.seo.site_title if config else 'Sianoro') }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- Мета-теги для SEO -->
-  <meta name="description" content="{{ _(page_description) if page_description else config.seo.site_description }}">
-  <meta name="keywords" content="{% block meta_keywords %}{{ config.seo.site_keywords }}{% endblock %}">
+  <meta name="description" content="{{ _(page_description) if page_description else (config.seo.site_description if config else 'Недвижимость в Таиланде') }}">
+  <meta name="keywords" content="{% block meta_keywords %}{{ config.seo.site_keywords if config else 'недвижимость, таиланд, паттайя' }}{% endblock %}">
   
   <!-- Open Graph -->
-  <meta property="og:title" content="{{ _(page_title) if page_title else config.seo.site_title }}">
-  <meta property="og:description" content="{{ _(page_description) if page_description else config.seo.site_description }}">
-  <meta property="og:image" content="{{ config.seo.og_image }}">
-  <meta property="og:type" content="{{ config.seo.og_type }}">
+  <meta property="og:title" content="{{ _(page_title) if page_title else (config.seo.site_title if config else 'Sianoro') }}">
+  <meta property="og:description" content="{{ _(page_description) if page_description else (config.seo.site_description if config else 'Недвижимость в Таиланде') }}">
+  <meta property="og:image" content="{{ config.seo.og_image if config else '/static/img/og-image.jpg' }}">
+  <meta property="og:type" content="{{ config.seo.og_type if config else 'website' }}">
   <meta property="og:url" content="{{ request.url }}">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="{{ config.brand.favicon_url }}">
+  <link rel="icon" type="image/x-icon" href="{{ config.brand.favicon_url if config else '/static/img/favicon.ico' }}">
   
   <!-- Мета-теги для языков -->
   {% for code, info in supported_languages.items() %}
@@ -57,14 +57,10 @@
   <!-- Кастомные CSS переменные и стили -->
   <style>
     :root {
-      {{ config.theme_css | safe }}
+      {{ config.theme_css | safe if config else '' }}{{ config.custom_css | safe if config else '' }}
     }
-    
-    {{ config.custom_css | safe }}
-    
     /* Карта */
     #map, #map-inline { height: 100%; min-height: 100%; }
-    
     /* Выпадающее меню */
     .dropdown-menu {
       transform: translateY(-10px);
@@ -72,13 +68,11 @@
       visibility: hidden;
       transition: all 0.3s ease;
     }
-    
     .dropdown-menu.show {
       transform: translateY(0);
       opacity: 1;
       visibility: visible;
     }
-
     /* Floating Social Menu */
     .floating-social-menu {
       position: fixed;

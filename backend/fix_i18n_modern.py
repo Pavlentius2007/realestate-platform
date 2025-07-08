@@ -290,23 +290,57 @@ class ModernI18nMiddleware(BaseHTTPMiddleware):
             
             # Добавляем в шаблоны
             if self.templates:
+                # Импортируем функции конфигурации
+                try:
+                    from backend.utils.config_utils import get_config_for_template, get_analytics_scripts
+                except ImportError:
+                    try:
+                        from utils.config_utils import get_config_for_template, get_analytics_scripts
+                    except ImportError:
+                        # Fallback если конфигурация недоступна
+                        def get_config_for_template():
+                            return {"seo": {"site_title": "Sianoro"}}
+                        def get_analytics_scripts() -> str:
+                            return ""
+                
+                # Получаем конфигурацию
+                config = get_config_for_template()
+                analytics_scripts = get_analytics_scripts()
+                
                 self.templates.env.globals.update({
                     "_": _,
                     "translate": _,
                     "lang": lang,
-                    "supported_languages": SUPPORTED_LANGUAGES
+                    "supported_languages": SUPPORTED_LANGUAGES,
+                    "config": config,
+                    "analytics_scripts": analytics_scripts
                 })
                 
             # Дополнительно обновляем шаблоны, используемые админкой
             try:
                 from backend.config.templates import templates as admin_templates
+                # Убеждаемся что config и analytics_scripts определены
+                if 'config' not in locals():
+                    try:
+                        from backend.utils.config_utils import get_config_for_template, get_analytics_scripts
+                    except ImportError:
+                        def get_config_for_template():
+                            return {"seo": {"site_title": "Sianoro"}}
+                        def get_analytics_scripts() -> str:
+                            return ""
+                    config = get_config_for_template()
+                    analytics_scripts = get_analytics_scripts()
+                
                 admin_templates.env.globals.update({
                     "_": _,
                     "translate": _,
                     "lang": lang,
-                    "supported_languages": SUPPORTED_LANGUAGES
+                    "supported_languages": SUPPORTED_LANGUAGES,
+                    "config": config,
+                    "analytics_scripts": analytics_scripts
                 })
-            except Exception:
+            except Exception as e:
+                print(f"⚠️ Ошибка обновления админских шаблонов: {e}")
                 pass
                 
             # Проверяем URL и редиректим если нужно
@@ -344,10 +378,29 @@ def inject_translator_to_templates(templates: Jinja2Templates, request: Request)
             
         request.state._ = _
     
+    # Импортируем функции конфигурации
+    try:
+        from backend.utils.config_utils import get_config_for_template, get_analytics_scripts
+    except ImportError:
+        try:
+            from utils.config_utils import get_config_for_template, get_analytics_scripts
+        except ImportError:
+            # Fallback если конфигурация недоступна
+            def get_config_for_template():
+                return {"seo": {"site_title": "Sianoro"}}
+            def get_analytics_scripts() -> str:
+                return ""
+    
+    # Получаем конфигурацию
+    config = get_config_for_template()
+    analytics_scripts = get_analytics_scripts()
+    
     # Обновляем глобальные переменные шаблонов
     templates.env.globals.update({
         "_": request.state._,
         "lang": request.state.lang,
-        "translate": request.state._
+        "translate": request.state._,
+        "config": config,
+        "analytics_scripts": analytics_scripts
     })
     return True 
