@@ -10,6 +10,20 @@ from typing import Optional, List
 from urllib.parse import urlparse, urlunparse
 import json
 import os
+import logging
+
+# 🔧 Настройка логирования - ДОЛЖНА БЫТЬ В НАЧАЛЕ!
+try:
+    from backend.utils.logging_config import setup_logging, get_logger, log_security_event
+    from backend.middleware.logging_middleware import LoggingMiddleware, DatabaseLoggingMiddleware
+    from backend.middleware.security_middleware import SecurityMiddleware
+except ImportError:
+    from utils.logging_config import setup_logging, get_logger, log_security_event
+    from middleware.logging_middleware import LoggingMiddleware, DatabaseLoggingMiddleware
+    from middleware.security_middleware import SecurityMiddleware
+
+# Настраиваем логирование
+logger = setup_logging("production")  # Можно изменить на "development" для разработки
 
 try:
     # Попытка импорта с backend. (когда запускаем из корня)
@@ -42,10 +56,12 @@ try:
     from backend.config.i18n import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, LANGUAGE_COOKIE_NAME
     from backend.config.templates import templates
     from backend.fix_i18n_modern import ModernI18n, ModernI18nMiddleware, i18n
+    from backend.middleware import CSRFMiddleware, RateLimitMiddleware
 except ImportError:
     from config.i18n import SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE, LANGUAGE_COOKIE_NAME
     from config.templates import templates
     from fix_i18n_modern import ModernI18n, ModernI18nMiddleware, i18n
+    from middleware import CSRFMiddleware, RateLimitMiddleware
 
 # 📁 Базовая директория и шаблоны
 # Определяем корневую директорию проекта независимо от текущей рабочей директории
@@ -89,6 +105,15 @@ def inject_translator_to_templates(templates: Jinja2Templates, request: Request)
     config = get_config_for_template()
     templates.env.globals['config'] = config
     templates.env.globals['analytics_scripts'] = get_analytics_scripts()
+    
+    # Добавляем CSRF токен в шаблоны
+    try:
+        from backend.middleware import get_csrf_token, csrf_token_input
+    except ImportError:
+        from middleware import get_csrf_token, csrf_token_input
+    
+    templates.env.globals['csrf_token'] = get_csrf_token(request)
+    templates.env.globals['csrf_token_input'] = csrf_token_input(request)
 
 # 🚀 Инициализация FastAPI
 app = FastAPI(debug=True)
@@ -112,8 +137,77 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 3. ModernI18nMiddleware - после всех остальных
+# 3. CSRF middleware - после Session и CORS
+app.add_middleware(
+    CSRFMiddleware,
+    secret_key="super-sianoro-csrf-key-change-in-production",
+    exempt_paths=["/admin/"]  # Админка пока без CSRF
+)
+
+# 4. Rate Limiting middleware - после CSRF
+app.add_middleware(
+    RateLimitMiddleware,
+    enable_rate_limiting=True
+)
+
+# 5. Logging middleware - после Rate Limiting
+app.add_middleware(LoggingMiddleware, logger_name="http")
+
+# 6. Database logging middleware - отслеживание запросов к БД
+# 6. Security middleware - санитизация входных данных
+app.add_middleware(SecurityMiddleware, enable_sanitization=True)
+
+# 7. Database Logging middleware - после обычного логирования
+app.add_middleware(DatabaseLoggingMiddleware, logger_name="database")
+
+# 8. ModernI18nMiddleware - после всех остальных
 app.add_middleware(ModernI18nMiddleware, templates=templates)
+
+# 🚨 Глобальный обработчик исключений для логирования
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Глобальный обработчик исключений с логированием"""
+    
+    # Логируем исключение
+    logger.error(
+        f"🚨 Unhandled exception: {str(exc)}",
+        extra={
+            'request_id': getattr(request.state, 'request_id', 'unknown'),
+            'ip_address': request.client.host if request.client else 'unknown',
+            'method': request.method,
+            'endpoint': str(request.url),
+            'user_agent': request.headers.get('user-agent', ''),
+            'exception_type': type(exc).__name__,
+            'exception_message': str(exc)
+        },
+        exc_info=True
+    )
+    
+    # Логируем как событие безопасности если подозрительно
+    if any(keyword in str(exc).lower() for keyword in ['sql', 'injection', 'script', 'xss', 'attack']):
+        log_security_event(
+            logger,
+            "potential_security_exception",
+            {
+                'exception_type': type(exc).__name__,
+                'exception_message': str(exc),
+                'endpoint': str(request.url)
+            },
+            request
+        )
+    
+    # Возвращаем HTTP 500
+    return HTMLResponse(
+        content="""
+        <html>
+            <body>
+                <h1>Internal Server Error</h1>
+                <p>Something went wrong. Please try again later.</p>
+            </body>
+        </html>
+        """,
+        status_code=500
+    )
 
 # 🔼 Статические файлы
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -125,7 +219,17 @@ locales_dir = str(BASE_DIR / "locales")
 app.mount("/locales", StaticFiles(directory=locales_dir), name="locales")
 
 # 🌍 Загрузка переводов
+logger.info("🌍 Загрузка переводов...")
 i18n.load_translations()  # Принудительная перезагрузка переводов при старте
+logger.info("✅ Переводы загружены успешно")
+
+# 🚀 Логирование запуска приложения
+logger.info("🚀 Запуск приложения Sianoro Real Estate Platform")
+logger.info(f"📁 Базовая директория: {BASE_DIR}")
+logger.info(f"📂 Директория шаблонов: {TEMPLATES_DIR}")
+logger.info(f"🌐 Поддерживаемые языки: {list(SUPPORTED_LANGUAGES.keys())}")
+logger.info(f"🌍 Язык по умолчанию: {DEFAULT_LANGUAGE}")
+logger.info(f"🛡️ Middleware настроено: Session, CORS, CSRF, Rate Limiting, Logging, Security, Database Logging, i18n")
 
 # 🌍 Смена языка - ДОЛЖЕН БЫТЬ ПЕРЕД ВСЕМИ РОУТЕРАМИ!
 @app.get("/lang/{lang_code}")
