@@ -1,0 +1,32 @@
+<section id="map-section" class="relative w-full bg-white pb-12">
+  <!-- Контактная информация -->
+  <div class="absolute top-8 left-8 z-50 bg-bluebrand text-[#1e3a8a] bg-opacity-90 p-6 rounded-2xl shadow-xl max-w-sm font-sans" style="font-family: 'Inter', 'Roboto', 'system-ui', sans-serif;">
+    <h3 class="text-xl font-bold mb-2">Контакты</h3>
+    <p class="mb-1"><span class="font-semibold">Адрес:</span><br>47/111 Moo 9, Soi Welcome Town, Pattaya</p>
+    <p class="mb-1"><span class="font-semibold">Телефон:</span><br>+66 92 326 5978</p>
+    <p class="mb-3"><span class="font-semibold">Email:</span><br><a href="mailto:info@sianoro.com" class="underline text-blue-800 hover:text-blue-600">info@sianoro.com</a></p>
+    <a href="#contact" class="inline-block bg-white text-bluebrand font-bold px-4 py-2 rounded shadow hover:bg-bluebrand-accent hover:text-white transition">Написать нам</a>
+  </div>
+
+  <!-- Карта -->
+  <div id="main-map" class="w-screen h-[500px] md:h-[600px] lg:h-[700px] xl:h-[800px] 2xl:h-[900px] left-1/2 right-1/2 -translate-x-1/2 relative z-10"></div>
+
+  <!-- Кнопки управления -->
+  <div class="absolute top-8 right-8 z-50 flex gap-2">
+    <button id="map-type-toggle" class="bg-white px-3 py-2 rounded shadow hover:bg-bluebrand-accent hover:text-white">Карта / Спутник</button>
+    <button id="map-fullscreen" class="bg-white px-3 py-2 rounded shadow hover:bg-bluebrand-accent hover:text-white">🔍 На весь экран</button>
+  </div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var center = [12.958498, 100.889275];
+    var map = L.map('main-map').setView(center, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    L.marker(center).addTo(map).bindPopup('Тестовый объект').openPopup();
+  });
+</script>

@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ _('Условия использования') }} - Sianoro Real Estate{% endblock %}
+
+{% block head %}
+<meta name="description" content="{{ _('Условия использования сайта Sianoro Real Estate. Правила и условия предоставления услуг по недвижимости в Таиланде.') }}">
+<style>
+  .legal-content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  
+  .legal-content h2 {
+    color: #1f2937;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .legal-content h3 {
+    color: #374151;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .legal-content p {
+    margin-bottom: 1rem;
+    color: #4b5563;
+  }
+  
+  .legal-content ul {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .legal-content li {
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+  }
+  
+  .contact-info {
+    background: #f9fafb;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #10b981;
+    margin: 2rem 0;
+  }
+  
+  .last-updated {
+    background: #ecfdf5;
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #047857;
+    margin-bottom: 2rem;
+  }
+  
+  .important-notice {
+    background: #fef3c7;
+    border: 1px solid #f59e0b;
+    padding: 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+  }
+  
+  .important-notice p {
+    color: #92400e;
+    margin: 0;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white">
+  <!-- Хлебные крошки -->
+  <div class="bg-gray-50 border-b">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <nav class="flex items-center gap-2 text-sm text-gray-500">
+        <a href="/{{ lang }}" class="hover:text-blue-600 transition-colors">{{ _('Главная') }}</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+        <span class="text-gray-900 font-medium">{{ _('Условия использования') }}</span>
+      </nav>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <div class="legal-content">
+      
+      <!-- Заголовок -->
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ _('Условия использования') }}</h1>
+        <p class="text-xl text-gray-600">{{ _('Правила и условия пользования сайтом Sianoro Real Estate') }}</p>
+      </div>
+
+      <!-- Последнее обновление -->
+      <div class="last-updated">
+        <strong>{{ _('Дата последнего обновления:') }}</strong> 1 июля 2025 года
+      </div>
+
+      <!-- Важное уведомление -->
+      <div class="important-notice">
+        <p><strong>{{ _('Важно:') }}</strong> {{ _('Используя наш сайт, вы соглашаетесь с данными условиями использования. Если вы не согласны с какими-либо условиями, пожалуйста, не используйте наш сайт.') }}</p>
+      </div>
+
+      <!-- Содержание -->
+      
+      <h2>1. {{ _('Общие положения') }}</h2>
+      <p>
+        {{ _('Настоящие Условия использования регулируют отношения между администрацией сайта Sianoro Real Estate и пользователями Сайта.') }}
+      </p>
+      <p>
+        {{ _('Сайт предоставляет услуги по поиску, подбору и продаже недвижимости в Таиланде, а также информационные услуги в сфере недвижимости.') }}
+      </p>
+
+      <h2>2. {{ _('Принятие условий') }}</h2>
+      <p>{{ _('Используя наш Сайт, вы подтверждаете, что:') }}</p>
+      <ul>
+        <li>{{ _('Достигли совершеннолетия согласно законодательству вашей страны') }}</li>
+        <li>{{ _('Обладаете полной дееспособностью для заключения данного соглашения') }}</li>
+        <li>{{ _('Прочитали и согласны со всеми условиями данного соглашения') }}</li>
+        <li>{{ _('Будете соблюдать все применимые законы и правила') }}</li>
+      </ul>
+
+      <h2>3. {{ _('Описание услуг') }}</h2>
+      <p>{{ _('Наша компания предоставляет следующие услуги:') }}</p>
+      <ul>
+        <li>{{ _('Консультации по недвижимости в Таиланде') }}</li>
+        <li>{{ _('Подбор объектов недвижимости согласно вашим требованиям') }}</li>
+        <li>{{ _('Сопровождение сделок купли-продажи недвижимости') }}</li>
+        <li>{{ _('Услуги по аренде недвижимости') }}</li>
+        <li>{{ _('Юридическое сопровождение сделок') }}</li>
+        <li>{{ _('Информационные услуги о рынке недвижимости') }}</li>
+      </ul>
+
+      <h2>4. {{ _('Правила использования сайта') }}</h2>
+      <p>{{ _('При использовании нашего Сайта вы обязуетесь:') }}</p>
+      <ul>
+        <li>{{ _('Предоставлять достоверную и актуальную информацию') }}</li>
+        <li>{{ _('Не нарушать права третьих лиц') }}</li>
+        <li>{{ _('Не использовать Сайт в незаконных целях') }}</li>
+        <li>{{ _('Не пытаться получить несанкционированный доступ к системам Сайта') }}</li>
+        <li>{{ _('Не загружать вредоносное программное обеспечение') }}</li>
+        <li>{{ _('Соблюдать правила этики и морали') }}</li>
+      </ul>
+
+      <h2>5. {{ _('Интеллектуальная собственность') }}</h2>
+      <p>{{ _('Все материалы, размещенные на Сайте, являются объектами интеллектуальной собственности и защищены соответствующими законами.') }}</p>
+
+      <h2>6. {{ _('Ответственность и гарантии') }}</h2>
+      <p>{{ _('Мы прилагаем все усилия для предоставления качественных услуг, однако не гарантируем бесперебойную работу Сайта.') }}</p>
+
+      <h2>7. {{ _('Конфиденциальность') }}</h2>
+      <p>{{ _('Вопросы обработки персональных данных регулируются нашей ') }}<a href="/{{ lang }}/privacy" class="text-blue-600 hover:text-blue-800">{{ _('Политикой конфиденциальности') }}</a>.</p>
+
+      <!-- Контактная информация -->
+      <div class="contact-info">
+        <h3>{{ _('Контактная информация') }}</h3>
+        <p>{{ _('По всем вопросам обращайтесь:') }}</p>
+        <ul class="mb-0">
+          <li><strong>Email:</strong> legal@sianoro.com</li>
+          <li><strong>WhatsApp:</strong> +66 XX XXX XXXX</li>
+          <li><strong>Telegram:</strong> @sianoro_support</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %} 

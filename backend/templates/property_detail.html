@@ -1,0 +1,718 @@
+{% extends "base.html" %}
+
+{% block title %}{{ property.title }} - {{ _("site.title") }}{% endblock %}
+
+{% block head %}
+  <meta name="description" content="{{ property.title }} – {{ property.description[:120] if property.description else '' }}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <style>
+    .property-header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 24px 0;
+    }
+    
+    .property-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    
+    @media (min-width: 640px) {
+      .property-price {
+        font-size: 2rem;
+      }
+    }
+    
+    .property-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin: 16px 0;
+    }
+    
+    @media (min-width: 640px) {
+      .property-stats {
+        gap: 24px;
+      }
+    }
+    
+    .property-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    @media (min-width: 640px) {
+      .property-stat {
+        gap: 8px;
+      }
+    }
+    
+    .property-stat i {
+      color: #3b82f6;
+      width: 14px;
+    }
+    
+    @media (min-width: 640px) {
+      .property-stat i {
+        width: 16px;
+      }
+    }
+    
+    .image-gallery {
+      height: 300px;
+      background: #f3f4f6;
+    }
+    
+    @media (min-width: 640px) {
+      .image-gallery {
+        height: 400px;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .image-gallery {
+        height: 500px;
+      }
+    }
+    
+    .image-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .property-details {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    
+    .contact-sidebar {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 24px;
+      position: sticky;
+      top: 24px;
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      width: 100%;
+      font-size: 0.875rem;
+    }
+    
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+    
+    .favorite-btn {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      background: white;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .favorite-btn:hover {
+      background: #f9fafb;
+    }
+    
+    .favorite-btn.favorited {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+    
+    .favorite-btn.favorited:hover {
+      background: #dc2626;
+    }
+    
+    .breadcrumb {
+      font-size: 0.875rem;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+    
+    .breadcrumb a {
+      color: #3b82f6;
+      text-decoration: none;
+    }
+    
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+    
+    .property-title {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+    
+    .property-location {
+      color: #6b7280;
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      color: #374151;
+    }
+    
+    .feature-item i {
+      color: #3b82f6;
+      width: 16px;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen">
+  <!-- Property Header -->
+  <div class="property-header">
+    <div class="max-w-7xl mx-auto px-4">
+      <nav class="breadcrumb text-xs sm:text-sm">
+        <a href="/{{ lang }}">{{ _("navigation.home") }}</a> › 
+        <a href="/{{ lang }}/properties?deal_type={{ property.property_type }}">
+          {% if property.property_type == 'rent' %}{{ _("navigation.rent_property") }}{% else %}{{ _("navigation.buy_property") }}{% endif %}
+        </a>
+        › <span>{{ property.title }}</span>
+      </nav>
+
+      <h1 class="property-title text-xl sm:text-2xl lg:text-3xl">{{ property.title }}</h1>
+      <p class="property-location text-sm sm:text-base">
+        <i class="fas fa-map-marker-alt mr-1 sm:mr-2"></i>{{ property.location }}, {{ property.district }}
+      </p>
+      
+      <div class="property-stats flex flex-wrap gap-4 sm:gap-6 text-xs sm:text-sm">
+        <div class="property-stat">
+          <i class="fas fa-bed"></i>
+          <span>{{ property.bedrooms }} {{ _("property.bedrooms") }}</span>
+        </div>
+        <div class="property-stat">
+          <i class="fas fa-bath"></i>
+          <span>{{ property.bathrooms }} {{ _("property.bathrooms") }}</span>
+        </div>
+        <div class="property-stat">
+          <i class="fas fa-ruler-combined"></i>
+          <span>{{ property.area }} {{ _("property.area") }}</span>
+        </div>
+        <div class="property-stat">
+          <i class="fas fa-building"></i>
+          <span>{{ property.floor }} {{ _("property.floor") }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto px-4 py-4 sm:py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
+      
+      <!-- Left Column - Property Details -->
+      <div class="lg:col-span-2 order-2 lg:order-1">
+        
+        <!-- Image Gallery -->
+        <div class="image-gallery rounded-lg overflow-hidden">
+          <div class="swiper h-full">
+            <div class="swiper-wrapper">
+              {% if property.images %}
+                {% for img in property.images if img.image_url %}
+                  <div class="swiper-slide">
+                    <img src="{{ img.image_url }}" alt="{{ property.title }}" />
+                  </div>
+                {% endfor %}
+              {% else %}
+                <div class="swiper-slide">
+                  <div class="w-full h-full flex items-center justify-center text-gray-400">
+                    <i class="fas fa-home text-6xl"></i>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          </div>
+        </div>
+
+        <!-- Property Details -->
+        <div class="property-details">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ _("property.details") }}</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Basic Info -->
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.basic_info") }}</h3>
+              <div class="space-y-2 text-sm">
+                <p><strong>{{ _("property.id") }}:</strong> #{{ property.id }}</p>
+                {% if property.property_type %}
+                  <p><strong>{{ _("property.type") }}:</strong> 
+                    {% if property.property_type == 'apartment' %}{{ _("common.apartments") }}
+                    {% elif property.property_type == 'condo' %}{{ _("common.condo") }}
+                    {% elif property.property_type == 'villa' %}{{ _("common.villa") }}
+                    {% elif property.property_type == 'townhouse' %}{{ _("property.types.townhouse") }}
+                    {% elif property.property_type == 'house' %}{{ _("property.types.house") }}
+                    {% else %}{{ property.property_type }}
+                    {% endif %}
+                  </p>
+                {% endif %}
+                {% if property.status %}
+                  <p><strong>{{ _("property.status") }}:</strong> 
+                    {% if property.status == 'available' %}{{ _("property.status.available") }}
+                    {% elif property.status == 'rented' %}{{ _("property.status.rented") }}
+                    {% elif property.status == 'pending' %}{{ _("property.status.pending") }}
+                    {% else %}{{ property.status }}
+                    {% endif %}
+                  </p>
+                {% endif %}
+                {% if property.condo_name %}
+                  <p><strong>{{ _("property.project") }}:</strong> {{ property.condo_name }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Price Info -->
+            <div>
+              <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.price_info") }}</h3>
+              <div class="space-y-2 text-sm">
+                <p><strong>{{ _("property.price") }}:</strong> <span class="property-price">฿{{ "{:,.0f}".format(property.price) }}</span></p>
+                {% if property.old_price and property.old_price > property.price %}
+                  <p><strong>{{ _("property.old_price") }}:</strong> <span class="text-gray-500 line-through">฿{{ "{:,.0f}".format(property.old_price) }}</span></p>
+                {% endif %}
+                {% if property.price_period %}
+                  <p><strong>{{ _("property.payment_period") }}:</strong> 
+                    {% if property.price_period == 'month' %}{{ _("property.per_month") }}
+                    {% elif property.price_period == 'day' %}{{ _("property.per_day") }}
+                    {% elif property.price_period == 'year' %}{{ _("property.per_year") }}
+                    {% elif property.price_period == 'week' %}{{ _("property.per_week") }}
+                    {% else %}{{ property.price_period }}
+                    {% endif %}
+                  </p>
+                {% endif %}
+                {% if property.furnished %}
+                  <p><strong>{{ _("property.furnished") }}:</strong> {{ property.furnished }}</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          {% if property.description %}
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.description") }}</h3>
+            <p class="text-gray-700 leading-relaxed">{{ property.description }}</p>
+          </div>
+          {% endif %}
+
+          {% if property.features %}
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.amenities") }}</h3>
+            <div class="features-grid">
+              {% for feature in property.features %}
+                <div class="feature-item">
+                  {% if "стиральная" in feature|lower %}
+                    <i class="fas fa-soap"></i>
+                  {% elif "балкон" in feature|lower %}
+                    <i class="fas fa-door-open"></i>
+                  {% elif "кондиционер" in feature|lower %}
+                    <i class="fas fa-snowflake"></i>
+                  {% elif "wi-fi" in feature|lower %}
+                    <i class="fas fa-wifi"></i>
+                  {% elif "спорт" in feature|lower %}
+                    <i class="fas fa-dumbbell"></i>
+                  {% elif "паркинг" in feature|lower %}
+                    <i class="fas fa-car"></i>
+                  {% elif "бассейн" in feature|lower %}
+                    <i class="fas fa-swimming-pool"></i>
+                  {% elif "охрана" in feature|lower %}
+                    <i class="fas fa-shield-alt"></i>
+                  {% elif "сад" in feature|lower %}
+                    <i class="fas fa-leaf"></i>
+                  {% else %}
+                    <i class="fas fa-check"></i>
+                  {% endif %}
+                  <span>{{ feature.strip() }}</span>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Map -->
+        {% if property.lat and property.lng %}
+        <div class="property-details">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">{{ _("property.location") }}</h2>
+          <div class="w-full h-96 rounded-lg overflow-hidden">
+            <div id="detail-map" class="w-full h-full"></div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- Right Column - Contact Sidebar -->
+      <div class="lg:col-span-1 order-1 lg:order-2">
+        <div class="contact-sidebar">
+          
+          <!-- Price -->
+          <div class="text-center mb-6">
+            <div class="property-price">฿{{ "{:,.0f}".format(property.price) }}</div>
+            {% if property.price_period %}
+              <div class="text-gray-600 text-sm">
+                {% if property.price_period == 'month' %}{{ _("property.per_month") }}
+                {% elif property.price_period == 'day' %}{{ _("property.per_day") }}
+                {% elif property.price_period == 'year' %}{{ _("property.per_year") }}
+                {% elif property.price_period == 'week' %}{{ _("property.per_week") }}
+                {% else %}{{ property.price_period }}
+                {% endif %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Favorite Button -->
+          <button id="favoriteBtn" onclick="toggleFavorite({{ property.id }})" 
+                  class="favorite-btn mb-6">
+            <i class="fas fa-heart" id="heartIcon"></i>
+            <span id="favoriteText">{{ _("property.add_to_favorites") }}</span>
+          </button>
+
+          <!-- Contact Form -->
+          <div class="mb-6">
+            <h3 class="font-semibold text-gray-900 mb-3">{{ _("property.contact_agent") }}</h3>
+            <form class="contact-form space-y-3">
+              <input type="text" name="name" placeholder="{{ _('contact.your_name') }}" required>
+              <input type="tel" name="phone" placeholder="{{ _('contact.phone_number') }}" required>
+              <textarea name="message" rows="3" placeholder="{{ _('contact.message_placeholder') }}"></textarea>
+              <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                {{ _("property.contact_agent") }}
+              </button>
+            </form>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="space-y-2">
+            <button onclick="shareProperty()" 
+                    class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center gap-2 text-sm">
+              <i class="fas fa-share"></i>
+              {{ _("property.share") }}
+            </button>
+            
+            <button onclick="contactWhatsApp()" 
+                    class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm">
+              <i class="fab fa-whatsapp"></i>
+              {{ _("property.contact_whatsapp") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Похожие объекты в стиле Zillow -->
+<section class="w-full bg-gray-50 py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Похожие объекты</h2>
+      <a href="/{{ lang }}/properties?district={{ property.district or 'all' }}&price_min={{ (property.price * 0.8)|int }}&price_max={{ (property.price * 1.2)|int }}" 
+         class="text-blue-600 hover:text-blue-700 font-semibold">Смотреть все похожие →</a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Заглушки для похожих объектов -->
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+        <div class="relative">
+          <img src="/static/images/default.jpg" alt="Похожий объект" 
+               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <div class="absolute top-3 left-3">
+            <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">НОВОЕ</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="text-2xl font-bold text-gray-900 mb-3">฿{{ "{:,.0f}".format(property.price * 0.9) }}</div>
+          <h3 class="font-semibold text-lg mb-2 text-gray-900">Похожая квартира в {{ property.district or "том же районе" }}</h3>
+          <p class="text-gray-600 text-sm mb-4">{{ property.district or "–" }}, {{ property.location or "–" }}</p>
+          <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 12a8 8 0 018-8 8 8 0 018 8M4 12a8 8 0 018 8 8 8 0 018-8"/>
+              </svg>
+              <span class="font-medium">{{ (property.area or 50) - 5 }} м²</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0v4"/>
+              </svg>
+              <span class="font-medium">{{ (property.bedrooms or 2) - 1 }}</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10V6a5 5 0 0110 0v4"/>
+              </svg>
+              <span class="font-medium">{{ property.bathrooms or 1 }}</span>
+            </span>
+          </div>
+          <a href="/{{ lang }}/properties/{{ property.id }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-semibold transition duration-200 text-sm">
+            {{ _('property.view_details') }}
+          </a>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+        <div class="relative">
+          <img src="/static/images/default.jpg" alt="Похожий объект" 
+               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <div class="absolute top-3 left-3">
+            <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">ГОРЯЧЕЕ</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="text-2xl font-bold text-gray-900 mb-3">฿{{ "{:,.0f}".format(property.price * 1.1) }}</div>
+          <h3 class="font-semibold text-lg mb-2 text-gray-900">Аналогичная недвижимость</h3>
+          <p class="text-gray-600 text-sm mb-4">{{ property.district or "–" }}, {{ property.location or "–" }}</p>
+          <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 12a8 8 0 018-8 8 8 0 018 8M4 12a8 8 0 018 8 8 8 0 018-8"/>
+              </svg>
+              <span class="font-medium">{{ (property.area or 50) + 5 }} м²</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0v4"/>
+              </svg>
+              <span class="font-medium">{{ (property.bedrooms or 2) + 1 }}</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10V6a5 5 0 0110 0v4"/>
+              </svg>
+              <span class="font-medium">{{ (property.bathrooms or 1) + 1 }}</span>
+            </span>
+          </div>
+          <a href="/{{ lang }}/properties/{{ property.id }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-semibold transition duration-200 text-sm">
+            {{ _('property.view_details') }}
+          </a>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+        <div class="relative">
+          <img src="/static/images/default.jpg" alt="Похожий объект" 
+               class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+          <div class="absolute top-3 left-3">
+            <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full shadow-sm">-15%</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-3">
+            <div class="text-2xl font-bold text-gray-900">฿{{ "{:,.0f}".format(property.price * 0.85) }}</div>
+            <div class="text-sm text-gray-500 line-through">฿{{ "{:,.0f}".format(property.price) }}</div>
+          </div>
+          <h3 class="font-semibold text-lg mb-2 text-gray-900">Скидка на похожий объект</h3>
+          <p class="text-gray-600 text-sm mb-4">{{ property.district or "–" }}, {{ property.location or "–" }}</p>
+          <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 12a8 8 0 018-8 8 8 0 018 8M4 12a8 8 0 018 8 8 8 0 018-8"/>
+              </svg>
+              <span class="font-medium">{{ property.area or 50 }} м²</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0v4"/>
+              </svg>
+              <span class="font-medium">{{ property.bedrooms or 2 }}</span>
+            </span>
+            <span class="flex items-center gap-1">
+              <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10V6a5 5 0 0110 0v4"/>
+              </svg>
+              <span class="font-medium">{{ property.bathrooms or 1 }}</span>
+            </span>
+          </div>
+          <a href="/{{ lang }}/properties/{{ property.id }}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-semibold transition duration-200 text-sm">
+            {{ _('property.view_details') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JavaScript -->
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script>
+// Variables
+let isInFavorites = false;
+let propertyId = {{ property.id }};
+
+// Check favorite status on load
+document.addEventListener('DOMContentLoaded', function() {
+  checkFavoriteStatus();
+  initMap();
+  initSwiper();
+});
+
+// Check favorite status
+async function checkFavoriteStatus() {
+  try {
+    const response = await fetch(`/{{ lang }}/favorites/check/${propertyId}`);
+    const data = await response.json();
+    
+    isInFavorites = data.in_favorites;
+    updateFavoriteButton();
+  } catch (error) {
+    console.error('Error checking favorite status:', error);
+  }
+}
+
+// Toggle favorite
+async function toggleFavorite(propertyId) {
+  const btn = document.getElementById('favoriteBtn');
+  btn.disabled = true;
+  
+  try {
+    const url = isInFavorites 
+      ? `/{{ lang }}/favorites/remove/${propertyId}`
+      : `/{{ lang }}/favorites/add/${propertyId}`;
+    
+    const method = isInFavorites ? 'DELETE' : 'POST';
+    
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (data.success || response.ok) {
+      isInFavorites = data.in_favorites;
+      updateFavoriteButton();
+    }
+  } catch (error) {
+    console.error('Error toggling favorite:', error);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// Update favorite button appearance
+function updateFavoriteButton() {
+  const btn = document.getElementById('favoriteBtn');
+  const text = document.getElementById('favoriteText');
+  const icon = document.getElementById('heartIcon');
+  
+  if (isInFavorites) {
+    btn.className = 'favorite-btn favorited';
+    text.textContent = '{{ _("property.in_favorites") }}';
+    icon.style.fill = 'currentColor';
+  } else {
+    btn.className = 'favorite-btn';
+    text.textContent = '{{ _("property.add_to_favorites") }}';
+    icon.style.fill = 'none';
+    icon.style.stroke = 'currentColor';
+    icon.style.strokeWidth = '1.5';
+  }
+}
+
+// Share property
+function shareProperty() {
+  const title = '{{ property.title|e }}';
+  const url = window.location.href;
+  
+  if (navigator.share) {
+    navigator.share({
+      title: title,
+      text: `{{ _("property.share_text") }}: ${title}`,
+      url: url
+    });
+  } else {
+    navigator.clipboard.writeText(url).then(() => {
+      alert('{{ _("property.link_copied") }}');
+    }).catch(() => {
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      alert('{{ _("property.link_copied") }}');
+    });
+  }
+}
+
+// Contact via WhatsApp
+function contactWhatsApp() {
+  const message = `{{ _("property.whatsapp_message") }} #${propertyId} - {{ property.title|e }}`;
+  const whatsappUrl = `https://wa.me/66982649201?text=${encodeURIComponent(message)}`;
+  window.open(whatsappUrl, '_blank');
+}
+
+// Initialize map
+function initMap() {
+  {% if property.lat and property.lng %}
+  const detailMap = L.map('detail-map').setView([{{ property.lat }}, {{ property.lng }}], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(detailMap);
+  L.marker([{{ property.lat }}, {{ property.lng }}]).addTo(detailMap).bindPopup("{{ property.title }}").openPopup();
+  {% endif %}
+}
+
+// Initialize Swiper
+function initSwiper() {
+  {% if property.images %}
+  const swiper = new Swiper('.swiper', {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+  {% endif %}
+}
+</script>
+{% endblock %}

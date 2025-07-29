@@ -1,0 +1,38 @@
+name: Development Board
+description: Канбан-доска для управления разработкой проекта
+columns:
+  - name: 📋 Backlog
+    description: Задачи в очереди на рассмотрение
+  - name: 🔍 To Do
+    description: Задачи, готовые к работе
+  - name: 🔄 In Progress
+    description: Задачи в разработке
+  - name: 👀 Review
+    description: Задачи на проверке
+  - name: ✅ Done
+    description: Завершенные задачи
+  - name: 🚀 Deployed
+    description: Развернутые в продакшн
+
+workflows:
+  - name: Standard Workflow
+    rules:
+      - column: "📋 Backlog"
+        conditions:
+          - label: "triage"
+      - column: "🔍 To Do"
+        conditions:
+          - label: "enhancement"
+          - label: "bug"
+      - column: "🔄 In Progress"
+        conditions:
+          - assignee: "*"
+      - column: "👀 Review"
+        conditions:
+          - label: "review"
+      - column: "✅ Done"
+        conditions:
+          - label: "completed"
+      - column: "🚀 Deployed"
+        conditions:
+          - label: "deployed" 

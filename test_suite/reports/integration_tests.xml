@@ -1,0 +1,2176 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="29" failures="0" skipped="0" tests="29" time="39.824" timestamp="2025-07-12T09:55:39.329404+07:00" hostname="MSI"><testcase classname="integration.test_api_endpoints.TestAuthEndpoints" name="test_register_user" time="0.027"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAuthEndpoints" name="test_login_user" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAuthEndpoints" name="test_login_invalid_credentials" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAuthEndpoints" name="test_get_current_user" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_get_properties_list" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_get_property_detail" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_create_property" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_update_property" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_delete_property" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPropertiesEndpoints" name="test_search_properties" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestProjectsEndpoints" name="test_get_projects_list" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestProjectsEndpoints" name="test_get_project_detail" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestArticlesEndpoints" name="test_get_articles_list" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestArticlesEndpoints" name="test_get_article_detail" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestFavoritesEndpoints" name="test_add_to_favorites" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestFavoritesEndpoints" name="test_get_favorites" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestFavoritesEndpoints" name="test_remove_from_favorites" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestRentalRequestsEndpoints" name="test_create_rental_request" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAIEndpoints" name="test_ai_search" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAIEndpoints" name="test_ai_chat" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAdminEndpoints" name="test_admin_dashboard" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAdminEndpoints" name="test_admin_users_list" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAdminEndpoints" name="test_admin_properties_list" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestAdminEndpoints" name="test_admin_analytics" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestErrorHandling" name="test_404_not_found" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestErrorHandling" name="test_422_validation_error" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestErrorHandling" name="test_500_internal_error" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestPagination" name="test_properties_pagination" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase><testcase classname="integration.test_api_endpoints.TestFiltering" name="test_properties_filtering" time="0.001"><error message="failed on setup with &quot;sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY&quot;">venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:139: in _compiler_dispatch
+    meth = getter(visitor)
+           ^^^^^^^^^^^^^^^
+E   AttributeError: 'SQLiteTypeCompiler' object has no attribute 'visit_ARRAY'. Did you mean: 'visit_REAL'?
+
+The above exception was the direct cause of the following exception:
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6487: in visit_create_table
+    processed = self.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6518: in visit_create_column
+    text = self.get_column_specification(column, first_pk=first_pk)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\dialects\sqlite\base.py:1534: in get_column_specification
+    coltype = self.dialect.type_compiler_instance.process(
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:957: in process
+    return type_._compiler_dispatch(self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:141: in _compiler_dispatch
+    return visitor.visit_unsupported_compilation(self, err, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:962: in visit_unsupported_compilation
+    raise exc.UnsupportedCompilationError(self, element) from err
+E   sqlalchemy.exc.UnsupportedCompilationError: Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY (Background on this error at: https://sqlalche.me/e/20/l7de)
+
+The above exception was the direct cause of the following exception:
+test_suite\conftest.py:76: in test_db_engine
+    Base.metadata.create_all(bind=engine)
+venv312\Lib\site-packages\sqlalchemy\sql\schema.py:5828: in create_all
+    bind._run_ddl_visitor(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:3243: in _run_ddl_visitor
+    conn._run_ddl_visitor(visitorcallable, element, **kwargs)
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:2447: in _run_ddl_visitor
+    visitorcallable(self.dialect, self, **kwargs).traverse_single(element)
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:919: in visit_metadata
+    self.traverse_single(
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:671: in traverse_single
+    return meth(obj, **kw)
+           ^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:957: in visit_table
+    )._invoke_with(self.connection)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:315: in _invoke_with
+    return bind.execute(self)
+           ^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1416: in execute
+    return meth(
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:181: in _execute_on_connection
+    return connection._execute_ddl(
+venv312\Lib\site-packages\sqlalchemy\engine\base.py:1525: in _execute_ddl
+    compiled = ddl.compile(
+venv312\Lib\site-packages\sqlalchemy\sql\elements.py:308: in compile
+    return self._compiler(dialect, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\ddl.py:69: in _compiler
+    return dialect.ddl_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:867: in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:912: in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\visitors.py:143: in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+venv312\Lib\site-packages\sqlalchemy\sql\compiler.py:6497: in visit_create_table
+    raise exc.CompileError(
+E   sqlalchemy.exc.CompileError: (in table 'properties', column 'features'): Compiler &lt;sqlalchemy.dialects.sqlite.base.SQLiteTypeCompiler object at 0x000001F7401330B0&gt; can't render element of type ARRAY</error></testcase></testsuite></testsuites>

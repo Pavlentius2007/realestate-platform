@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-3xl mx-auto py-10 px-4">
+  <h1 class="text-3xl font-bold text-bluebrand mb-6 text-center">🤖 Подбор жилья по ИИ</h1>
+  <form id="ai-search-form" class="bg-white rounded-2xl shadow p-6 space-y-6" method="post">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Бюджет (฿)</label>
+        <input type="number" name="budget" class="w-full border rounded-xl px-4 py-2" placeholder="до 100 000" min="0">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Площадь (м²)</label>
+        <div class="flex gap-2">
+          <input type="number" name="area_from" class="w-full border rounded-xl px-4 py-2" placeholder="от" min="0">
+          <input type="number" name="area_to" class="w-full border rounded-xl px-4 py-2" placeholder="до" min="0">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Район</label>
+        <select name="district" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любой</option>
+          <option>Вонгамат</option>
+          <option>Центральная Паттайя</option>
+          <option>Восточная Паттайя</option>
+          <option>Наклуа</option>
+          <option>Пратамнак</option>
+          <option>Джомтьен</option>
+          <option>На Джомтьен</option>
+          <option>Юг</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">{{ _("forms.property_type") }}</label>
+        <select name="property_type" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любой</option>
+          <option>Кондо</option>
+          <option>Апартаменты</option>
+          <option>Вилла</option>
+          <option>Таунхаус</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Спален</label>
+        <select name="bedrooms" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любое</option>
+          <option>1+</option>
+          <option>2+</option>
+          <option>3+</option>
+          <option>4+</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Этаж / Этажность</label>
+        <input type="text" name="floor" class="w-full border rounded-xl px-4 py-2" placeholder="Например: не выше 5, не первый и не последний">
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Меблировка</label>
+        <select name="furnished" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любая</option>
+          <option>Полностью меблирована</option>
+          <option>Частично</option>
+          <option>Без мебели</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Вид из окна</label>
+        <select name="view" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любой</option>
+          <option>Море</option>
+          <option>Город</option>
+          <option>Горы</option>
+          <option>Сад</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Уровень объекта</label>
+        <select name="level" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любой</option>
+          <option>Эконом</option>
+          <option>Комфорт</option>
+          <option>Бизнес</option>
+          <option>Люкс</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Питомцы разрешены</label>
+        <select name="pets" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Не важно</option>
+          <option>Да</option>
+          <option>Нет</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Бассейн</label>
+        <select name="pool" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Не важно</option>
+          <option>С бассейном</option>
+          <option>Без бассейна</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Новостройка / Вторичка</label>
+        <select name="new_or_secondary" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Любой</option>
+          <option>Новостройка</option>
+          <option>Вторичка</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Цель подбора</label>
+        <select name="purpose" class="w-full border rounded-xl px-4 py-2">
+          <option value="">Не выбрано</option>
+          <option>Туристу</option>
+          <option>На ПМЖ</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <label class="block text-sm font-medium mb-1">Инфраструктура рядом</label>
+      <div class="flex flex-wrap gap-4">
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_school" class="form-checkbox mr-2">Школа</label>
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_beach" class="form-checkbox mr-2">Пляж</label>
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_mall" class="form-checkbox mr-2">ТЦ</label>
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_market" class="form-checkbox mr-2">Рынок</label>
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_hospital" class="form-checkbox mr-2">Госпиталь</label>
+        <label class="inline-flex items-center"><input type="checkbox" name="infra_gym" class="form-checkbox mr-2">Спортзал</label>
+      </div>
+    </div>
+    <div class="flex flex-wrap gap-4 justify-center pt-6">
+      <button type="submit" class="bg-bluebrand hover:bg-bluebrand-dark text-white font-semibold px-8 py-3 rounded-2xl shadow-lg transition">Подобрать</button>
+      <button type="button" class="bg-white border border-bluebrand text-bluebrand font-semibold px-8 py-3 rounded-2xl shadow-lg transition">Показать на карте</button>
+      <button type="button" class="bg-blue-100 text-bluebrand font-semibold px-8 py-3 rounded-2xl shadow-lg transition">Сохранить подбор</button>
+      <button type="button" class="bg-blue-100 text-bluebrand font-semibold px-8 py-3 rounded-2xl shadow-lg transition">Получить подбор на почту</button>
+    </div>
+  </form>
+  <div id="ai-results" class="mt-10">
+    {% if explanation %}
+      <div class="bg-blue-50 border-l-4 border-bluebrand p-4 mb-6 text-bluebrand text-lg rounded">{{ explanation }}</div>
+    {% endif %}
+    {% if results is defined %}
+      {% if results|length > 0 %}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {% for property in results %}
+            <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 transition hover:shadow-lg">
+              <img src="/static/images/{{ property.preview_image or 'default.jpg' }}" alt="{{ property.title }}"
+                   class="w-full h-48 object-cover">
+              <div class="p-4 space-y-2">
+                <div class="text-xl font-bold text-sber">฿ {{ "{:,.0f}".format(property.price) }}</div>
+                <h3 class="text-lg font-bold text-gray-800 truncate">{{ property.title }}</h3>
+                <div class="text-gray-800 font-semibold text-sm truncate">🏢 {{ property.condo_name or "–" }}</div>
+                <div class="text-gray-500 text-sm truncate">📍 {{ property.district or "–" }}, {{ property.location or "–" }}</div>
+                <div class="flex justify-between text-xs text-gray-600 mt-2">
+                  <span>🏧 {{ property.bedrooms or "–" }} спальн.</span>
+                  <span>🚻 {{ property.bathrooms or "–" }} ванн.</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                  <span>📀 {{ property.area or "–" }} м²</span>
+                  <span>🏢 {{ property.floor or "—" }} этаж</span>
+                </div>
+                <div class="pt-2 text-right">
+                  <a href="/{{ lang }}/properties/{{ property.id }}" class="text-sm text-sber-dark font-medium underline">Подробнее</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center text-gray-500 text-lg py-8">Нет подходящих объектов по выбранным параметрам.</div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %} 

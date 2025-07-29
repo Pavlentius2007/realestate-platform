@@ -1,0 +1,92 @@
+[
+  {
+    "name": "bug",
+    "color": "d73a4a",
+    "description": "Что-то не работает"
+  },
+  {
+    "name": "enhancement",
+    "color": "a2eeef",
+    "description": "Новая функция или запрос"
+  },
+  {
+    "name": "translation",
+    "color": "0075ca",
+    "description": "Переводы и локализация"
+  },
+  {
+    "name": "i18n",
+    "color": "0075ca",
+    "description": "Интернационализация"
+  },
+  {
+    "name": "frontend",
+    "color": "0e8a16",
+    "description": "Фронтенд изменения"
+  },
+  {
+    "name": "backend",
+    "color": "fbca04",
+    "description": "Backend изменения"
+  },
+  {
+    "name": "database",
+    "color": "5319e7",
+    "description": "Изменения в базе данных"
+  },
+  {
+    "name": "ui/ux",
+    "color": "c2e0c6",
+    "description": "Пользовательский интерфейс"
+  },
+  {
+    "name": "mobile",
+    "color": "1d76db",
+    "description": "Мобильная версия"
+  },
+  {
+    "name": "security",
+    "color": "d93f0b",
+    "description": "Проблемы безопасности"
+  },
+  {
+    "name": "performance",
+    "color": "ffa500",
+    "description": "Производительность"
+  },
+  {
+    "name": "documentation",
+    "color": "0075ca",
+    "description": "Документация"
+  },
+  {
+    "name": "triage",
+    "color": "e4e669",
+    "description": "Требует рассмотрения"
+  },
+  {
+    "name": "priority: high",
+    "color": "d73a4a",
+    "description": "Высокий приоритет"
+  },
+  {
+    "name": "priority: medium",
+    "color": "fbca04",
+    "description": "Средний приоритет"
+  },
+  {
+    "name": "priority: low",
+    "color": "0e8a16",
+    "description": "Низкий приоритет"
+  },
+  {
+    "name": "good first issue",
+    "color": "7057ff",
+    "description": "Хорошо для новичков"
+  },
+  {
+    "name": "help wanted",
+    "color": "008672",
+    "description": "Нужна помощь"
+  }
+] 

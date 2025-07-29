@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление статьями - Админ панель Sianoro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="/admin" class="text-gray-600 hover:text-gray-900">
+                        <i class="fas fa-arrow-left mr-2"></i>Назад в админку
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-900">📚 Управление статьями</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm text-gray-600">Всего статей: {{ total_articles }}</span>
+                    <a href="/admin/articles/add" 
+                       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-plus mr-2"></i>Добавить статью
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto py-6 px-6">
+        
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="text-3xl text-blue-600 mr-4">📄</div>
+                    <div>
+                        <p class="text-sm text-gray-600">Всего статей</p>
+                        <p class="text-2xl font-bold text-gray-900">{{ total_articles }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="text-3xl text-green-600 mr-4">✅</div>
+                    <div>
+                        <p class="text-sm text-gray-600">Опубликованы</p>
+                        <p class="text-2xl font-bold text-gray-900">
+                            {{ articles | selectattr('published') | list | length }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="text-3xl text-yellow-600 mr-4">📝</div>
+                    <div>
+                        <p class="text-sm text-gray-600">Черновики</p>
+                        <p class="text-2xl font-bold text-gray-900">
+                            {{ articles | rejectattr('published') | list | length }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow p-6">
+                <div class="flex items-center">
+                    <div class="text-3xl text-purple-600 mr-4">📊</div>
+                    <div>
+                        <p class="text-sm text-gray-600">Категории</p>
+                        <p class="text-2xl font-bold text-gray-900">
+                            {{ (articles | map(attribute='category') | unique | list) | length }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Table -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Список статей</h2>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" 
+                               id="search-articles" 
+                               placeholder="Поиск статей..." 
+                               class="border border-gray-300 rounded px-3 py-2 text-sm">
+                        <select id="filter-category" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                            <option value="">Все категории</option>
+                            <option value="buying">Покупка</option>
+                            <option value="renting">Аренда</option>
+                            <option value="investment">Инвестиции</option>
+                            <option value="legal">Юридические</option>
+                            <option value="tips">Советы</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            {% if articles %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Статья
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Категория
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Статус
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Обновлена
+                            </th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Размер
+                            </th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Действия
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="articles-tbody">
+                        {% for article in articles %}
+                        <tr class="article-row hover:bg-gray-50" 
+                            data-title="{{ article.title | lower }}" 
+                            data-category="{{ article.category }}">
+                            <td class="px-6 py-4">
+                                <div class="flex items-start">
+                                    <div class="flex-1">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            <a href="/ru/articles/{{ article.slug }}" 
+                                               target="_blank" 
+                                               class="hover:text-blue-600">
+                                                {{ article.title }}
+                                            </a>
+                                        </div>
+                                        {% if article.excerpt %}
+                                        <div class="text-sm text-gray-500 mt-1">
+                                            {{ article.excerpt[:100] }}...
+                                        </div>
+                                        {% endif %}
+                                        <div class="text-xs text-gray-400 mt-1">
+                                            Slug: {{ article.slug }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                    {% if article.category == 'buying' %}bg-blue-100 text-blue-800
+                                    {% elif article.category == 'renting' %}bg-green-100 text-green-800
+                                    {% elif article.category == 'investment' %}bg-purple-100 text-purple-800
+                                    {% elif article.category == 'legal' %}bg-red-100 text-red-800
+                                    {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                    {% if article.category == 'buying' %}🏠 Покупка
+                                    {% elif article.category == 'renting' %}🔑 Аренда
+                                    {% elif article.category == 'investment' %}📈 Инвестиции
+                                    {% elif article.category == 'legal' %}⚖️ Юридические
+                                    {% else %}💡 Советы{% endif %}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if article.published %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    ✅ Опубликована
+                                </span>
+                                {% else %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    📝 Черновик
+                                </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {% if article.updated_at %}
+                                {{ article.updated_at[:10] }}
+                                {% else %}
+                                Неизвестно
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {{ "%.1f" | format(article.file_size / 1024) }} KB
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <div class="flex items-center justify-end space-x-2">
+                                    <a href="/ru/articles/{{ article.slug }}" 
+                                       target="_blank"
+                                       class="text-blue-600 hover:text-blue-900 p-1" 
+                                       title="Просмотр">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="/admin/articles/edit/{{ article.slug }}" 
+                                       class="text-green-600 hover:text-green-900 p-1" 
+                                       title="Редактировать">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button onclick="togglePublishStatus('{{ article.slug }}', {% if article.published %}true{% else %}false{% endif %})" 
+                                            class="{% if article.published %}text-yellow-600 hover:text-yellow-900{% else %}text-purple-600 hover:text-purple-900{% endif %} p-1" 
+                                            title="{% if article.published %}Снять с публикации{% else %}Опубликовать{% endif %}">
+                                        <i class="fas {% if article.published %}fa-eye-slash{% else %}fa-rocket{% endif %}"></i>
+                                    </button>
+                                    <button onclick="deleteArticle('{{ article.slug }}', '{{ article.title }}')" 
+                                            class="text-red-600 hover:text-red-900 p-1" 
+                                            title="Удалить">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <!-- Empty State -->
+            <div class="text-center py-12">
+                <div class="text-6xl mb-4">📚</div>
+                <h3 class="text-xl font-medium text-gray-900 mb-2">Статьи не найдены</h3>
+                <p class="text-gray-600 mb-6">Создайте первую статью для вашего блога</p>
+                <a href="/admin/articles/add" 
+                   class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Создать статью
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="mt-8 bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">🚀 Быстрые действия</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="/admin/articles/add" 
+                   class="flex items-center p-4 border-2 border-dashed border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-plus text-blue-600 text-xl mr-3"></i>
+                    <div>
+                        <div class="font-medium text-gray-900">Новая статья</div>
+                        <div class="text-sm text-gray-600">Создать статью с нуля</div>
+                    </div>
+                </a>
+                
+                <button onclick="bulkAction('publish')" 
+                        class="flex items-center p-4 border-2 border-dashed border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors">
+                    <i class="fas fa-check-circle text-green-600 text-xl mr-3"></i>
+                    <div class="text-left">
+                        <div class="font-medium text-gray-900">Опубликовать все</div>
+                        <div class="text-sm text-gray-600">Опубликовать черновики</div>
+                    </div>
+                </button>
+                
+                <button onclick="exportArticles()" 
+                        class="flex items-center p-4 border-2 border-dashed border-purple-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors">
+                    <i class="fas fa-download text-purple-600 text-xl mr-3"></i>
+                    <div class="text-left">
+                        <div class="font-medium text-gray-900">Экспорт</div>
+                        <div class="text-sm text-gray-600">Скачать все статьи</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Search functionality
+    document.getElementById('search-articles').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        filterArticles();
+    });
+
+    document.getElementById('filter-category').addEventListener('change', function() {
+        filterArticles();
+    });
+
+    function filterArticles() {
+        const query = document.getElementById('search-articles').value.toLowerCase();
+        const category = document.getElementById('filter-category').value;
+        const rows = document.querySelectorAll('.article-row');
+
+        rows.forEach(row => {
+            const title = row.dataset.title || '';
+            const rowCategory = row.dataset.category || '';
+            
+            const matchesSearch = title.includes(query);
+            const matchesCategory = !category || rowCategory === category;
+            
+            if (matchesSearch && matchesCategory) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Toggle publish status
+    function togglePublishStatus(slug, currentStatus) {
+        const action = currentStatus ? 'снять с публикации' : 'опубликовать';
+        if (!confirm(`Вы хотите ${action} статью?`)) {
+            return;
+        }
+
+        fetch(`/admin/articles/publish/${slug}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('Ошибка: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Произошла ошибка при изменении статуса публикации');
+        });
+    }
+
+    // Delete article
+    function deleteArticle(slug, title) {
+        if (!confirm(`Удалить статью "${title}"?\n\nЭто действие нельзя отменить.`)) {
+            return;
+        }
+
+        fetch(`/admin/articles/delete/${slug}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Статья удалена успешно');
+                location.reload();
+            } else {
+                alert('Ошибка удаления: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Произошла ошибка при удалении статьи');
+        });
+    }
+
+    // Bulk actions
+    function bulkAction(action) {
+        if (action === 'publish') {
+            if (confirm('Опубликовать все черновики?')) {
+                alert('Функция пакетной публикации будет добавлена в следующих версиях');
+            }
+        }
+    }
+
+    function exportArticles() {
+        alert('Функция экспорта будет добавлена в следующих версиях');
+    }
+    </script>
+</body>
+</html> 

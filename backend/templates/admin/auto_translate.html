@@ -1,0 +1,417 @@
+{% extends "admin.html" %}
+
+{% block title %}{{ _('Автоматические переводы') }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3>{{ _('Система автоматических переводов') }}</h3>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-info" onclick="checkTranslationService()">
+                        <i class="fas fa-check-circle"></i> {{ _('Проверить сервис') }}
+                    </button>
+                    <button class="btn btn-success" onclick="showBulkTranslateModal()">
+                        <i class="fas fa-globe"></i> {{ _('Массовый перевод') }}
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Статистика переводов -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body">
+                                <h4 id="stats-total">0</h4>
+                                <small>{{ _('Всего переводов') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body">
+                                <h4 id="stats-queue">0</h4>
+                                <small>{{ _('В очереди') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body">
+                                <h4 id="stats-completed">0</h4>
+                                <small>{{ _('Завершено сегодня') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body">
+                                <h4 id="stats-failed">0</h4>
+                                <small>{{ _('Ошибок сегодня') }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Быстрый перевод текста -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>{{ _('Быстрый перевод текста') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="quickTranslateForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>{{ _('Исходный текст') }}:</label>
+                                    <textarea id="sourceText" class="form-control" rows="4" 
+                                        placeholder="{{ _('Введите текст для перевода...') }}"></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label>{{ _('Переведенный текст') }}:</label>
+                                    <textarea id="translatedText" class="form-control" rows="4" readonly></textarea>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-4">
+                                    <select id="sourceLanguage" class="form-control">
+                                        <option value="ru">{{ _('Русский') }}</option>
+                                        <option value="en">{{ _('Английский') }}</option>
+                                        <option value="th">{{ _('Тайский') }}</option>
+                                        <option value="zh">{{ _('Китайский') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select id="targetLanguage" class="form-control">
+                                        <option value="en">{{ _('Английский') }}</option>
+                                        <option value="th">{{ _('Тайский') }}</option>
+                                        <option value="zh">{{ _('Китайский') }}</option>
+                                        <option value="ru">{{ _('Русский') }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-primary w-100" onclick="translateQuickText()">
+                                        <i class="fas fa-language"></i> {{ _('Перевести') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Перевод статей -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5>{{ _('Перевод статей') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{ _('ID статьи') }}:</label>
+                                    <input type="number" id="articleId" class="form-control" 
+                                        placeholder="{{ _('Введите ID статьи...') }}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{ _('Целевые языки') }}:</label>
+                                    <div class="d-flex gap-2">
+                                        <label class="form-check">
+                                            <input type="checkbox" class="form-check-input" value="en" checked>
+                                            <span class="form-check-label">{{ _('English') }}</span>
+                                        </label>
+                                        <label class="form-check">
+                                            <input type="checkbox" class="form-check-input" value="th" checked>
+                                            <span class="form-check-label">{{ _('ไทย') }}</span>
+                                        </label>
+                                        <label class="form-check">
+                                            <input type="checkbox" class="form-check-input" value="zh" checked>
+                                            <span class="form-check-label">{{ _('中文') }}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-check mb-3">
+                                    <input type="checkbox" id="autoPublish" class="form-check-input">
+                                    <label class="form-check-label" for="autoPublish">
+                                        {{ _('Автоматически опубликовать переводы') }}
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-success" onclick="translateArticle()">
+                                    <i class="fas fa-newspaper"></i> {{ _('Перевести статью') }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Настройки перевода -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>{{ _('Настройки автоматического перевода') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{ _('Сервис перевода') }}:</label>
+                                    <select id="translationService" class="form-control">
+                                        <option value="google">Google Translate</option>
+                                        <option value="yandex" disabled>Yandex Translate ({{ _('в разработке') }})</option>
+                                        <option value="deepl" disabled>DeepL ({{ _('в разработке') }})</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{ _('Автоперевод новых объектов') }}:</label>
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" id="autoTranslateNew" class="form-check-input" checked>
+                                        <label class="form-check-label" for="autoTranslateNew">
+                                            {{ _('Включить автоматический перевод') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            {{ _('Автоматический перевод использует машинное обучение. Для критически важного контента рекомендуется проверка переводов вручную.') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно массового перевода -->
+<div class="modal fade" id="bulkTranslateModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ _('Массовый перевод') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ _('Массовый перевод может занять продолжительное время. Процесс будет выполняться в фоновом режиме.') }}
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>{{ _('Типы контента') }}:</h6>
+                        <div class="form-check">
+                            <input type="checkbox" id="bulkArticles" class="form-check-input">
+                            <label class="form-check-label" for="bulkArticles">
+                                {{ _('Все статьи без переводов') }}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="bulkProperties" class="form-check-input">
+                            <label class="form-check-label" for="bulkProperties">
+                                {{ _('Объекты недвижимости без переводов') }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>{{ _('Языки для перевода') }}:</h6>
+                        <div class="form-check">
+                            <input type="checkbox" id="bulkEn" class="form-check-input" checked>
+                            <label class="form-check-label" for="bulkEn">{{ _('Английский') }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="bulkTh" class="form-check-input" checked>
+                            <label class="form-check-label" for="bulkTh">{{ _('Тайский') }}</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="bulkZh" class="form-check-input" checked>
+                            <label class="form-check-label" for="bulkZh">{{ _('Китайский') }}</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _('Отмена') }}</button>
+                <button type="button" class="btn btn-primary" onclick="startBulkTranslation()">
+                    <i class="fas fa-play"></i> {{ _('Запустить массовый перевод') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Загрузка статистики
+function loadTranslationStats() {
+    fetch('/api/translate/queue/status')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('stats-total').textContent = data.total_in_queue || 0;
+            document.getElementById('stats-queue').textContent = data.processing || 0;
+            document.getElementById('stats-completed').textContent = data.completed_today || 0;
+            document.getElementById('stats-failed').textContent = data.failed_today || 0;
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки статистики:', error);
+        });
+}
+
+// Быстрый перевод текста
+function translateQuickText() {
+    const sourceText = document.getElementById('sourceText').value;
+    const sourceLang = document.getElementById('sourceLanguage').value;
+    const targetLang = document.getElementById('targetLanguage').value;
+    
+    if (!sourceText.trim()) {
+        alert('{{ _("Введите текст для перевода") }}');
+        return;
+    }
+    
+    // Показываем индикатор загрузки
+    const translateBtn = event.target;
+    const originalText = translateBtn.innerHTML;
+    translateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ _("Переводим...") }}';
+    translateBtn.disabled = true;
+    
+    fetch('/api/translate/text', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            text: sourceText,
+            source_language: sourceLang,
+            target_language: targetLang
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('translatedText').value = data.translated_text;
+        } else {
+            alert('{{ _("Ошибка перевода") }}: ' + (data.error || '{{ _("Неизвестная ошибка") }}'));
+        }
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('{{ _("Ошибка соединения") }}');
+    })
+    .finally(() => {
+        translateBtn.innerHTML = originalText;
+        translateBtn.disabled = false;
+    });
+}
+
+// Перевод статьи
+function translateArticle() {
+    const articleId = document.getElementById('articleId').value;
+    const targetLanguages = [];
+    
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+        if (['en', 'th', 'zh'].includes(checkbox.value)) {
+            targetLanguages.push(checkbox.value);
+        }
+    });
+    
+    const autoPublish = document.getElementById('autoPublish').checked;
+    
+    if (!articleId) {
+        alert('{{ _("Введите ID статьи") }}');
+        return;
+    }
+    
+    if (targetLanguages.length === 0) {
+        alert('{{ _("Выберите хотя бы один язык для перевода") }}');
+        return;
+    }
+    
+    fetch(`/api/translate/article/${articleId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            article_id: parseInt(articleId),
+            target_languages: targetLanguages,
+            auto_publish: autoPublish
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('{{ _("Перевод статьи добавлен в очередь") }}. {{ _("Языки") }}: ' + data.target_languages.join(', '));
+        loadTranslationStats(); // Обновляем статистику
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+        alert('{{ _("Ошибка при добавлении перевода в очередь") }}');
+    });
+}
+
+// Проверка сервиса переводов
+function checkTranslationService() {
+    fetch('/api/translate/languages')
+        .then(response => response.json())
+        .then(data => {
+            const languages = data.languages.map(lang => `${lang.native} (${lang.code})`).join(', ');
+            alert('{{ _("Сервис переводов работает") }}!\n{{ _("Доступные языки") }}: ' + languages);
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('{{ _("Ошибка проверки сервиса переводов") }}');
+        });
+}
+
+// Показать модальное окно массового перевода
+function showBulkTranslateModal() {
+    const modal = new bootstrap.Modal(document.getElementById('bulkTranslateModal'));
+    modal.show();
+}
+
+// Запуск массового перевода
+function startBulkTranslation() {
+    alert('{{ _("Функция массового перевода будет доступна в следующей версии") }}');
+    // Здесь будет логика запуска массового перевода
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    loadTranslationStats();
+    
+    // Обновляем статистику каждые 30 секунд
+    setInterval(loadTranslationStats, 30000);
+});
+</script>
+
+<style>
+.card-body .row {
+    margin-bottom: 1rem;
+}
+
+.form-check {
+    margin-right: 1rem;
+}
+
+.bg-primary, .bg-warning, .bg-success, .bg-danger {
+    border-radius: 10px;
+}
+
+.card-body h4 {
+    font-size: 2rem;
+    margin-bottom: 0;
+}
+
+#translatedText {
+    background-color: #f8f9fa;
+}
+
+.modal-body .form-check {
+    margin-bottom: 0.5rem;
+}
+</style>
+{% endblock %} 

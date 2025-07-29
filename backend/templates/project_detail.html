@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} - Проекты - Sianoro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <div class="relative h-96 bg-gray-900">
+        {% if project.hero_image %}
+        <img src="{{ project.hero_image }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        {% endif %}
+        
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4">{{ project.title }}</h1>
+                {% if project.subtitle %}
+                <p class="text-xl md:text-2xl text-gray-200">{{ project.subtitle }}</p>
+                {% endif %}
+                
+                <!-- Location & Developer -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mt-6 text-lg">
+                    {% if project.district %}
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        {{ project.district }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.developer %}
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm0 2h12v11H4V4z" clip-rule="evenodd"></path>
+                        </svg>
+                        {{ project.developer }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column - Main Info -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Project Overview -->
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">О проекте</h2>
+                    {% if project.description %}
+                    <div class="prose max-w-none text-gray-700">
+                        {{ project.description|safe }}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Key Features -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                        {% if project.completion_year %}
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span><strong>Год завершения:</strong> {{ project.completion_year }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if project.total_units %}
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span><strong>{{ _("Количество единиц") }}:</strong> {{ project.total_units }}</span>
+                        </div>
+                        {% endif %}
+                        
+                        {% if project.floors %}
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span><strong>{{ _("Этажей") }}:</strong> {{ project.floors }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Highlights -->
+                {% if project.highlights %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Основные преимущества</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {% for highlight in project.highlights %}
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>{{ highlight }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Amenities -->
+                {% if project.amenities %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Удобства</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {% for amenity in project.amenities %}
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>{{ amenity }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Gallery -->
+                {% if project.gallery_images %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Галерея</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for image in project.gallery_images %}
+                        <div class="relative h-48 bg-gray-200 rounded-lg overflow-hidden cursor-pointer hover:opacity-75 transition-opacity"
+                             onclick="openLightbox('{{ image }}')">
+                            <img src="{{ image }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Related Properties -->
+                {% if related_properties %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Объекты в проекте</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for property in related_properties %}
+                        <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                            <h3 class="font-semibold text-lg">{{ property.title }}</h3>
+                            <p class="text-gray-600 text-sm mb-2">
+                                {% if property.bedrooms %}{{ property.bedrooms }} сп. •{% endif %}
+                                {% if property.area %} {{ property.area }}м²{% endif %}
+                            </p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-lg">{{ "{:,.0f}".format(property.price) }} THB</span>
+                                <a href="/{{ lang }}/properties/{{ property.id }}" class="text-blue-600 hover:text-blue-800">Смотреть</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Right Column - Sidebar -->
+            <div class="space-y-6">
+                
+                <!-- Price & Payment Info -->
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Стоимость и платежи</h3>
+                    
+                    <!-- Price Range -->
+                    <div class="mb-6">
+                        {% if project.price_from %}
+                        <div class="text-center">
+                            <span class="text-3xl font-bold text-gray-900">
+                                {{ "{:,.0f}".format(project.price_from) }}
+                                {% if project.price_to %}
+                                - {{ "{:,.0f}".format(project.price_to) }}
+                                {% else %}
+                                +
+                                {% endif %}
+                            </span>
+                            <span class="text-lg text-gray-600 ml-2">{{ project.currency or 'THB' }}</span>
+                        </div>
+                        {% else %}
+                        <div class="text-center text-gray-600">{{ _("Цена по запросу") }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Payment Plan -->
+                    {% if project.payment_plan %}
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">План платежей</h4>
+                        <p class="text-gray-700 text-sm">{{ project.payment_plan }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.down_payment %}
+                    <div class="mb-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">{{ _("Первоначальный взнос") }}</h4>
+                        <p class="text-gray-700">{{ project.down_payment }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.monthly_payment %}
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-900 mb-2">{{ _("Ежемесячный платеж") }}</h4>
+                        <p class="text-gray-700">{{ project.monthly_payment }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Contact Form -->
+                    <div class="space-y-3">
+                        <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors" 
+                                onclick="openContactModal()">
+                            {{ _("Получить консультацию") }}
+                        </button>
+                        <button class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors"
+                                onclick="openWhatsApp()">
+                            {{ _("Написать в WhatsApp") }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sales Office Contact -->
+                {% if project.sales_office_address or project.sales_office_phone %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">{{ _("Офис продаж") }}</h3>
+                    
+                    {% if project.sales_office_address %}
+                    <div class="flex items-start mb-3">
+                        <svg class="w-5 h-5 mr-3 text-gray-600 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <p class="text-gray-700">{{ project.sales_office_address }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.sales_office_phone %}
+                    <div class="flex items-center mb-3">
+                        <svg class="w-5 h-5 mr-3 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                        </svg>
+                        <a href="tel:{{ project.sales_office_phone }}" class="text-blue-600 hover:text-blue-800">
+                            {{ project.sales_office_phone }}
+                        </a>
+                    </div>
+                    {% endif %}
+                    
+                    {% if project.sales_office_email %}
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-3 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
+                        </svg>
+                        <a href="mailto:{{ project.sales_office_email }}" class="text-blue-600 hover:text-blue-800">
+                            {{ project.sales_office_email }}
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- ROI Info -->
+                {% if project.roi_info %}
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">{{ _("Инвестиционная привлекательность") }}</h3>
+                    <div class="prose prose-sm text-gray-700">
+                        {{ project.roi_info|safe }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Related Projects -->
+        {% if related_projects %}
+        <div class="mt-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">{{ _("Другие проекты в районе") }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for related_project in related_projects %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="h-48 bg-gray-200">
+                        {% if related_project.hero_image %}
+                        <img src="{{ related_project.hero_image }}" alt="{{ related_project.title }}" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">{{ related_project.title }}</h3>
+                        <p class="text-gray-600 text-sm mb-3">{{ related_project.district }}</p>
+                        <a href="/{{ lang }}/projects/{{ related_project.slug }}" 
+                           class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded hover:bg-blue-700 transition-colors">
+                            {{ _("Подробнее") }}
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Lightbox for Gallery -->
+<div id="lightbox" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center" onclick="closeLightbox()">
+    <div class="relative max-w-4xl max-h-full p-4">
+        <img id="lightbox-image" src="" alt="" class="max-w-full max-h-full object-contain">
+        <button onclick="closeLightbox()" class="absolute top-4 right-4 text-white text-2xl hover:text-gray-300">&times;</button>
+    </div>
+</div>
+
+<script>
+function openLightbox(imageSrc) {
+    document.getElementById('lightbox-image').src = imageSrc;
+    document.getElementById('lightbox').classList.remove('hidden');
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.add('hidden');
+}
+
+function openContactModal() {
+    alert('{{ _("Функция в разработке") }}');
+}
+
+function openWhatsApp() {
+    window.open('https://wa.me/66123456789?text={{ _("Здравствуйте! Интересует проект") }} {{ project.title }}', '_blank');
+}
+</script>
+{% endblock %} 

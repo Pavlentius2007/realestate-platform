@@ -1,0 +1,512 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("Отчеты") }} - Админ панель{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="list-group">
+                <a href="/admin" class="list-group-item list-group-item-action">
+                    <i class="fas fa-home"></i> {{ _("Главная") }}
+                </a>
+                <a href="/admin/users" class="list-group-item list-group-item-action">
+                    <i class="fas fa-users"></i> {{ _("Пользователи") }}
+                </a>
+                <a href="/admin/properties" class="list-group-item list-group-item-action">
+                    <i class="fas fa-building"></i> {{ _("Недвижимость") }}
+                </a>
+                <a href="/admin/projects" class="list-group-item list-group-item-action">
+                    <i class="fas fa-project-diagram"></i> {{ _("Проекты") }}
+                </a>
+                <a href="/admin/articles" class="list-group-item list-group-item-action">
+                    <i class="fas fa-newspaper"></i> {{ _("Статьи") }}
+                </a>
+                <a href="/admin/backup" class="list-group-item list-group-item-action">
+                    <i class="fas fa-database"></i> {{ _("Резервные копии") }}
+                </a>
+                <a href="/admin/seo" class="list-group-item list-group-item-action">
+                    <i class="fas fa-search"></i> {{ _("SEO настройки") }}
+                </a>
+                <a href="/admin/content" class="list-group-item list-group-item-action">
+                    <i class="fas fa-file-alt"></i> {{ _("Контент") }}
+                </a>
+                <a href="/admin/logs" class="list-group-item list-group-item-action">
+                    <i class="fas fa-list-alt"></i> {{ _("Логи системы") }}
+                </a>
+                <a href="/admin/analytics" class="list-group-item list-group-item-action">
+                    <i class="fas fa-chart-bar"></i> {{ _("Аналитика") }}
+                </a>
+                <a href="/admin/reports" class="list-group-item list-group-item-action active">
+                    <i class="fas fa-file-alt"></i> {{ _("Отчеты") }}
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-10">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">
+                    <i class="fas fa-chart-line text-primary"></i>
+                    {{ _("Отчеты и статистика") }}
+                </h2>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-chart-bar"></i> {{ _("Создать отчет") }}
+                    </button>
+                    <button class="btn btn-outline-success" onclick="exportReport()">
+                        <i class="fas fa-download"></i> {{ _("Экспорт") }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Быстрые отчеты -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card text-white bg-primary">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">{{ _("Пользователи") }}</h5>
+                                    <h3 class="mb-0">{{ reports.get('users_count', 0) }}</h3>
+                                    <small>{{ _("За все время") }}</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="text-white" onclick="generateUserReport()">
+                                {{ _("Подробный отчет") }} <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card text-white bg-success">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">{{ _("Недвижимость") }}</h5>
+                                    <h3 class="mb-0">{{ reports.get('properties_count', 0) }}</h3>
+                                    <small>{{ _("Активных объектов") }}</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-building fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="text-white" onclick="generatePropertyReport()">
+                                {{ _("Подробный отчет") }} <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card text-white bg-info">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">{{ _("Проекты") }}</h5>
+                                    <h3 class="mb-0">{{ reports.get('projects_count', 0) }}</h3>
+                                    <small>{{ _("Новостройки") }}</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-project-diagram fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="text-white" onclick="generateProjectReport()">
+                                {{ _("Подробный отчет") }} <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card text-white bg-warning">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">{{ _("Заявки") }}</h5>
+                                    <h3 class="mb-0">{{ reports.get('rental_requests_count', 0) }}</h3>
+                                    <small>{{ _("За месяц") }}</small>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-envelope fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="text-white" onclick="generateRentalReport()">
+                                {{ _("Подробный отчет") }} <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Настройки отчета -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ _("Параметры отчета") }}</h5>
+                </div>
+                <div class="card-body">
+                    <form id="reportForm" class="row g-3">
+                        <div class="col-md-3">
+                            <label for="reportType" class="form-label">{{ _("Тип отчета") }}</label>
+                            <select class="form-select" id="reportType" required>
+                                <option value="">{{ _("Выберите тип") }}</option>
+                                <option value="users">{{ _("Отчет по пользователям") }}</option>
+                                <option value="properties">{{ _("Отчет по недвижимости") }}</option>
+                                <option value="projects">{{ _("Отчет по проектам") }}</option>
+                                <option value="rental_requests">{{ _("Отчет по заявкам") }}</option>
+                                <option value="analytics">{{ _("Аналитический отчет") }}</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dateFrom" class="form-label">{{ _("Дата начала") }}</label>
+                            <input type="date" class="form-control" id="dateFrom">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="dateTo" class="form-label">{{ _("Дата окончания") }}</label>
+                            <input type="date" class="form-control" id="dateTo">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="format" class="form-label">{{ _("Формат") }}</label>
+                            <select class="form-select" id="format">
+                                <option value="html">HTML</option>
+                                <option value="csv">CSV</option>
+                                <option value="excel">Excel</option>
+                                <option value="pdf">PDF</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-chart-bar"></i> {{ _("Создать отчет") }}
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fas fa-undo"></i> {{ _("Сбросить") }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Результаты отчета -->
+            <div class="card" id="reportResults" style="display: none;">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ _("Результаты отчета") }}</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-sm btn-outline-primary" onclick="printReport()">
+                                <i class="fas fa-print"></i> {{ _("Печать") }}
+                            </button>
+                            <button class="btn btn-sm btn-outline-success" onclick="exportCurrentReport()">
+                                <i class="fas fa-download"></i> {{ _("Скачать") }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="reportContent">
+                        <!-- Содержимое отчета будет загружено здесь -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сохраненные отчеты -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">{{ _("Сохраненные отчеты") }}</h5>
+                </div>
+                <div class="card-body">
+                    {% if reports.get('saved_reports') %}
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>{{ _("Название") }}</th>
+                                        <th>{{ _("Тип") }}</th>
+                                        <th>{{ _("Дата создания") }}</th>
+                                        <th>{{ _("Размер") }}</th>
+                                        <th>{{ _("Действия") }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for report in reports.saved_reports %}
+                                    <tr>
+                                        <td>{{ report.name }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">{{ report.type }}</span>
+                                        </td>
+                                        <td>{{ report.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                                        <td>{{ report.size }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <button class="btn btn-outline-primary" onclick="viewReport('{{ report.id }}')">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn btn-outline-success" onclick="downloadReport('{{ report.id }}')">
+                                                    <i class="fas fa-download"></i>
+                                                </button>
+                                                <button class="btn btn-outline-danger" onclick="deleteReport('{{ report.id }}')">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">{{ _("Нет сохраненных отчетов") }}</h5>
+                            <p class="text-muted">{{ _("Создайте свой первый отчет") }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для просмотра отчета -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportModalLabel">{{ _("Просмотр отчета") }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modalReportContent">
+                    <!-- Содержимое отчета будет загружено здесь -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _("Закрыть") }}</button>
+                <button type="button" class="btn btn-primary" onclick="printModalReport()">
+                    <i class="fas fa-print"></i> {{ _("Печать") }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Генерация отчета
+document.getElementById('reportForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    generateCustomReport();
+});
+
+function generateReport() {
+    generateCustomReport();
+}
+
+function generateCustomReport() {
+    const reportType = document.getElementById('reportType').value;
+    const dateFrom = document.getElementById('dateFrom').value;
+    const dateTo = document.getElementById('dateTo').value;
+    const format = document.getElementById('format').value;
+    
+    if (!reportType) {
+        alert('{{ _("Пожалуйста, выберите тип отчета") }}');
+        return;
+    }
+    
+    // Показать индикатор загрузки
+    const reportResults = document.getElementById('reportResults');
+    const reportContent = document.getElementById('reportContent');
+    
+    reportContent.innerHTML = `
+        <div class="text-center py-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ _("Загрузка...") }}</span>
+            </div>
+            <p class="mt-2">{{ _("Генерация отчета...") }}</p>
+        </div>
+    `;
+    
+    reportResults.style.display = 'block';
+    
+    // Отправить запрос на генерацию отчета
+    const params = new URLSearchParams({
+        type: reportType,
+        date_from: dateFrom,
+        date_to: dateTo,
+        format: format
+    });
+    
+    fetch(`/admin/reports/generate?${params}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                reportContent.innerHTML = data.content;
+            } else {
+                reportContent.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        {{ _("Ошибка при генерации отчета") }}: ${data.error}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            reportContent.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ _("Ошибка сети") }}: ${error.message}
+                </div>
+            `;
+        });
+}
+
+// Быстрые отчеты
+function generateUserReport() {
+    document.getElementById('reportType').value = 'users';
+    generateCustomReport();
+}
+
+function generatePropertyReport() {
+    document.getElementById('reportType').value = 'properties';
+    generateCustomReport();
+}
+
+function generateProjectReport() {
+    document.getElementById('reportType').value = 'projects';
+    generateCustomReport();
+}
+
+function generateRentalReport() {
+    document.getElementById('reportType').value = 'rental_requests';
+    generateCustomReport();
+}
+
+// Экспорт
+function exportReport() {
+    const reportType = document.getElementById('reportType').value;
+    if (!reportType) {
+        alert('{{ _("Сначала создайте отчет") }}');
+        return;
+    }
+    exportCurrentReport();
+}
+
+function exportCurrentReport() {
+    window.print();
+}
+
+// Управление сохраненными отчетами
+function viewReport(reportId) {
+    fetch(`/admin/reports/${reportId}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('modalReportContent').innerHTML = data.content;
+            new bootstrap.Modal(document.getElementById('reportModal')).show();
+        })
+        .catch(error => {
+            alert('{{ _("Ошибка при загрузке отчета") }}');
+        });
+}
+
+function downloadReport(reportId) {
+    window.open(`/admin/reports/${reportId}/download`, '_blank');
+}
+
+function deleteReport(reportId) {
+    if (confirm('{{ _("Вы уверены, что хотите удалить этот отчет?") }}')) {
+        fetch(`/admin/reports/${reportId}`, {
+            method: 'DELETE'
+        }).then(() => {
+            location.reload();
+        });
+    }
+}
+
+// Утилиты
+function resetForm() {
+    document.getElementById('reportForm').reset();
+    document.getElementById('reportResults').style.display = 'none';
+}
+
+function printReport() {
+    const content = document.getElementById('reportContent').innerHTML;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>{{ _("Отчет") }}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                ${content}
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+}
+
+function printModalReport() {
+    const content = document.getElementById('modalReportContent').innerHTML;
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>{{ _("Отчет") }}</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                    th { background-color: #f2f2f2; }
+                </style>
+            </head>
+            <body>
+                ${content}
+            </body>
+        </html>
+    `);
+    printWindow.document.close();
+    printWindow.print();
+}
+
+// Установка текущей даты по умолчанию
+document.addEventListener('DOMContentLoaded', function() {
+    const today = new Date().toISOString().split('T')[0];
+    const monthAgo = new Date();
+    monthAgo.setMonth(monthAgo.getMonth() - 1);
+    const monthAgoStr = monthAgo.toISOString().split('T')[0];
+    
+    document.getElementById('dateFrom').value = monthAgoStr;
+    document.getElementById('dateTo').value = today;
+});
+</script>
+
+{% if error %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('reportContent').innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                {{ _("Ошибка") }}: {{ error }}
+            </div>
+        `;
+        document.getElementById('reportResults').style.display = 'block';
+    });
+</script>
+{% endif %}
+
+{% endblock %} 

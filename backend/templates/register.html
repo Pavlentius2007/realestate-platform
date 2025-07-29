@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+  <!-- Регистрация -->
+  <section id="form-section" class="bg-gray-100 p-6 rounded shadow mt-6">
+    <h2 class="text-xl font-bold mb-4">Регистрация</h2>
+    <form class="space-y-4" onsubmit="handleSubmit(event)">
+      <input class="w-full border p-2 rounded" type="text" name="full_name" placeholder="Ваше имя" required />
+      <input class="w-full border p-2 rounded" type="email" name="email" placeholder="Email" required />
+      <input class="w-full border p-2 rounded" type="text" name="phone" placeholder="Телефон" required />
+      <input type="hidden" name="source" value="landing" />
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" type="submit">Отправить</button>
+    </form>
+  </section>
+{% endblock %}
+
+{% block scripts %}
+<script defer>
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch("http://127.0.0.1:8000/users/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      document.getElementById("form-section").innerHTML = `
+        <div class="text-green-600 font-semibold text-xl mt-6">Вы успешно зарегистрированы!</div>
+      `;
+    } else {
+      alert("Ошибка при отправке формы. Пожалуйста, попробуйте позже.");
+    }
+  }
+
+  async function handleCallbackSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch("http://127.0.0.1:8000/callback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      event.target.innerHTML = `<div class="text-green-600 font-semibold">Спасибо! Мы свяжемся с вами в ближайшее время.</div>`;
+    } else {
+      alert("Ошибка при отправке заявки.");
+    }
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.786" timestamp="2025-07-12T21:56:44.263499+07:00" hostname="MSI"><testcase classname="" name="performance.test_performance" time="0.000"><error message="collection failure">test_suite\performance\test_performance.py:15: in &lt;module&gt;
+    class TestPerformance:
+test_suite\performance\test_performance.py:46: in TestPerformance
+    def test_property_detail_load_time(self, client: TestClient, test_db: Session, test_property_data):
+                                                                          ^^^^^^^
+E   NameError: name 'Session' is not defined</error></testcase></testsuite></testsuites>

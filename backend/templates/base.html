@@ -1,0 +1,889 @@
+<!-- projects.html template loaded -->
+<!-- base.html template loaded -->
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ _(page_title) if page_title else (config.seo.site_title if config else 'Sianoro') }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Мета-теги для SEO -->
+  <meta name="description" content="{{ _(page_description) if page_description else (config.seo.site_description if config else 'Недвижимость в Таиланде') }}">
+  <meta name="keywords" content="{% block meta_keywords %}{{ config.seo.site_keywords if config else 'недвижимость, таиланд, паттайя' }}{% endblock %}">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ _(page_title) if page_title else (config.seo.site_title if config else 'Sianoro') }}">
+  <meta property="og:description" content="{{ _(page_description) if page_description else (config.seo.site_description if config else 'Недвижимость в Таиланде') }}">
+  <meta property="og:image" content="{{ config.seo.og_image if config else '/static/img/og-image.jpg' }}">
+  <meta property="og:type" content="{{ config.seo.og_type if config else 'website' }}">
+  <meta property="og:url" content="{{ request.url }}">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="{{ config.brand.favicon_url if config else '/static/img/favicon.ico' }}">
+  
+  <!-- Мета-теги для языков -->
+  {% for code, info in supported_languages.items() %}
+  <link rel="alternate" hreflang="{{ code }}" href="{{ request.url.scheme }}://{{ request.url.netloc }}/{{ code }}{{ request.url.path.replace('/' + lang + '/', '/') }}">
+  {% endfor %}
+  
+  <!-- Современные шрифты Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <!-- Tailwind -->
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <!-- Zillow-style CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/zillow-style.css') }}">
+  
+  <!-- Mobile improvements CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/mobile-improvements.css') }}">
+  
+  <!-- Final touches CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/final-touches.css') }}">
+  
+  <!-- Footer improvements CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/footer-improvements.css') }}">
+  
+  <!-- Кастомные CSS переменные и стили -->
+  <style>
+    :root {
+      {{ config.theme_css | safe if config else '' }}{{ config.custom_css | safe if config else '' }}
+    }
+    /* Карта */
+    #map, #map-inline { height: 100%; min-height: 100%; }
+    /* Выпадающее меню */
+    .dropdown-menu {
+      transform: translateY(-10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .dropdown-menu.show {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+    /* Floating Social Menu */
+    .floating-social-menu {
+      position: fixed;
+      right: 32px;
+      bottom: 120px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .floating-social-menu {
+        right: 16px;
+        bottom: 24px;
+      }
+    }
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .social-btn {
+      width: 56px;
+      height: 56px;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .telegram-btn {
+      background: linear-gradient(135deg, #0088cc 0%, #229ED9 100%);
+      color: white;
+    }
+    .telegram-btn:hover {
+      background: linear-gradient(135deg, #229ED9 0%, #0088cc 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,136,204,0.3);
+    }
+    .whatsapp-btn {
+      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+      color: white;
+    }
+    .whatsapp-btn:hover {
+      background: linear-gradient(135deg, #128C7E 0%, #25D366 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37,211,102,0.3);
+    }
+  </style>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="{{ url_for('static', path='css/navbar.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='css/font-awesome.min.css') }}">
+  {% block extra_css %}{% endblock %}
+
+  {% block head %}{% endblock %}
+
+  <!-- Скрипт для AJAX-переключения языка -->
+  <script>
+    // Глобальный кэш переводов
+    const translationsCache = new Map();
+    
+    // Загрузка переводов для языка
+    async function loadTranslations(lang) {
+      if (translationsCache.has(lang)) {
+        return translationsCache.get(lang);
+      }
+      
+      try {
+        // Используем абсолютный URL для статических файлов
+        const response = await fetch(`${window.location.origin}/static/locales/${lang}.json`);
+        const translations = await response.json();
+        translationsCache.set(lang, translations);
+        return translations;
+      } catch (error) {
+        console.error(`Error loading translations for ${lang}:`, error);
+        return null;
+      }
+    }
+    
+    // Обновление контента страницы
+    async function updatePageContent(newLang) {
+      try {
+        // Получаем текущий путь
+        const currentPath = window.location.pathname;
+        const pathParts = currentPath.split('/');
+        
+        // Заменяем или добавляем код языка
+        if (pathParts[1] && ['ru', 'en', 'th', 'zh'].includes(pathParts[1])) {
+          pathParts[1] = newLang;
+        } else {
+          pathParts.splice(1, 0, newLang);
+        }
+        
+        // Формируем новый URL
+        const newPath = pathParts.join('/');
+        const search = window.location.search;
+        const newUrl = newPath + search;
+        
+        // Отправляем AJAX запрос на смену языка
+        const response = await fetch(`/lang/${newLang}`, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Загружаем новый контент
+        const pageResponse = await fetch(newUrl);
+        if (!pageResponse.ok) {
+          throw new Error(`HTTP error! status: ${pageResponse.status}`);
+        }
+        
+        const html = await pageResponse.text();
+        
+        // Обновляем основной контент и navbar
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        
+        // Обновляем navbar
+        const newNavbar = doc.querySelector('nav');
+        const currentNavbar = document.querySelector('nav');
+        if (newNavbar && currentNavbar) {
+          currentNavbar.innerHTML = newNavbar.innerHTML;
+        }
+        
+        // Обновляем основной контент
+        const newContent = doc.querySelector('main').innerHTML;
+        document.querySelector('main').innerHTML = newContent;
+        
+        // Обновляем URL без перезагрузки
+        window.history.pushState({}, '', newUrl);
+        
+        // Обновляем язык в HTML
+        document.documentElement.lang = newLang;
+        
+        // Переинициализируем обработчики событий для обновленного navbar
+        initializeNavbarHandlers();
+        
+        // Загружаем переводы для нового языка
+        await loadTranslations(newLang);
+        
+      } catch (error) {
+        console.error('Error updating content:', error);
+        // При ошибке делаем полную перезагрузку
+        window.location.href = `/lang/${newLang}`;
+      }
+    }
+    
+    // Инициализация обработчиков navbar
+    function initializeNavbarHandlers() {
+      // Обработка переключателя языка (десктоп)
+      const langSwitcher = document.getElementById('language-switcher');
+      if (langSwitcher) {
+        langSwitcher.addEventListener('change', function(e) {
+          const newLang = e.target.value;
+          updatePageContent(newLang);
+          window.location.reload();
+        });
+      }
+      
+      // Обработка переключателя языка (мобильный)
+      const langMobile = document.getElementById('mobile-language-switcher');
+      if (langMobile) {
+        langMobile.addEventListener('change', function(e) {
+          const newLang = e.target.value;
+          if (langSwitcher) {
+            langSwitcher.value = newLang;
+          }
+          updatePageContent(newLang);
+        });
+      }
+      
+      // Мобильное меню
+      const burger = document.getElementById('navbar-burger');
+      const menu = document.getElementById('mobile-menu');
+      if (burger && menu) {
+        burger.addEventListener('click', function() {
+          menu.classList.toggle('hidden');
+        });
+      }
+      
+      // Синхронизация языкового select
+      if (langSwitcher && langMobile) {
+        langSwitcher.addEventListener('change', e => {
+          langMobile.value = e.target.value;
+        });
+      }
+    }
+    
+    // Обработчик смены языка
+    document.addEventListener('DOMContentLoaded', function() {
+      // Инициализируем обработчики navbar
+      initializeNavbarHandlers();
+      
+      // Обработка языковых ссылок
+      document.querySelectorAll('[data-lang]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const newLang = this.dataset.lang;
+          updatePageContent(newLang);
+        });
+      });
+      
+      // Загружаем переводы для текущего языка
+      const currentLang = document.documentElement.lang;
+      loadTranslations(currentLang);
+      
+      // Предзагружаем переводы для других языков
+      ['en', 'ru', 'th', 'zh'].forEach(lang => {
+        if (lang !== currentLang) {
+          loadTranslations(lang);
+        }
+      });
+    });
+  </script>
+
+  <!-- Аналитика -->
+  {{ analytics_scripts | safe }}
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-modern flex flex-col min-h-screen">
+  {% include 'components/navbar.html' %}
+
+  <!-- Вертикальная панель социальных сетей (справа) -->
+  
+  <!-- Мобильная версия социальных сетей -->
+  
+  <!-- Модальное окно Telegram -->
+  <div id="modal-telegram" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full relative">
+      <button onclick="closeModal('telegram')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+      <h2 class="text-xl font-bold mb-2 text-blue-700">{{ _("social.subscribe_telegram") }}</h2>
+      <p class="mb-4 text-gray-600">{{ _("social.know_offers") }}</p>
+      <form id="form-telegram" class="space-y-4">
+        <input type="text" name="full_name" placeholder="{{ _('social.your_name') }}" class="w-full border p-2 rounded" required />
+        <input type="text" name="telegram_id" placeholder="{{ _('social.your_telegram') }}" class="w-full border p-2 rounded" required />
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">{{ _("social.subscribe") }}</button>
+      </form>
+      <div id="success-telegram" class="hidden text-green-600 font-semibold text-center mt-4"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно WhatsApp -->
+  <div id="modal-whatsapp" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full relative">
+      <button onclick="closeModal('whatsapp')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+      <h2 class="text-xl font-bold mb-2 text-green-700">{{ _("social.subscribe_whatsapp") }}</h2>
+      <p class="mb-4 text-gray-600">{{ _("social.know_offers") }}</p>
+      <form id="form-whatsapp" class="space-y-4">
+        <input type="text" name="full_name" placeholder="{{ _('social.your_name') }}" class="w-full border p-2 rounded" required />
+        <input type="text" name="whatsapp_number" placeholder="{{ _('social.your_whatsapp') }}" class="w-full border p-2 rounded" required />
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">{{ _("social.subscribe") }}</button>
+      </form>
+      <div id="success-whatsapp" class="hidden text-green-600 font-semibold text-center mt-4"></div>
+    </div>
+  </div>
+
+  <!-- Модальное окно Instagram -->
+  <div id="modal-instagram" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full relative">
+      <button onclick="closeModal('instagram')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl">&times;</button>
+      <h2 class="text-xl font-bold mb-2 text-pink-600">{{ _("social.subscribe_instagram") }}</h2>
+      <p class="mb-4 text-gray-600">{{ _("social.know_offers") }}</p>
+      <form id="form-instagram" class="space-y-4">
+        <input type="text" name="full_name" placeholder="{{ _('social.your_name') }}" class="w-full border p-2 rounded" required />
+        <input type="text" name="instagram_handle" placeholder="@instagram" class="w-full border p-2 rounded" required />
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded">{{ _("social.subscribe") }}</button>
+      </form>
+      <div id="success-instagram" class="hidden text-green-600 font-semibold text-center mt-4"></div>
+    </div>
+  </div>
+
+  <!-- 📦 Контент -->
+  <main class="p-0 flex-1">
+    {% block content %}{% endblock %}
+    
+  </main>
+
+  <!-- Компактный футер в стиле Zillow -->
+  {% include 'components/footer.html' %}
+  
+  <!-- Калькулятор ипотеки -->
+  {% include 'components/mortgage_calculator.html' %}
+  
+  <!-- Оценка недвижимости -->
+  {% include 'components/property_valuation.html' %}
+
+  <!-- ИИ-подбор модальное окно -->
+  <div id="modal-ai-search" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold font-heading text-gray-900">🤖 {{ _("ai.modal_title") }}</h2>
+        <button onclick="closeAiSearchModal()" class="text-gray-400 hover:text-gray-700 text-3xl font-light">&times;</button>
+      </div>
+      
+      <div class="mb-6">
+        <p class="text-lg text-gray-600">{{ _("ai.modal_subtitle") }}</p>
+      </div>
+      
+      <form onsubmit="handleAiSearch(event)" class="space-y-6">
+        <!-- Тип поиска -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 transition-colors">
+            <input type="radio" name="search_type" value="buy" class="mr-3" checked>
+            <div>
+              <div class="font-semibold text-gray-900">🏠 {{ _("ai.buy") }}</div>
+              <div class="text-sm text-gray-500">{{ _("ai.buy_desc") }}</div>
+            </div>
+          </label>
+          
+          <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 transition-colors">
+            <input type="radio" name="search_type" value="rent" class="mr-3">
+            <div>
+              <div class="font-semibold text-gray-900">🏖️ {{ _("ai.rent") }}</div>
+              <div class="text-sm text-gray-500">{{ _("ai.rent_desc") }}</div>
+            </div>
+          </label>
+          
+          <label class="flex items-center p-4 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-blue-300 transition-colors">
+            <input type="radio" name="search_type" value="new_builds" class="mr-3">
+            <div>
+              <div class="font-semibold text-gray-900">🏗️ {{ _("ai.new_builds") }}</div>
+              <div class="text-sm text-gray-500">{{ _("ai.new_builds_desc") }}</div>
+            </div>
+          </label>
+        </div>
+        
+        <!-- Основные параметры -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2">{{ _("ai.budget") }}</label>
+            <div class="flex gap-2">
+              <input type="number" name="budget_from" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="{{ _('common.from') }}" min="0">
+              <input type="number" name="budget_to" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="{{ _('common.to') }}" min="0">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">{{ _("ai.area") }}</label>
+            <div class="flex gap-2">
+              <input type="number" name="area_from" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="{{ _('common.from') }}" min="0">
+              <input type="number" name="area_to" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="{{ _('common.to') }}" min="0">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">{{ _("ai.district") }}</label>
+            <select name="district" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="">{{ _("ai.any_district") }}</option>
+              <option>{{ _("districts.wongamat") }}</option>
+              <option>{{ _("districts.central") }}</option>
+              <option>{{ _("districts.east") }}</option>
+              <option>{{ _("districts.naklua") }}</option>
+              <option>{{ _("districts.pratumnak") }}</option>
+              <option>{{ _("districts.jomtien") }}</option>
+              <option>{{ _("districts.na_jomtien") }}</option>
+              <option>{{ _("districts.south") }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">{{ _("forms.property_type") }}</label>
+            <select name="property_type" class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="">{{ _("common.any_type") }}</option>
+              <option>{{ _("common.condo") }}</option>
+              <option>{{ _("common.apartments") }}</option>
+              <option>{{ _("common.villa") }}</option>
+              <option>{{ _("common.townhouse") }}</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Описание пожеланий -->
+        <div>
+          <label class="block text-sm font-medium mb-2">{{ _("ai.describe_preferences") }}</label>
+          <textarea name="description" rows="4" 
+                    placeholder="{{ _('ai.preferences_placeholder') }}"
+                    class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+        </div>
+        
+        <!-- Кнопки -->
+        <div class="flex gap-4 pt-4">
+          <button type="button" onclick="closeAiSearchModal()" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-3 px-6 rounded-xl transition-colors">
+            {{ _("ai.cancel") }}
+          </button>
+          <button type="submit" class="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+            🔍 {{ _("ai.find_property") }}
+          </button>
+        </div>
+      </form>
+      
+      <!-- Результаты поиска -->
+      <div id="ai-search-results" class="mt-8 hidden">
+        <h3 class="text-xl font-semibold mb-4">{{ _('ai.search_results') }}</h3>
+        <div id="ai-results-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Social Menu -->
+  <div class="floating-social-menu">
+    <div class="social-buttons">
+      <button onclick="openTelegramModal()" title="Telegram" class="social-btn telegram-btn flex items-center justify-center">
+        <!-- Telegram SVG Icon -->
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#229ED9"/>
+          <path d="M36.5 13.5L31.5 35.5C31.5 35.5 30.8 37 29 36.5L22.5 31.5L19.5 34.5C19.5 34.5 19.2 34.8 18.5 34.5C17.8 34.2 17.9 33.5 17.9 33.5L18.5 29.5L32.5 16.5C32.5 16.5 33.5 15.5 32.5 15.5C31.5 15.5 16.5 25.5 16.5 25.5L12.5 24C12.5 24 11.5 23.7 12.5 23.2L35.5 13.5C35.5 13.5 36.5 13 36.5 13.5Z" fill="white"/>
+        </svg>
+      </button>
+      <button onclick="openWhatsappModal()" title="WhatsApp" class="social-btn whatsapp-btn flex items-center justify-center">
+        <!-- WhatsApp SVG Icon -->
+        <svg width="28" height="28" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="24" fill="#25D366"/>
+          <path d="M34.6 29.2c-.5-.2-2.9-1.4-3.3-1.6-.4-.2-.7-.2-1 .2-.3.4-1.1 1.6-1.4 1.9-.3.3-.5.4-1 .1-.5-.2-2-0.7-3.8-2.2-1.4-1.2-2.3-2.7-2.6-3.2-.3-.5 0-.7.2-.9.2-.2.5-.6.7-.9.2-.3.2-.5.3-.8.1-.3 0-.6-.1-.8-.1-.2-1-2.4-1.4-3.3-.4-.9-.7-.8-1-.8-.3 0-.6 0-.9 0-.3 0-.8.1-1.2.5-.4.4-1.6 1.6-1.6 3.8 0 2.2 1.6 4.3 1.8 4.6.2.3 3.2 5.1 7.8 6.7 1.1.4 2 .7 2.7.9 1.1.3 2.1.3 2.9.2.9-.1 2.9-1.2 3.3-2.4.4-1.2.4-2.2.3-2.4-.1-.2-.4-.3-.9-.5z" fill="white"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- JS для модалок и навигации -->
+  <script>
+    // Выпадающее меню навигации
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainMenuButton = document.getElementById('mainMenuButton');
+      const mainMenu = document.getElementById('mainMenu');
+      const menuArrow = document.getElementById('menuArrow');
+      
+      // Мобильное меню
+      const mobileMenuButton = document.getElementById('mobileMenuButton');
+      if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function() {
+          // Создаем или показываем мобильное меню
+          let mobileMenu = document.getElementById('mobile-menu');
+          if (!mobileMenu) {
+            mobileMenu = createMobileMenu();
+          }
+          
+          // Переключаем видимость
+          if (mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          } else {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+          }
+        });
+      }
+      
+      if (mainMenuButton && mainMenu) {
+        mainMenuButton.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isVisible = mainMenu.classList.contains('show');
+          
+          if (isVisible) {
+            mainMenu.classList.remove('show');
+            menuArrow.style.transform = 'rotate(0deg)';
+          } else {
+            // Скрыть все другие открытые меню
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+              menu.classList.remove('show');
+            });
+            mainMenu.classList.add('show');
+            menuArrow.style.transform = 'rotate(180deg)';
+          }
+        });
+        
+        // Закрытие при клике вне меню
+        document.addEventListener('click', function(e) {
+          if (!mainMenuButton.contains(e.target) && !mainMenu.contains(e.target)) {
+            mainMenu.classList.remove('show');
+            menuArrow.style.transform = 'rotate(0deg)';
+          }
+        });
+      }
+    });
+    
+    // Создание мобильного меню
+    function createMobileMenu() {
+      const mobileMenu = document.createElement('div');
+      mobileMenu.id = 'mobile-menu';
+      mobileMenu.className = 'fixed inset-0 z-50 lg:hidden bg-black bg-opacity-50';
+      
+      mobileMenu.innerHTML = `
+        <div class="fixed top-0 right-0 h-full w-80 bg-white shadow-xl transform transition-transform">
+          <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+              <h2 class="text-xl font-bold text-gray-900">{{ _('navigation.menu') }}</h2>
+              <button onclick="closeMobileMenu()" class="text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+            
+            <nav class="space-y-4">
+              <div class="space-y-3">
+                <h3 class="font-semibold text-gray-900 text-sm uppercase tracking-wider">{{ _("navigation.real_estate") }}</h3>
+                <a href="/{{ lang }}/properties?deal_type=buy" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors">
+                  🏠 {{ _("navigation.buy_property") }}
+                </a>
+                <a href="/{{ lang }}/properties/rent" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors">
+                  🏖️ {{ _("navigation.rent_property") }}
+                </a>
+                <a href="/{{ lang }}/projects" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors">
+                  🏗️ {{ _("navigation.new_builds") }}
+                </a>
+                <button onclick="openAiSearchModal(); closeMobileMenu();" class="w-full text-left py-2 px-4 text-purple-700 hover:bg-purple-50 rounded-lg transition-colors">
+                  🤖 {{ _('navigation.ai_assistant') }}
+                </button>
+              </div>
+              
+                             <div class="border-t pt-4 space-y-3">
+                 <a href="/{{ lang }}/articles" class="block py-2 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors">
+                   📚 Полезное
+                 </a>
+               </div>
+            </nav>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(mobileMenu);
+      
+      // Закрытие мобильного меню
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target === mobileMenu) {
+          closeMobileMenu();
+        }
+      });
+      
+      return mobileMenu;
+    }
+    
+    // Закрытие мобильного меню
+    function closeMobileMenu() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileMenu) {
+        mobileMenu.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+      }
+    }
+    
+    // ИИ-подбор модальное окно
+    function openAiSearchModal() {
+      document.getElementById('modal-ai-search').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeAiSearchModal() {
+      document.getElementById('modal-ai-search').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+    
+    function handleAiSearch(event) {
+      event.preventDefault();
+      
+      const formData = new FormData(event.target);
+      const searchType = formData.get('search_type');
+      const description = formData.get('description');
+      
+      // Показать результаты (заглушка)
+      const resultsDiv = document.getElementById('ai-search-results');
+      const contentDiv = document.getElementById('ai-results-content');
+      
+      resultsDiv.classList.remove('hidden');
+      contentDiv.innerHTML = `
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+          <p class="text-blue-800"><strong>🤖 ИИ анализирует ваш запрос:</strong> "${description}"</p>
+          <p class="text-blue-600 mt-2">Тип поиска: ${searchType === 'buy' ? 'Покупка' : searchType === 'rent' ? 'Аренда' : 'Новостройки'}</p>
+        </div>
+        <div class="text-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p class="text-gray-600">Ищем подходящие варианты...</p>
+        </div>
+      `;
+      
+             // Имитация поиска
+       setTimeout(() => {
+         let redirectUrl = '/{{ lang }}/properties';
+         if (searchType === 'rent') {
+           redirectUrl += '/rent';
+         } else if (searchType === 'new_builds') {
+           redirectUrl = '/{{ lang }}/projects';
+         }
+        
+        // Добавляем параметры поиска
+        const params = new URLSearchParams();
+        if (formData.get('budget_from')) params.append('price_from', formData.get('budget_from'));
+        if (formData.get('budget_to')) params.append('price_to', formData.get('budget_to'));
+        if (formData.get('district')) params.append('district', formData.get('district'));
+        if (formData.get('property_type')) params.append('property_type', formData.get('property_type'));
+        
+        if (params.toString()) {
+          redirectUrl += '?' + params.toString();
+        }
+        
+        window.location.href = redirectUrl;
+      }, 2000);
+    }
+    
+    // Функции для открытия модалок
+    function openTelegramModal() {
+      document.getElementById('modal-telegram').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function openWhatsappModal() {
+      document.getElementById('modal-whatsapp').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    // Открытие модалки Telegram
+    document.querySelectorAll('a[href="/auth/telegram"]').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        openTelegramModal();
+      });
+    });
+    
+     // Открытие модалки WhatsApp
+     document.querySelectorAll('a[href="/auth/whatsapp"]').forEach(btn => {
+       btn.addEventListener('click', function(e) {
+         e.preventDefault();
+         openWhatsappModal();
+       });
+     });
+     
+     // Открытие модалки Instagram
+     document.getElementById('btn-instagram-modal').addEventListener('click', function(e) {
+       e.preventDefault();
+       document.getElementById('modal-instagram').classList.remove('hidden');
+     });
+     
+     // Функции для закрытия модалок
+     function closeModal(type) {
+       document.getElementById('modal-' + type).classList.add('hidden');
+       document.body.style.overflow = 'auto';
+       // Сброс формы и сообщения
+       document.getElementById('form-' + type).reset();
+       document.getElementById('success-' + type).classList.add('hidden');
+     }
+     
+     // AJAX отправка форм подписки
+     document.getElementById('form-telegram').addEventListener('submit', async function(e) {
+       e.preventDefault();
+       const formData = new FormData(e.target);
+       try {
+         const response = await fetch('/auth/telegram/callback', {
+           method: 'POST',
+           body: formData
+         });
+         if (response.ok) {
+           document.getElementById('success-telegram').textContent = 'Спасибо! Вы подписаны на обновления.';
+           document.getElementById('success-telegram').classList.remove('hidden');
+           setTimeout(() => closeModal('telegram'), 2000);
+         }
+       } catch (error) {
+         document.getElementById('success-telegram').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
+         document.getElementById('success-telegram').classList.remove('hidden');
+         setTimeout(() => closeModal('telegram'), 2000);
+       }
+     });
+     
+     document.getElementById('form-whatsapp').addEventListener('submit', async function(e) {
+       e.preventDefault();
+       const formData = new FormData(e.target);
+       try {
+         const response = await fetch('/auth/whatsapp/submit', {
+           method: 'POST',
+           body: formData
+         });
+         if (response.ok) {
+           document.getElementById('success-whatsapp').textContent = 'Спасибо! Вы подписаны на обновления.';
+           document.getElementById('success-whatsapp').classList.remove('hidden');
+           setTimeout(() => closeModal('whatsapp'), 2000);
+         }
+       } catch (error) {
+         document.getElementById('success-whatsapp').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
+         document.getElementById('success-whatsapp').classList.remove('hidden');
+         setTimeout(() => closeModal('whatsapp'), 2000);
+       }
+     });
+     
+     document.getElementById('form-instagram').addEventListener('submit', async function(e) {
+       e.preventDefault();
+       const formData = new FormData(e.target);
+       try {
+         const response = await fetch('/auth/instagram/submit', {
+           method: 'POST',
+           body: formData
+         });
+         if (response.ok) {
+           document.getElementById('success-instagram').textContent = 'Спасибо! Ваш профиль Instagram сохранён.';
+           document.getElementById('success-instagram').classList.remove('hidden');
+           setTimeout(() => closeModal('instagram'), 2000);
+         }
+       } catch (error) {
+         document.getElementById('success-instagram').textContent = 'Спасибо! Мы свяжемся с вами в ближайшее время.';
+         document.getElementById('success-instagram').classList.remove('hidden');
+         setTimeout(() => closeModal('instagram'), 2000);
+       }
+     });
+     
+     // 🌍 Функция смены языка
+     function setLanguage(langCode) {
+       // Предотвращаем переход по ссылке
+       event.preventDefault();
+       
+       // Отправляем запрос на смену языка
+       fetch(`/lang/${langCode}`, {
+         method: 'GET',
+         credentials: 'include'
+       }).then(() => {
+         // Получаем текущий путь без префикса языка
+         let currentPath = window.location.pathname;
+         const pathParts = currentPath.split('/');
+         
+         // Убираем текущий язык из пути (первая часть после /)
+         if (pathParts[1] && ['ru', 'en', 'th', 'zh'].includes(pathParts[1])) {
+           pathParts[1] = langCode; // Заменяем на новый язык
+         } else {
+           pathParts.splice(1, 0, langCode); // Добавляем язык если его нет
+         }
+         
+         // Формируем новый URL
+         const newPath = pathParts.join('/');
+         const search = window.location.search; // Сохраняем параметры запроса
+         
+         // Перенаправляем на новый URL
+         window.location.href = newPath + search;
+       }).catch(() => {
+         // Если запрос не удался, просто меняем URL
+         let currentPath = window.location.pathname;
+         const pathParts = currentPath.split('/');
+         
+         if (pathParts[1] && ['ru', 'en', 'th', 'zh'].includes(pathParts[1])) {
+           pathParts[1] = langCode;
+         } else {
+           pathParts.splice(1, 0, langCode);
+         }
+         
+         window.location.href = pathParts.join('/') + window.location.search;
+       });
+     }
+
+    // Загружаем переводы для текущего языка при загрузке страницы
+    document.addEventListener('DOMContentLoaded', async function() {
+        const currentLang = document.documentElement.lang;
+        await loadTranslations(currentLang);
+        
+        // Предзагружаем переводы для других языков
+        ['en', 'ru', 'th', 'zh'].forEach(lang => {
+            if (lang !== currentLang) {
+                loadTranslations(lang);
+            }
+        });
+        
+        // Мобильное меню
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Закрытие меню при клике вне его
+            document.addEventListener('click', function(e) {
+                if (!mobileMenuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+        
+        // Выпадающие меню
+        const dropdowns = document.querySelectorAll('.group');
+        dropdowns.forEach(dropdown => {
+            const button = dropdown.querySelector('button');
+            const menu = dropdown.querySelector('.dropdown-menu');
+            
+            if (button && menu) {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    menu.classList.toggle('show');
+                });
+            }
+        });
+        
+        // Закрытие выпадающих меню при клике вне их
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
+    });
+
+
+  </script>
+
+  <!-- Скрипты -->
+  <script src="{{ url_for('static', path='js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', path='js/jquery.min.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

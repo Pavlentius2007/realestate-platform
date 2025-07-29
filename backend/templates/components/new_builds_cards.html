@@ -1,0 +1,148 @@
+{% if properties %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    {% for property in properties %}
+    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+         data-lat="{{ property.lat }}" 
+         data-lng="{{ property.lng }}"
+         data-title="{{ property.title }}"
+         data-price="{{ property.price }} {{ property.price_period or 'THB' }}">
+        
+        <!-- Property Image -->
+        <div class="relative h-48 bg-gray-200">
+            {% if property.main_image_url %}
+            <img src="{{ property.main_image_url }}" 
+                 alt="{{ property.title }}" 
+                 class="w-full h-full object-cover">
+            {% else %}
+            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                </svg>
+            </div>
+            {% endif %}
+            
+            <!-- New Building Badge -->
+            <div class="absolute top-3 left-3">
+                <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                    {{ _("common.new_building") }}
+                </span>
+            </div>
+            
+            <!-- Property Type Badge -->
+            <div class="absolute top-3 right-3">
+                <span class="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                    {% if property.property_type == 'apartment' %}
+                        {{ _("common.apartments") }}
+                    {% elif property.property_type == 'villa' %}
+                        {{ _("common.villa") }}
+                    {% else %}
+                        {{ property.property_type or _("common.property") }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <!-- Property Info -->
+        <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+                {{ property.title }}
+            </h3>
+            
+            {% if property.condo_name %}
+            <p class="text-sm text-blue-600 mb-2">{{ property.condo_name }}</p>
+            {% endif %}
+            
+            <!-- Location -->
+            {% if property.district %}
+            <div class="flex items-center text-sm text-gray-600 mb-3">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                </svg>
+                {{ _(property.district) }}
+            </div>
+            {% endif %}
+            
+            <!-- Property Details -->
+            <div class="flex items-center justify-between text-sm text-gray-600 mb-3">
+                {% if property.bedrooms %}
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {{ property.bedrooms }} {{ _("common.bedrooms_short") }}
+                </span>
+                {% endif %}
+                
+                {% if property.bathrooms %}
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ property.bathrooms }} {{ _("common.bathrooms_short") }}
+                </span>
+                {% endif %}
+                
+                {% if property.area %}
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ property.area }}м²
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Price -->
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <span class="text-xl font-bold text-gray-900">
+                        {{ "{:,.0f}".format(property.price) }}
+                    </span>
+                    {% if property.price_period %}
+                    <span class="text-sm text-gray-600">/{{ property.price_period }}</span>
+                    {% else %}
+                    <span class="text-sm text-gray-600">THB</span>
+                    {% endif %}
+                </div>
+                
+                {% if property.old_price and property.old_price > property.price %}
+                <span class="text-sm text-gray-500 line-through">
+                    {{ "{:,.0f}".format(property.old_price) }}
+                </span>
+                {% endif %}
+            </div>
+            
+            <!-- Features -->
+            {% if property.features %}
+            <div class="flex flex-wrap gap-1 mb-3">
+                {% for feature in property.features[:3] %}
+                <span class="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
+                    {{ _(feature) }}
+                </span>
+                {% endfor %}
+                {% if property.features|length > 3 %}
+                <span class="text-xs text-gray-500">+{{ property.features|length - 3 }}</span>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <!-- Action Button -->
+            <a href="/properties/{{ property.id }}" 
+               class="block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                {{ _("common.details") }}
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-12">
+    <div class="text-gray-400 mb-4">
+        <svg class="w-16 h-16 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 mb-2">{{ _("new_builds.not_found") }}</h3>
+    <p class="text-gray-600">{{ _("common.try_change_filters") }}</p>
+</div>
+{% endif %} 

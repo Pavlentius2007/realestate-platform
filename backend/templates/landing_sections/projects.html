@@ -1,0 +1,8 @@
+<h1>Объекты недвижимости</h1>
+<ul>
+  {% for p in properties %}
+    <li>{{ p.title }} — {{ p.price }} THB</li>
+  {% else %}
+    <li>Нет объектов для отображения</li>
+  {% endfor %}
+</ul>

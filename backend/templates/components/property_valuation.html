@@ -1,0 +1,465 @@
+<!-- Оценка недвижимости в стиле Zillow -->
+<div id="property-valuation" class="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 hidden">
+  <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-3xl font-bold text-gray-900">Оценка недвижимости</h2>
+      <button onclick="closePropertyValuation()" class="text-gray-400 hover:text-gray-700 text-3xl font-light">&times;</button>
+    </div>
+    
+    <form id="valuation-form" class="space-y-6">
+      <!-- Адрес -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Адрес недвижимости</label>
+        <input type="text" id="property-address" name="property_address" 
+               class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Введите полный адрес" required>
+      </div>
+      
+      <!-- Район -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Район</label>
+        <select id="property-district" name="property_district" 
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">Выберите район</option>
+          <option value="wongamat">Вонгамат</option>
+          <option value="central">Центр Паттайи</option>
+          <option value="jomtien">Джомтьен</option>
+          <option value="pratumnak">Пратумнак</option>
+          <option value="naklua">Наклуа</option>
+          <option value="east-pattaya">Восточная Паттайя</option>
+        </select>
+      </div>
+      
+      <!-- Тип недвижимости -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Тип недвижимости</label>
+        <select id="property-type" name="property_type" 
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="">Выберите тип</option>
+          <option value="apartment">Квартира</option>
+          <option value="condo">Кондо</option>
+          <option value="villa">Вилла</option>
+          <option value="house">Дом</option>
+          <option value="townhouse">Таунхаус</option>
+        </select>
+      </div>
+      
+      <!-- Площадь -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Площадь (м²)</label>
+        <input type="number" id="property-area" name="property_area" 
+               class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Введите площадь" required>
+      </div>
+      
+      <!-- Количество спален -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Количество спален</label>
+        <select id="property-bedrooms" name="property_bedrooms" 
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5+</option>
+        </select>
+      </div>
+      
+      <!-- Количество ванных -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Количество ванных</label>
+        <select id="property-bathrooms" name="property_bathrooms" 
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4+</option>
+        </select>
+      </div>
+      
+      <!-- Год постройки -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Год постройки</label>
+        <input type="number" id="property-year" name="property_year" min="1980" max="2025"
+               class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+               placeholder="Например: 2020" required>
+      </div>
+      
+      <!-- Состояние -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Состояние</label>
+        <select id="property-condition" name="property_condition" 
+                class="w-full border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          <option value="excellent">Отличное</option>
+          <option value="good">Хорошее</option>
+          <option value="average">Среднее</option>
+          <option value="needs_renovation">Требует ремонта</option>
+        </select>
+      </div>
+      
+      <!-- Дополнительные характеристики -->
+      <div>
+        <label class="block text-sm font-medium mb-2 text-gray-700">Дополнительные характеристики</label>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="pool" class="mr-2">
+            <span class="text-sm">Бассейн</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="gym" class="mr-2">
+            <span class="text-sm">Спортзал</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="parking" class="mr-2">
+            <span class="text-sm">Парковка</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="security" class="mr-2">
+            <span class="text-sm">Охрана</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="sea_view" class="mr-2">
+            <span class="text-sm">Вид на море</span>
+          </label>
+          <label class="flex items-center">
+            <input type="checkbox" name="features" value="balcony" class="mr-2">
+            <span class="text-sm">Балкон</span>
+          </label>
+        </div>
+      </div>
+      
+      <!-- Кнопка оценки -->
+      <button type="submit" 
+              class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-xl font-semibold transition duration-200">
+        Оценить недвижимость
+      </button>
+    </form>
+    
+    <!-- Результаты оценки -->
+    <div id="valuation-results" class="mt-8 hidden">
+      <h3 class="text-xl font-bold mb-4 text-gray-900">Результаты оценки</h3>
+      
+      <!-- Основная оценка -->
+      <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-6">
+        <div class="text-center">
+          <div class="text-sm text-gray-600 mb-2">Оценка стоимости</div>
+          <div class="text-4xl font-bold text-gray-900" id="estimated-price">฿0</div>
+          <div class="text-sm text-gray-500 mt-2">Диапазон: <span id="price-range">฿0 - ฿0</span></div>
+        </div>
+      </div>
+      
+      <!-- Детали оценки -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-blue-50 rounded-xl p-4">
+          <div class="text-sm text-blue-600 font-medium">Цена за м²</div>
+          <div class="text-xl font-bold text-blue-900" id="price-per-sqm">฿0</div>
+        </div>
+        
+        <div class="bg-purple-50 rounded-xl p-4">
+          <div class="text-sm text-purple-600 font-medium">Рыночная тенденция</div>
+          <div class="text-xl font-bold text-purple-900" id="market-trend">+0%</div>
+        </div>
+        
+        <div class="bg-orange-50 rounded-xl p-4">
+          <div class="text-sm text-orange-600 font-medium">Ликвидность</div>
+          <div class="text-xl font-bold text-orange-900" id="liquidity">Средняя</div>
+        </div>
+        
+        <div class="bg-green-50 rounded-xl p-4">
+          <div class="text-sm text-green-600 font-medium">Инвестиционный потенциал</div>
+          <div class="text-xl font-bold text-green-900" id="investment-potential">Хороший</div>
+        </div>
+      </div>
+      
+      <!-- Сравнение с рынком -->
+      <div class="bg-gray-50 rounded-xl p-4 mb-6">
+        <h4 class="text-lg font-semibold mb-3 text-gray-900">Сравнение с рынком</h4>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Средняя цена в районе:</span>
+            <span class="font-semibold" id="avg-district-price">฿0</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Средняя цена за м²:</span>
+            <span class="font-semibold" id="avg-price-per-sqm">฿0</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Количество предложений:</span>
+            <span class="font-semibold" id="market-listings">0</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Факторы влияния -->
+      <div class="bg-yellow-50 rounded-xl p-4">
+        <h4 class="text-lg font-semibold mb-3 text-yellow-800">Факторы влияния на цену</h4>
+        <div class="space-y-2 text-sm text-yellow-700">
+          <div id="positive-factors">
+            <div class="font-medium text-green-700 mb-2">✅ Положительные факторы:</div>
+            <ul class="list-disc list-inside space-y-1" id="positive-list">
+              <!-- Заполняется динамически -->
+            </ul>
+          </div>
+          <div id="negative-factors" class="mt-3">
+            <div class="font-medium text-red-700 mb-2">❌ Отрицательные факторы:</div>
+            <ul class="list-disc list-inside space-y-1" id="negative-list">
+              <!-- Заполняется динамически -->
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Рекомендации -->
+      <div class="mt-6 bg-blue-50 rounded-xl p-4">
+        <h4 class="text-lg font-semibold mb-2 text-blue-800">💡 Рекомендации</h4>
+        <ul class="text-sm text-blue-700 space-y-1" id="recommendations">
+          <!-- Заполняется динамически -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Функции для работы с оценкой недвижимости
+function openPropertyValuation() {
+  document.getElementById('property-valuation').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePropertyValuation() {
+  document.getElementById('property-valuation').classList.add('hidden');
+  document.body.style.overflow = 'auto';
+}
+
+// Расчет оценки недвижимости
+function calculateValuation() {
+  const address = document.getElementById('property-address').value;
+  const district = document.getElementById('property-district').value;
+  const propertyType = document.getElementById('property-type').value;
+  const area = parseFloat(document.getElementById('property-area').value) || 0;
+  const bedrooms = parseInt(document.getElementById('property-bedrooms').value) || 1;
+  const bathrooms = parseInt(document.getElementById('property-bathrooms').value) || 1;
+  const year = parseInt(document.getElementById('property-year').value) || 2020;
+  const condition = document.getElementById('property-condition').value;
+  
+  if (!address || !district || !propertyType || area <= 0) {
+    alert('Пожалуйста, заполните все обязательные поля');
+    return;
+  }
+  
+  // Базовые цены за м² по районам (в батах)
+  const basePrices = {
+    'wongamat': 120000,
+    'central': 80000,
+    'jomtien': 90000,
+    'pratumnak': 110000,
+    'naklua': 70000,
+    'east-pattaya': 60000
+  };
+  
+  // Множители по типам недвижимости
+  const typeMultipliers = {
+    'apartment': 1.0,
+    'condo': 1.1,
+    'villa': 1.5,
+    'house': 1.3,
+    'townhouse': 1.2
+  };
+  
+  // Множители по состоянию
+  const conditionMultipliers = {
+    'excellent': 1.2,
+    'good': 1.0,
+    'average': 0.9,
+    'needs_renovation': 0.7
+  };
+  
+  // Множители по количеству спален
+  const bedroomMultipliers = {
+    1: 0.9,
+    2: 1.0,
+    3: 1.1,
+    4: 1.2,
+    5: 1.3
+  };
+  
+  // Множители по количеству ванных
+  const bathroomMultipliers = {
+    1: 0.95,
+    2: 1.0,
+    3: 1.05,
+    4: 1.1
+  };
+  
+  // Множитель по году постройки
+  const currentYear = new Date().getFullYear();
+  const ageMultiplier = Math.max(0.7, 1 - (currentYear - year) * 0.01);
+  
+  // Базовый расчет
+  const basePrice = basePrices[district] || 80000;
+  const typeMultiplier = typeMultipliers[propertyType] || 1.0;
+  const conditionMultiplier = conditionMultipliers[condition] || 1.0;
+  const bedroomMultiplier = bedroomMultipliers[bedrooms] || 1.0;
+  const bathroomMultiplier = bathroomMultipliers[bathrooms] || 1.0;
+  
+  // Дополнительные характеристики
+  const features = Array.from(document.querySelectorAll('input[name="features"]:checked')).map(cb => cb.value);
+  let featuresMultiplier = 1.0;
+  
+  features.forEach(feature => {
+    switch(feature) {
+      case 'pool': featuresMultiplier += 0.05; break;
+      case 'gym': featuresMultiplier += 0.03; break;
+      case 'parking': featuresMultiplier += 0.02; break;
+      case 'security': featuresMultiplier += 0.02; break;
+      case 'sea_view': featuresMultiplier += 0.1; break;
+      case 'balcony': featuresMultiplier += 0.02; break;
+    }
+  });
+  
+  // Итоговый расчет
+  const pricePerSqm = basePrice * typeMultiplier * conditionMultiplier * bedroomMultiplier * bathroomMultiplier * ageMultiplier * featuresMultiplier;
+  const estimatedPrice = Math.round(pricePerSqm * area);
+  const priceRange = {
+    min: Math.round(estimatedPrice * 0.9),
+    max: Math.round(estimatedPrice * 1.1)
+  };
+  
+  // Обновляем результаты
+  document.getElementById('estimated-price').textContent = '฿' + estimatedPrice.toLocaleString();
+  document.getElementById('price-range').textContent = '฿' + priceRange.min.toLocaleString() + ' - ฿' + priceRange.max.toLocaleString();
+  document.getElementById('price-per-sqm').textContent = '฿' + Math.round(pricePerSqm).toLocaleString();
+  
+  // Рыночная тенденция
+  const marketTrend = Math.random() * 10 - 5; // -5% до +5%
+  document.getElementById('market-trend').textContent = (marketTrend > 0 ? '+' : '') + marketTrend.toFixed(1) + '%';
+  document.getElementById('market-trend').className = 'text-xl font-bold ' + (marketTrend > 0 ? 'text-green-900' : 'text-red-900');
+  
+  // Ликвидность
+  const liquidityOptions = ['Высокая', 'Средняя', 'Низкая'];
+  const liquidity = liquidityOptions[Math.floor(Math.random() * 3)];
+  document.getElementById('liquidity').textContent = liquidity;
+  
+  // Инвестиционный потенциал
+  const potentialOptions = ['Отличный', 'Хороший', 'Средний', 'Низкий'];
+  const potential = potentialOptions[Math.floor(Math.random() * 4)];
+  document.getElementById('investment-potential').textContent = potential;
+  
+  // Сравнение с рынком
+  const avgDistrictPrice = Math.round(basePrice * area * 0.95);
+  const avgPricePerSqm = Math.round(basePrice * 0.98);
+  const marketListings = Math.floor(Math.random() * 50) + 10;
+  
+  document.getElementById('avg-district-price').textContent = '฿' + avgDistrictPrice.toLocaleString();
+  document.getElementById('avg-price-per-sqm').textContent = '฿' + avgPricePerSqm.toLocaleString();
+  document.getElementById('market-listings').textContent = marketListings;
+  
+  // Факторы влияния
+  updateFactors(pricePerSqm, basePrice, features, condition, year, bedrooms, bathrooms);
+  
+  // Рекомендации
+  updateRecommendations(estimatedPrice, priceRange, marketTrend, liquidity, potential);
+  
+  // Показываем результаты
+  document.getElementById('valuation-results').classList.remove('hidden');
+}
+
+// Обновление факторов влияния
+function updateFactors(pricePerSqm, basePrice, features, condition, year, bedrooms, bathrooms) {
+  const positiveList = document.getElementById('positive-list');
+  const negativeList = document.getElementById('negative-list');
+  
+  positiveList.innerHTML = '';
+  negativeList.innerHTML = '';
+  
+  // Положительные факторы
+  if (pricePerSqm > basePrice * 1.1) {
+    positiveList.innerHTML += '<li>Высокая цена за м² в районе</li>';
+  }
+  
+  features.forEach(feature => {
+    switch(feature) {
+      case 'sea_view': positiveList.innerHTML += '<li>Вид на море значительно повышает стоимость</li>'; break;
+      case 'pool': positiveList.innerHTML += '<li>Наличие бассейна</li>'; break;
+      case 'gym': positiveList.innerHTML += '<li>Спортзал в комплексе</li>'; break;
+    }
+  });
+  
+  if (condition === 'excellent') {
+    positiveList.innerHTML += '<li>Отличное состояние недвижимости</li>';
+  }
+  
+  if (year >= 2020) {
+    positiveList.innerHTML += '<li>Новостройка</li>';
+  }
+  
+  if (bedrooms >= 3) {
+    positiveList.innerHTML += '<li>Большое количество спален</li>';
+  }
+  
+  // Отрицательные факторы
+  if (pricePerSqm < basePrice * 0.9) {
+    negativeList.innerHTML += '<li>Низкая цена за м² в районе</li>';
+  }
+  
+  if (condition === 'needs_renovation') {
+    negativeList.innerHTML += '<li>Требует капитального ремонта</li>';
+  }
+  
+  if (year < 2000) {
+    negativeList.innerHTML += '<li>Старая постройка</li>';
+  }
+  
+  if (bathrooms < bedrooms) {
+    negativeList.innerHTML += '<li>Недостаточно ванных комнат</li>';
+  }
+  
+  if (features.length === 0) {
+    negativeList.innerHTML += '<li>Отсутствие дополнительных удобств</li>';
+  }
+}
+
+// Обновление рекомендаций
+function updateRecommendations(estimatedPrice, priceRange, marketTrend, liquidity, potential) {
+  const recommendations = document.getElementById('recommendations');
+  recommendations.innerHTML = '';
+  
+  if (marketTrend > 0) {
+    recommendations.innerHTML += '<li>Рынок растет - хорошее время для покупки</li>';
+  } else {
+    recommendations.innerHTML += '<li>Рынок падает - можно торговаться</li>';
+  }
+  
+  if (liquidity === 'Высокая') {
+    recommendations.innerHTML += '<li>Высокая ликвидность - легко продать</li>';
+  } else if (liquidity === 'Низкая') {
+    recommendations.innerHTML += '<li>Низкая ликвидность - сложно продать</li>';
+  }
+  
+  if (potential === 'Отличный' || potential === 'Хороший') {
+    recommendations.innerHTML += '<li>Хороший инвестиционный потенциал</li>';
+  }
+  
+  recommendations.innerHTML += '<li>Рекомендуется провести профессиональную оценку</li>';
+  recommendations.innerHTML += '<li>Сравните с аналогичными предложениями в районе</li>';
+}
+
+// Обработчик формы
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('valuation-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      calculateValuation();
+    });
+  }
+});
+
+// Закрытие по клику вне модального окна
+document.getElementById('property-valuation').addEventListener('click', function(e) {
+  if (e.target === this) {
+    closePropertyValuation();
+  }
+});
+</script> 

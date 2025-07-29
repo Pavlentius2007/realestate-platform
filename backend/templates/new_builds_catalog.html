@@ -1,0 +1,287 @@
+{% extends "base.html" %}
+
+{% block title %}{{ _("new_builds.title") }} - Sianoro{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ _("new_builds.title") }}</h1>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+                    {{ _("new_builds.subtitle") }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col lg:flex-row gap-6 items-center justify-between">
+                <!-- Property Type Filter -->
+                <div class="flex flex-wrap gap-3">
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if not selected_type %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProperties('', '{{ selected_district }}')"
+                    >
+                        {{ _("new_builds.all_projects") }}
+                    </button>
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if selected_type == 'apartment' %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProperties('apartment', '{{ selected_district }}')"
+                    >
+                        {{ _("common.apartments") }}
+                    </button>
+                    <button 
+                        class="px-6 py-3 rounded-lg font-medium transition-all duration-200 {% if selected_type == 'villa' %}bg-blue-600 text-white{% else %}bg-gray-100 text-gray-700 hover:bg-gray-200{% endif %}"
+                        onclick="filterProperties('villa', '{{ selected_district }}')"
+                    >
+                        {{ _("common.villa") }}
+                    </button>
+                </div>
+
+                <!-- Expanded Filters -->
+                <div class="flex flex-wrap gap-3">
+                    <select 
+                        id="districtFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onchange="filterProperties('{{ selected_type }}', this.value)"
+                    >
+                        <option value="">{{ _("forms.all_districts") }}</option>
+                        {% for district in districts %}
+                        <option value="{{ district }}" {% if selected_district == district %}selected{% endif %}>
+                            {{ _(district) }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    
+                    <select 
+                        id="bedroomsFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onchange="filterWithAdvanced()"
+                    >
+                        <option value="">{{ _("property.bedrooms") }}</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                    </select>
+                    
+                    <input 
+                        type="number" 
+                        id="priceFromFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
+                        placeholder="{{ _('common.from') }}"
+                        onchange="filterWithAdvanced()"
+                    />
+                    
+                    <input 
+                        type="number" 
+                        id="priceToFilter" 
+                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent w-32"
+                        placeholder="{{ _('common.to') }}"
+                        onchange="filterWithAdvanced()"
+                    />
+                    
+                    <button 
+                        id="toggleExtraFilters"
+                        class="px-6 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-all duration-200"
+                        onclick="toggleExtraFilters()"
+                    >
+                        {{ _("forms.more_filters") }}
+                    </button>
+                    
+                    <a href="/{{ lang }}#ai-search-section" 
+                       class="px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-200 flex items-center gap-2">
+                        🤖 {{ _("ai.search_button") }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Extra Filters Section -->
+        <div id="extraFiltersSection" class="hidden border-t bg-gray-50 py-6">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="seaViewFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("common.sea_view") }}
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="poolFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("amenities.pool") }}
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="gymFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("amenities.gym") }}
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="parkingFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("amenities.parking") }}
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="securityFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("amenities.security") }}
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="furnishedFilter" class="form-checkbox text-blue-600 mr-2" onchange="filterWithAdvanced()">
+                        {{ _("amenities.furnished") }}
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Properties Grid -->
+    <div class="container mx-auto px-4 py-8">
+        <div id="propertiesContainer">
+            {% include "components/new_builds_cards.html" %}
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="bg-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">{{ _("map.title") }}</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    {{ _("map.subtitle") }}
+                </p>
+            </div>
+            
+            <div id="map" class="w-full h-96 rounded-lg shadow-lg"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let map;
+let markers = [];
+
+// Initialize map
+function initMap() {
+    map = L.map('map').setView([12.9236, 100.8824], 12); // Pattaya coordinates
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    
+    updateMapMarkers();
+}
+
+// Update map markers based on filtered properties
+function updateMapMarkers() {
+    // Clear existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+    
+    // Get current properties from the grid
+    const propertyCards = document.querySelectorAll('[data-lat][data-lng]');
+    
+    propertyCards.forEach(card => {
+        const lat = parseFloat(card.dataset.lat);
+        const lng = parseFloat(card.dataset.lng);
+        const title = card.dataset.title;
+        const price = card.dataset.price;
+        
+        if (lat && lng) {
+            const marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup(`
+                <div class="p-2">
+                    <h3 class="font-bold text-sm">${title}</h3>
+                    <p class="text-sm text-gray-600">${price}</p>
+                </div>
+            `);
+            markers.push(marker);
+        }
+    });
+    
+    // Fit map to markers if there are any
+    if (markers.length > 0) {
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.1));
+    }
+}
+
+// Filter properties function
+function filterProperties(propertyType, district) {
+    const url = new URL('/properties/new-builds/filter', window.location.origin);
+    if (propertyType) url.searchParams.set('property_type', propertyType);
+    if (district) url.searchParams.set('district', district);
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('propertiesContainer').innerHTML = html;
+            updateMapMarkers();
+        })
+        .catch(error => {
+            console.error('Error filtering properties:', error);
+        });
+}
+
+// Advanced filter function with all parameters
+function filterWithAdvanced() {
+    const url = new URL('/properties/new-builds/filter', window.location.origin);
+    
+    // Get current property type and district
+    const selectedType = document.querySelector('.bg-blue-600')?.onclick?.toString().match(/'([^']*)'/) ? 
+                         document.querySelector('.bg-blue-600').onclick.toString().match(/'([^']*)'/)[1] : '';
+    const district = document.getElementById('districtFilter').value;
+    const bedrooms = document.getElementById('bedroomsFilter').value;
+    const priceFrom = document.getElementById('priceFromFilter').value;
+    const priceTo = document.getElementById('priceToFilter').value;
+    
+    // Add basic filters
+    if (selectedType) url.searchParams.set('property_type', selectedType);
+    if (district) url.searchParams.set('district', district);
+    if (bedrooms) url.searchParams.set('bedrooms', bedrooms);
+    if (priceFrom) url.searchParams.set('price_from', priceFrom);
+    if (priceTo) url.searchParams.set('price_to', priceTo);
+    
+    // Add checkbox filters
+    if (document.getElementById('seaViewFilter').checked) url.searchParams.set('sea_view', 'true');
+    if (document.getElementById('poolFilter').checked) url.searchParams.set('pool', 'true');
+    if (document.getElementById('gymFilter').checked) url.searchParams.set('gym', 'true');
+    if (document.getElementById('parkingFilter').checked) url.searchParams.set('parking', 'true');
+    if (document.getElementById('securityFilter').checked) url.searchParams.set('security', 'true');
+    if (document.getElementById('furnishedFilter').checked) url.searchParams.set('furnished', 'true');
+    
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('propertiesContainer').innerHTML = html;
+            updateMapMarkers();
+        })
+        .catch(error => {
+            console.error('Error filtering properties:', error);
+        });
+}
+
+// Toggle extra filters section
+function toggleExtraFilters() {
+    const section = document.getElementById('extraFiltersSection');
+    const button = document.getElementById('toggleExtraFilters');
+    
+    section.classList.toggle('hidden');
+    button.textContent = section.classList.contains('hidden') ? 
+                        '{{ _("forms.more_filters") }}' : '{{ _("forms.hide_filters") }}';
+}
+
+// Initialize map when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initMap();
+});
+
+
+</script>
+
+{% endblock %} 

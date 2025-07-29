@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Zillow-style hero-блок с расширенным поиском -->
+<section class="w-full bg-gradient-to-br from-blue-50 to-white py-16 md:py-24">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-6 leading-tight" style="font-family: 'Inter', 'Poppins', sans-serif;">
+        {{ _('landing.hero_title') }}
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+        {{ _('landing.hero_subtitle') }}
+      </p>
+    </div>
+    
+    <!-- Расширенная поисковая форма в стиле Zillow -->
+    <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-6 md:p-8 max-w-4xl mx-auto">
+      <form class="space-y-6">
+        <!-- Основная строка поиска -->
+        <div class="flex flex-col lg:flex-row gap-4">
+          <div class="flex-1">
+            <input type="text" name="query" placeholder="{{ _('landing.search_placeholder') }}" 
+                   class="w-full px-6 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 text-lg rounded-xl transition duration-200 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            {{ _('landing.search_button') }}
+          </button>
+        </div>
+        
+        <!-- Дополнительные фильтры -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <select name="deal_type" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _('landing.deal_type') }}</option>
+            <option value="buy">{{ _('landing.buy') }}</option>
+            <option value="rent">{{ _('landing.rent') }}</option>
+            <option value="new">{{ _('landing.new') }}</option>
+          </select>
+          
+          <select name="property_type" class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            <option value="">{{ _('landing.property_type') }}</option>
+            <option value="apartment">{{ _('landing.apartment') }}</option>
+            <option value="villa">{{ _('landing.villa') }}</option>
+            <option value="house">{{ _('landing.house') }}</option>
+            <option value="condo">{{ _('landing.condo') }}</option>
+          </select>
+          
+          <input type="number" name="price_min" placeholder="{{ _('landing.price_from') }}" 
+                 class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          
+          <input type="number" name="price_max" placeholder="{{ _('landing.price_to') }}" 
+                 class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        </div>
+        
+        <!-- Быстрые ссылки -->
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-gray-200">
+          <a href="/{{ lang }}/properties?deal_type=buy&district=wongamat" class="text-blue-600 hover:text-blue-700 text-sm font-medium">{{ _('districts.wongamat') }}</a>
+          <a href="/{{ lang }}/properties?deal_type=buy&district=central" class="text-blue-600 hover:text-blue-700 text-sm font-medium">{{ _('districts.central') }}</a>
+          <a href="/{{ lang }}/properties?deal_type=buy&district=jomtien" class="text-blue-600 hover:text-blue-700 text-sm font-medium">{{ _('districts.jomtien') }}</a>
+          <a href="/{{ lang }}/rent" class="text-blue-600 hover:text-blue-700 text-sm font-medium">{{ _('landing.rent') }}</a>
+          <a href="/{{ lang }}/projects" class="text-blue-600 hover:text-blue-700 text-sm font-medium">{{ _('landing.new') }}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Статистика рынка в стиле Zillow -->
+<section class="w-full bg-white py-12 border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-2xl font-bold text-center mb-8 text-gray-900">Рынок недвижимости Паттайи</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="text-center">
+        <div class="text-3xl font-bold text-blue-600 mb-2">฿2.1M</div>
+        <div class="text-sm text-gray-600">Средняя цена</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-green-600 mb-2">+12%</div>
+        <div class="text-sm text-gray-600">Рост цен за год</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-purple-600 mb-2">1,247</div>
+        <div class="text-sm text-gray-600">Активных предложений</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-orange-600 mb-2">89</div>
+        <div class="text-sm text-gray-600">Дней на рынке</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Преимущества с улучшенным дизайном -->
+<section class="w-full bg-gray-50 py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">Почему выбирают Sianoro</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-4 text-gray-900">Умный поиск</h3>
+        <p class="text-gray-600 leading-relaxed">ИИ-алгоритмы подберут идеальные варианты под ваши требования и бюджет</p>
+      </div>
+      
+      <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-4 text-gray-900">Проверенные объекты</h3>
+        <p class="text-gray-600 leading-relaxed">Все объекты проверены нашими экспертами и имеют полную документацию</p>
+      </div>
+      
+      <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow">
+        <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+          <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-4 text-gray-900">Экспертная поддержка</h3>
+        <p class="text-gray-600 leading-relaxed">Персональный менеджер поможет на всех этапах сделки</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Каталог объектов с улучшенными карточками -->
+<section class="w-full bg-white py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Рекомендованные объекты</h2>
+      <a href="/{{ lang }}/properties" class="text-blue-600 hover:text-blue-700 font-semibold">Смотреть все →</a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for property in properties %}
+        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group">
+          <div class="relative">
+            <img src="{{ property.main_image_url or '/static/images/default.jpg' }}" 
+                 class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+            
+            <!-- Бейджи -->
+            <div class="absolute top-3 left-3 flex gap-2">
+              {% if property.is_new %}
+                <span class="bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">НОВОЕ</span>
+              {% endif %}
+              {% if property.is_hot %}
+                <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">ГОРЯЧЕЕ</span>
+              {% endif %}
+            </div>
+            
+            <!-- Кнопка избранного -->
+            <button class="absolute top-3 right-3 bg-white rounded-full p-2 shadow-lg hover:bg-gray-50 transition">
+              <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="p-6">
+            <div class="flex justify-between items-start mb-3">
+              <div class="text-2xl font-bold text-gray-900">฿{{ "{:,.0f}".format(property.price) }}</div>
+              {% if property.old_price and property.old_price > property.price %}
+                <div class="text-sm text-gray-500 line-through">฿{{ "{:,.0f}".format(property.old_price) }}</div>
+              {% endif %}
+            </div>
+            
+            <h3 class="font-semibold text-lg mb-2 text-gray-900 line-clamp-2">{{ property.title }}</h3>
+            <p class="text-gray-600 text-sm mb-4">{{ property.district or "–" }}, {{ property.location or "–" }}</p>
+            
+            <div class="flex items-center gap-4 text-sm text-gray-600 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16M4 12a8 8 0 018-8 8 8 0 018 8M4 12a8 8 0 018 8 8 8 0 018-8"/>
+                </svg>
+                {{ property.area or "–" }} м²
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0v4"/>
+                </svg>
+                {{ property.bedrooms or "–" }}
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 10V6a5 5 0 0110 0v4"/>
+                </svg>
+                {{ property.bathrooms or "–" }}
+              </span>
+            </div>
+            
+            <a href="/{{ lang }}/properties/{{ property.id }}" 
+               class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-3 rounded-xl font-semibold transition">
+              Подробнее
+            </a>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-span-3 text-center py-12">
+          <div class="text-gray-400 text-6xl mb-4">🏠</div>
+          <p class="text-gray-500 text-lg">Нет объектов для отображения</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Интерактивная карта -->
+<section class="w-full bg-gray-50 py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Поиск по карте</h2>
+      <a href="/{{ lang }}/properties?map=1" class="text-blue-600 hover:text-blue-700 font-semibold">Открыть карту →</a>
+    </div>
+    
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
+      <div id="main-map" class="w-full h-[500px] md:h-[600px]"></div>
+    </div>
+    
+    <!-- Популярные районы -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+      <a href="/{{ lang }}/properties?district=wongamat" class="bg-white rounded-xl p-4 text-center hover:shadow-lg transition-shadow">
+        <div class="text-2xl mb-2">🏖️</div>
+        <div class="font-semibold text-gray-900">Вонгамат</div>
+        <div class="text-sm text-gray-600">от ฿1.2M</div>
+      </a>
+      <a href="/{{ lang }}/properties?district=central" class="bg-white rounded-xl p-4 text-center hover:shadow-lg transition-shadow">
+        <div class="text-2xl mb-2">🏙️</div>
+        <div class="font-semibold text-gray-900">Центр</div>
+        <div class="text-sm text-gray-600">от ฿800K</div>
+      </a>
+      <a href="/{{ lang }}/properties?district=jomtien" class="bg-white rounded-xl p-4 text-center hover:shadow-lg transition-shadow">
+        <div class="text-2xl mb-2">🌊</div>
+        <div class="font-semibold text-gray-900">Джомтьен</div>
+        <div class="text-sm text-gray-600">от ฿900K</div>
+      </a>
+      <a href="/{{ lang }}/properties?district=pratumnak" class="bg-white rounded-xl p-4 text-center hover:shadow-lg transition-shadow">
+        <div class="text-2xl mb-2">🌴</div>
+        <div class="font-semibold text-gray-900">Пратумнак</div>
+        <div class="text-sm text-gray-600">от ฿1.5M</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Новые функции в стиле Zillow -->
+<section class="w-full bg-white py-16">
+  <div class="max-w-6xl mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">Полезные инструменты</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Инвестиционный калькулятор -->
+      <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 flex flex-col items-center justify-center">
+        <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-900">Инвестиционный калькулятор</h3>
+        <p class="text-gray-600 mb-4 text-center">Рассчитайте доходность и окупаемость квартиры в Таиланде</p>
+        <button onclick="openInvestmentCalculator()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition text-lg">Рассчитать инвестиции</button>
+      </div>
+      
+      <!-- Оценка недвижимости -->
+      <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-900">Оценка недвижимости</h3>
+        <p class="text-gray-600 mb-4">Узнайте рыночную стоимость вашего объекта</p>
+        <button onclick="openPropertyValuation()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition">
+          Оценить
+        </button>
+      </div>
+      
+      <!-- ИИ-ассистент -->
+      <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6">
+        <div class="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-3 text-gray-900">{{ _('ai.title') }}</h3>
+        <p class="text-gray-600 mb-4">{{ _('ai.subtitle') }}</p>
+        <a href="#" onclick="event.preventDefault(); openAiSearchModal();" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-semibold transition inline-block">
+          {{ _('ai.search_button') }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Модальное окно калькулятора -->
+{% include 'components/investment_calculator.html' %}
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var center = [12.958498, 100.889275];
+    var map = L.map('main-map').setView(center, 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+    
+    // Добавляем маркеры популярных районов
+    var districts = [
+      {name: 'Вонгамат', coords: [12.985, 100.875], icon: '🏖️'},
+      {name: 'Центр Паттайи', coords: [12.958, 100.889], icon: '🏙️'},
+      {name: 'Джомтьен', coords: [12.885, 100.889], icon: '🌊'},
+      {name: 'Пратумнак', coords: [12.920, 100.889], icon: '🌴'}
+    ];
+    
+    districts.forEach(function(district) {
+      L.marker(district.coords).addTo(map)
+        .bindPopup('<b>' + district.icon + ' ' + district.name + '</b><br><a href="/{{ lang }}/properties?district=' + district.name.toLowerCase().replace(' ', '-') + '">Смотреть объекты</a>');
+    });
+  });
+</script>
+
+<link rel="stylesheet" href="/static/css/investment_calculator.css">
+<script src="/static/js/investment_calculator.js"></script>
+
+{% endblock %}

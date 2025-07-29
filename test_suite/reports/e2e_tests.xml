@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="15" skipped="0" tests="15" time="59.661" timestamp="2025-07-12T21:56:52.043978+07:00" hostname="MSI"><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_homepage_loading" time="10.047"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:42: in test_homepage_loading
+    driver.get(f"{base_url}/ru")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_property_search" time="2.619"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:61: in test_property_search
+    driver.get(f"{base_url}/ru/properties")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_property_detail_view" time="4.524"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:98: in test_property_detail_view
+    driver.get(f"{base_url}/ru/properties")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_user_registration" time="2.437"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:133: in test_user_registration
+    driver.get(f"{base_url}/ru/register")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_user_login" time="2.697"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:174: in test_user_login
+    driver.get(f"{base_url}/ru/login")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_add_to_favorites" time="4.564"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:204: in test_add_to_favorites
+    self.test_user_login(driver, base_url)
+test_suite\e2e\test_user_scenarios.py:174: in test_user_login
+    driver.get(f"{base_url}/ru/login")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_contact_form" time="2.669"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:229: in test_contact_form
+    driver.get(f"{base_url}/ru/contacts")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_rental_request" time="4.597"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:265: in test_rental_request
+    driver.get(f"{base_url}/ru/properties")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_ai_search" time="0.148"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:327: in test_ai_search
+    driver.get(f"{base_url}/ru/ai-search")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_ai_chat" time="4.575"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:362: in test_ai_chat
+    driver.get(f"{base_url}/ru/ai-chat")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_language_switching" time="4.873"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:389: in test_language_switching
+    driver.get(f"{base_url}/ru")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_mobile_responsiveness" time="5.212"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:427: in test_mobile_responsiveness
+    driver.get(f"{base_url}/ru")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_performance_metrics" time="2.631"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:462: in test_performance_metrics
+    driver.get(f"{base_url}/ru")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_accessibility" time="4.540"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:489: in test_accessibility
+    driver.get(f"{base_url}/ru")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase><testcase classname="e2e.test_user_scenarios.TestUserScenarios" name="test_error_pages" time="2.307"><failure message="selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED&#10;  (Session info: chrome=138.0.7204.101)&#10;Stacktrace:&#10;&#09;GetHandleVerifier [0x0x7ff670fd6f75+76917]&#10;&#09;GetHandleVerifier [0x0x7ff670fd6fd0+77008]&#10;&#09;(No symbol) [0x0x7ff670d89dea]&#10;&#09;(No symbol) [0x0x7ff670d86ba5]&#10;&#09;(No symbol) [0x0x7ff670d77879]&#10;&#09;(No symbol) [0x0x7ff670d79631]&#10;&#09;(No symbol) [0x0x7ff670d77b96]&#10;&#09;(No symbol) [0x0x7ff670d775f6]&#10;&#09;(No symbol) [0x0x7ff670d772ba]&#10;&#09;(No symbol) [0x0x7ff670d74e8b]&#10;&#09;(No symbol) [0x0x7ff670d7570c]&#10;&#09;(No symbol) [0x0x7ff670d8dd9a]&#10;&#09;(No symbol) [0x0x7ff670e3143e]&#10;&#09;(No symbol) [0x0x7ff670e0846a]&#10;&#09;(No symbol) [0x0x7ff670e3065c]&#10;&#09;(No symbol) [0x0x7ff670e08243]&#10;&#09;(No symbol) [0x0x7ff670dd1431]&#10;&#09;(No symbol) [0x0x7ff670dd21c3]&#10;&#09;GetHandleVerifier [0x0x7ff6712ad2ad+3051437]&#10;&#09;GetHandleVerifier [0x0x7ff6712a7903+3028483]&#10;&#09;GetHandleVerifier [0x0x7ff6712c589d+3151261]&#10;&#09;GetHandleVerifier [0x0x7ff670ff183e+185662]&#10;&#09;GetHandleVerifier [0x0x7ff670ff96ff+218111]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfaf4+112628]&#10;&#09;GetHandleVerifier [0x0x7ff670fdfca9+113065]&#10;&#09;GetHandleVerifier [0x0x7ff670fc6c78+10616]&#10;&#09;BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]&#10;&#09;RtlUserThreadStart [0x0x7ffbdcbdc34c+44]">test_suite\e2e\test_user_scenarios.py:512: in test_error_pages
+    driver.get(f"{base_url}/nonexistent-page")
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:479: in get
+    self.execute(Command.GET, {"url": url})
+venv312\Lib\site-packages\selenium\webdriver\remote\webdriver.py:454: in execute
+    self.error_handler.check_response(response)
+venv312\Lib\site-packages\selenium\webdriver\remote\errorhandler.py:232: in check_response
+    raise exception_class(message, screen, stacktrace)
+E   selenium.common.exceptions.WebDriverException: Message: unknown error: net::ERR_CONNECTION_REFUSED
+E     (Session info: chrome=138.0.7204.101)
+E   Stacktrace:
+E   	GetHandleVerifier [0x0x7ff670fd6f75+76917]
+E   	GetHandleVerifier [0x0x7ff670fd6fd0+77008]
+E   	(No symbol) [0x0x7ff670d89dea]
+E   	(No symbol) [0x0x7ff670d86ba5]
+E   	(No symbol) [0x0x7ff670d77879]
+E   	(No symbol) [0x0x7ff670d79631]
+E   	(No symbol) [0x0x7ff670d77b96]
+E   	(No symbol) [0x0x7ff670d775f6]
+E   	(No symbol) [0x0x7ff670d772ba]
+E   	(No symbol) [0x0x7ff670d74e8b]
+E   	(No symbol) [0x0x7ff670d7570c]
+E   	(No symbol) [0x0x7ff670d8dd9a]
+E   	(No symbol) [0x0x7ff670e3143e]
+E   	(No symbol) [0x0x7ff670e0846a]
+E   	(No symbol) [0x0x7ff670e3065c]
+E   	(No symbol) [0x0x7ff670e08243]
+E   	(No symbol) [0x0x7ff670dd1431]
+E   	(No symbol) [0x0x7ff670dd21c3]
+E   	GetHandleVerifier [0x0x7ff6712ad2ad+3051437]
+E   	GetHandleVerifier [0x0x7ff6712a7903+3028483]
+E   	GetHandleVerifier [0x0x7ff6712c589d+3151261]
+E   	GetHandleVerifier [0x0x7ff670ff183e+185662]
+E   	GetHandleVerifier [0x0x7ff670ff96ff+218111]
+E   	GetHandleVerifier [0x0x7ff670fdfaf4+112628]
+E   	GetHandleVerifier [0x0x7ff670fdfca9+113065]
+E   	GetHandleVerifier [0x0x7ff670fc6c78+10616]
+E   	BaseThreadInitThunk [0x0x7ffbdb29e8d7+23]
+E   	RtlUserThreadStart [0x0x7ffbdcbdc34c+44]</failure></testcase></testsuite></testsuites>
